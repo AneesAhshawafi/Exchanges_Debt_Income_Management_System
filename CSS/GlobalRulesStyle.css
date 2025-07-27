@@ -1,0 +1,319 @@
+:root {
+    --main-color: #C5BAFF;
+    --secondary-color: #9400FF;
+    --section-background: #E4F1FF;
+    --element-background: #AED2FF;
+    --specila-headind-color: #C5BAFF;
+    --specila-headind-p-color: #00B0a0;
+    --ul-li-color: #AED2FF;
+    --paragraph-color: #27005D;
+    --section-padding: 60px;
+    --section-margin-top: 80px;
+    --border-color: #78747c;
+}
+
+/* Start Global Rules */
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+}
+
+html {
+    scroll-behavior: smooth;
+    padding: 0;
+    margin: 0;
+height: 100%;
+direction: rtl;
+}
+
+body {
+    font-family: "Work Sans", sans-serif;
+    /* direction: ; */
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+
+.container {
+    /* background-color: #0aa; */
+    /* width: 600px; */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    /* padding-top:0 ;
+    padding-bottom:0 ; */
+    align-self: center;
+
+}
+
+@media (min-width:729px) {
+    .container {
+        width: 750px;
+    }
+
+}
+
+@media (min-width:992px) {
+    .container {
+        width: 970px;
+    }
+
+}
+
+@media (min-width:1200px) {
+    .container {
+        width: 1170px;
+    }
+
+}
+
+/* End Global Rules */
+
+/* Start Components */
+.hidden{
+    display: none;
+}
+.special-heading {
+    color: var(--specila-headind-color);
+    font-size: 60px;
+    text-align: center;
+    font-weight: 800;
+    /* letter-spacing: -3px; */
+    margin: 0;
+    /* margin-top: 100px; */
+}
+
+
+
+@media (max-width:767px) {
+    .special-heading {
+        font-size: 35px;
+    }
+
+    .special-heading+p {
+        margin: var(--special-heading-p-margin-mobile);
+        font-size: 13px;
+    }
+
+}
+
+/* Start header */
+header {
+    /* direction:;
+    position: fixed; */
+    width: 100%;
+    z-index: 2;
+    left: 0;
+    background-color: var(--section-background);
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    min-height: 97px;
+    /* margin-bottom: 70px; */
+    /* direction: rtl; */
+}
+
+header .container::after {
+    content: '';
+    position: absolute;
+    height: 1px;
+    width: calc(100% - 30px);
+    background-color: var(--element-background);
+    bottom: 16px;
+    left: 15px;
+    z-index: -0;
+}
+
+
+header nav {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+header .logo img {
+    height: 40px
+}
+
+header nav .toggle-menu {
+    display: none;
+}
+
+header nav ul {
+    display: flex;
+    padding: 0;
+
+}
+
+header nav li {
+    list-style: none;
+
+}
+
+@media (max-width:992px) {
+    #menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        align-items: flex-start;
+        top: 70%;
+        left: 0;
+        width: 100%;
+        background-color: rgb(0 0 0 / 50%);
+        padding-bottom: 5px;
+        z-index: 2;
+    }
+
+    #menu.active {
+        display: flex;
+    }
+
+    #fa-bar {
+        display: block;
+        font-size: 30px;
+        color: var(--secondary-color);
+        cursor: pointer;
+        margin: 0;
+    }
+
+
+
+    header nav ul li a {
+        padding: 15px !important;
+        margin-left: 15px;
+        margin-right: 15px;
+
+
+
+    }
+
+}
+
+header nav ul li a {
+
+    padding: 40px 10px;
+    display: block;
+    font-weight: bold;
+    color: var(--ul-li-color);
+    text-decoration: none;
+    font-size: 19px;
+    transition: 0.3s;
+    position: relative;
+    z-index: 2;
+    height: fit-content;
+    border-radius: 4px;
+
+}
+
+header nav ul li a:hover,
+header nav ul li a.active {
+    color: var(--paragraph-color);
+    border-bottom: var(--paragraph-color) 1px solid;
+}
+
+/* ------------------------------------ */
+
+
+/* 🌞🌙 تنسيقات زر الوضع الليلي و زر اختيار اللغة */
+
+/* حاوية الزرين داخل الترويسة */
+nav select,
+.theme-toggle {
+    padding: 5px 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-family: inherit;
+    background-color: var(--element-background);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* زر تغيير اللغة */
+nav select {
+    background-color: var(--element-background);
+    color: var(--paragraph-color);
+    /* border: 1px solid var(--border-color); */
+    font-weight: 500;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+nav select:hover {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+/* زر التبديل */
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--element-background);
+    width: 32px;
+    height: 32px;
+    /* border: 1px solid var(--border-color); */
+    border-radius: 50%;
+    position: relative;
+    /* margin-left: 10px; */
+    /* margin-right: 15px; */
+    /* top: 5px; */
+}
+
+/* إخفاء الـ checkbox نفسه */
+.theme-toggle input[type="checkbox"] {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* إضافة أيقونة شمس وقمر باستخدام ::before أو FontAwesome من JS لاحقًا */
+.theme-toggle::before {
+    content: "🌙";
+    position: absolute;
+    z-index: 1;
+    font-size: 16px;
+    color: var(--main-color);
+    transition: 0.3s ease;
+    /* top: 9.5px; */
+}
+
+body.dark-mode .theme-toggle::before {
+    content: "🌞";
+}
+
+.theme-toggle:hover {
+    background-color: var(--secondary-color);
+}
+
+
+/* End header */
+
+/* Start Footer */
+.footer {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 30 10;
+    text-align: center;
+    font-size: 18px;
+}
+
+.footer span {
+    color: var(--main-color);
+}
+
+/* End Footer */

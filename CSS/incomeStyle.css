@@ -1,0 +1,163 @@
+:root {
+  --main-color: #c5baff;
+  --secondary-color: #c5baff;
+  --section-padding: 60px;
+  --section-background: #e4f1ff;
+  --element-background: #aed2ff;
+  --section-margin-top: 80px;
+  --paragraph-color: #27005d;
+}
+
+.income {
+  padding-top: 30px;
+  padding-bottom: 50px;
+  background-color: #e4f1ff;
+  height: fit-content;
+}
+
+/* Start Lists css */
+
+.income .income-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 1fr);
+  margin-top: var(--section-margin-top);
+  margin-top: 20px;
+}
+
+.income-data,
+.income-list-header {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  text-align: center;
+  justify-content: center;
+  border-bottom: 1px solid green;
+  background-color: var(--secondary-color);
+  padding: 10px 10px;
+
+  transition: all 0.3s ease;
+}
+
+.income .income-data:hover {
+  transform: scale(1.01);
+  cursor: pointer;
+}
+
+.income .container .plus-icon {
+  height: 33px;
+  cursor: pointer;
+  width: 33px;
+  border: 1px solid white;
+  border-radius: 50%;
+  padding: 2px;
+  position: fixed;
+  background-color: #9400ff;
+  top: 600px;
+  color: white;
+}
+
+.income .container .fa-plus {
+  position: absolute;
+  top: 5px;
+  right: 6.5px;
+  font-size: 20px;
+}
+
+.income .income-data h3,
+.income-list-header h3,
+.income .income-data h3,
+.income-list-header h3 {
+  text-align: center;
+  padding: 2px 0px 2px;
+  color: #f1f2f4;
+  font-weight: 800;
+  margin: 0;
+}
+.income .income-list-title, .add-income-form-title{
+  text-align: center;
+}
+@media (max-width: 676px) {
+
+  .income .income-data,
+  .income-list-header,
+  .income-data,
+  .income-list-header {
+    font-size: 10px;
+    font-weight: 100;
+    padding: 5px;
+  }
+
+  .income .income-data h3 {
+    padding: 2px 15px 2px;
+  }
+
+  .income .income-data .name {
+    padding: 2px 0px 2px;
+  }
+
+  .income-list .income-list-title,
+  .add-income-form-title {
+    font-size: 14px;
+  }
+
+}
+
+.add-income-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #e4f1ff;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.add-income {
+  position: relative;
+  width: 80%;
+  margin: 50px;
+  border: 2px solid white;
+  padding: 20px;
+}
+
+
+.input-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  margin-bottom: 5px;
+  margin-right: 10px;
+  font-weight: 600;
+  color: black;
+}
+
+.input-group input {
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: white;
+  color: var(--paragraph-color);
+}
+
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--paragraph-color);
+}
+span {
+  font-size: 40px;
+  font-weight: 800;
+}
+.hidden{
+  display: none;
+}

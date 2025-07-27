@@ -1,0 +1,139 @@
+:root {
+  --main-color: #C5BAFF;
+  --secondary-color: #9400FF;
+  --section-background: #E4F1FF;
+  --element-background:#AED2FF;
+  --specila-headind-color:#AED2FF;
+  --specila-headind-p-color:#00B0a0;
+  --ul-li-color:#AED2FF;
+  --paragraph-color: #27005D;
+  --section-padding: 60px;
+  --section-margin-top: 80px;
+}
+
+/* تنسيقات واجهات تسجيل الدخول والتسجيل واستعادة كلمة المرور */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--section-background);
+  transition: background 0.3s;
+  color: var(--paragraph-color);
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  min-height: 100vh;
+}
+
+.login-card {
+  background-color: var(--element-background);
+  border-radius: 10px;
+  padding: 30px 25px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-card h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: var(--paragraph-color);
+}
+
+.input-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: row;
+  
+}
+
+.input-group label {
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: var(--paragraph-color);
+}
+
+.input-group input {
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: white;
+  color: var(--paragraph-color);
+}
+
+/* .password-wrapper {
+  position: relative;
+} */
+
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+.login-btn {
+  background-color: transparent;
+  color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+
+.back-btn {
+  background-color: transparent;
+  color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+
+.form-links {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.form-links a {
+  color: var(--secondary-color);
+  text-decoration: none;
+}
+
+.login-button {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: var(--secondary-color);
+  color: white;
+  border-radius: 6px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+.login-button:hover {
+  background-color: var(--hover-color);
+}
