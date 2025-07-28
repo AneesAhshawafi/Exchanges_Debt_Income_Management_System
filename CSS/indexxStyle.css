@@ -91,7 +91,8 @@
 }
 
 .fa-trash-alt,
-.fa-edit {
+.fa-edit,
+.fa-share-alt{
     color: blue;
     margin-right: 12px;
     margin-left: 5px;
@@ -101,7 +102,8 @@
 }
 
 .fa-trash-alt:hover,
-.fa-edit:hover {
+.fa-edit:hover,
+.fa-share-alt:hover {
     transform: scale(1.05);
     cursor: pointer;
 }

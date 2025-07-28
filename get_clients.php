@@ -1,8 +1,9 @@
 <?php
 include 'dbconn.php';
+include 'total_ammounts_calc.php';
 
 $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
-$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 20;
+$limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
 
 // استعلام العملاء بالحد والبدء
 $sql = "SELECT CLIENT_ID, CLIENT_NAME FROM CLIENT ORDER BY CLIENT_ID DESC LIMIT $limit OFFSET $offset";

@@ -63,7 +63,7 @@
 
         <!-- Start exchanges List -->
 
-        <div class="exchanges-list-overlay hidden" id="exchanges-list-overlay">
+        <div class="exchanges-list-overlay " id="exchanges-list-overlay">
             <div class="exchanges-list" id="exchanges-list">
                 <span class="close-modal" id="closeExchangeListBtn">&times;</span>
                 <div class="exchanges-list-title">

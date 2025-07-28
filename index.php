@@ -1,6 +1,6 @@
 <?php
 include 'dbconn.php';
-include 'total_ammount_calc.php';
+include 'total_ammounts_calc.php';
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //add client
     $client_name = $_POST["client_name"];
@@ -96,8 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <i class="fas fa-plus fa-2x"></i>
                     </button>
                 </div>
-                <!-- End Clients List -->
-
+                
                 <!-- End Clients List -->
 
                 <!-- start add-client-form -->
