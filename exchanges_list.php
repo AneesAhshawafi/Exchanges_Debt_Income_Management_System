@@ -1,0 +1,192 @@
+<?php
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
+ */
+?>
+<html lang="ar">
+
+    <head>
+        <!-- تحديد ترميز النص -->
+        <meta charset="utf-8" />
+        <!-- ضبط التوافق مع إنترنت إكسبلورر -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <!-- عنوان الصفحة مع دعم الترجمة -->
+        <title data-lang="page-title">الرئيسية</title>
+        <!-- جعل التصميم متجاوباً مع مختلف الشاشات -->
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!-- استيراد التنسيقات العامة للموقع -->
+        <link rel="stylesheet" href="CSS/GlobalRulesStyle.css" />
+        <!-- تنسيقات الوضع الليلي -->
+        <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
+        <!-- تنسيقات خاصة بالصفحة الرئيسية -->
+        <link rel="stylesheet" href="CSS/indexxStyle.css" />
+        <!-- إعادة ضبط تنسيقات المتصفح الافتراضية -->
+        <link rel="stylesheet" type="text/css" media="screen" href="CSS/normalize.css" />
+        <!-- مكتبة أيقونات Font Awesome -->
+        <link rel="stylesheet" href="CSS/all.min.css" />
+
+        <!-- إعدادات خطوط Google -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+              rel="stylesheet" />
+    </head>
+
+    <body>
+        <!-- رأس الصفحة ويحتوي على الشعار والقائمة -->
+        <header>
+            <section class="container">
+                <nav>
+                    <!-- أيقونة القائمة المنسدلة (للهواتف) -->
+                    <i class="fas fa-bars toggle-menu" id="fa-bar"></i>
+                    <!-- قائمة الروابط -->
+                    <ul id="menu">
+
+                        <li><a class="active" href="index.html"> قسم الحوالات</a></li>
+                        <li><a href="debt.html">قسم الديون</a></li>
+                        <li><a href="income.html">قسم الدخل</a></li>
+
+                        <!-- زر تسجيل الدخول -->
+                        <li id="login-li">
+                            <a href="login.html" data-lang="login-btn" class="login-buttn" id="login-link">تسجيل الدخول</a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- شعار الموقع -->
+                <a href="#" class="logo">
+                    <img src="images/logo.png" alt="logo" />
+                </a>
+            </section>
+        </header>
+
+        <!-- Start exchanges List -->
+
+        <div class="exchanges-list-overlay hidden" id="exchanges-list-overlay">
+            <div class="exchanges-list" id="exchanges-list">
+                <span class="close-modal" id="closeExchangeListBtn">&times;</span>
+                <div class="exchanges-list-title">
+                    <h2>قائمة العمليات (حوالات/ايداع)</h2>
+                </div>
+                <div class="exchanges-list-container" >
+
+
+                    <div class="exchanges-list-header">
+                        <h3 >اسم المرسل/المودع</h3>
+                        <h3>نوع العملية</h3>
+                        <h3 class="no-exchanges">رقم الحوالة</h3>
+                        <h3>المبلغ قعيطي</h3>
+                        <h3>المبلغ قديم</h3>
+                        <h3>المبلغ سعودي</h3>
+                        <h3 >له/عليه</h3>
+                        <h3>التاريخ</h3>
+                        <h3>الصراف</h3>
+                        <h3>الاجمالي قعيطي</h3>
+                        <h3>الاجمالي قديم</h3>
+                        <h3>الإجمالي سعودي</h3>
+                        <h3>ملاحظة</h3>
+                    </div>
+                    <div class="exchanges-list-body" id="exchanges-list-body">
+
+                    </div>
+                </div>
+            </div>
+            <button class="plus-icon open-modal-btn" id="addExchangeBtn">
+                <i class="fas fa-plus fa-2x"></i>
+            </button>
+        </div>
+
+        <!-- End exchanges List -->
+
+        <!-- Start Add Exchange Form -->
+
+        <div id="addExchangeForm" class="modal-overlay hidden">
+            <div class="add-exchange">
+                <form class="add-exchange-form" id="add-exchange-form" action="" method="POST">
+                    <span class="close-modal" id="closeAddExchangeBtn">&times;</span>
+                    <div class="add-exchange-title">
+                        <h3>اضافة عملية حوالة/ايداع</h3>
+                    </div>
+                    <select name="type" required>
+                        <option value="" disabled selected>اختر نوع العملية</option>
+                        <option value="حوالة">حوالة</option>
+                        <option value="إيداع">إيداع</option>
+                        <!--<option value="transfer_btwn_accounts">تحويل بين الحسابات</option>-->
+                    </select>
+                    <select name="currency" required>
+                        <option value="" disabled selected>اختر العملة</option>
+                        <option value="new">قعيطي</option>
+                        <option value="old">قديم</option>
+                        <option value="sa">سعودي</option>
+                    </select>
+                    <select name="for-or-on" id="for-or-on" required>
+                        <option value="" disabled selected>له / عليه</option>
+                        <option value="له">له</option>
+                        <option value="عليه">عليه</option>
+                    </select>
+                    <div class="input-group">
+                        <label for="sender">المرسل</label>
+                        <input type="text" id="sender" name="sender-name" placeholder=" اسم المرسل او المودع" required />
+                    </div>
+                    <div class="input-group">
+                        <label for="id-exchange">رقم الحوالة</label>
+                        <input type="text" id="id-exchange" name="transfer-no" placeholder="رقم الحوالة " />
+                    </div>
+                    <div class="input-group">
+                        <label for="ammount">المبلغ</label>
+                        <input type="text" id="ammount" name="ammount" placeholder="المبلغ" required />
+                    </div>
+
+                    <div class="input-group">
+                        <label for="fees">الرسوم</label>
+                        <input type="text" id="fees" name="fees" placeholder="الرسوم" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="date">التاريخ والوقت</label>
+                        <input type="datetime-local" id="date" name="tra-date" placeholder="التاريخ والوقت" />
+                    </div>
+                    <div class="input-group">
+                        <label for="atm">الصراف</label>
+                        <input type="text" id="atm" name="atm" placeholder="الصراف" required />
+                    </div>
+
+                    <div class="input-group">
+                        <label for="note">ملاحظة</label>
+                        <input type="text" id="note" name="note" placeholder=" ملاحظة" />
+                    </div>
+
+                    <button class="btn" type="submit" name="submit-exchange">حفظ</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- End Add Exchange Form -->
+
+
+
+
+
+        <!--Start Share Modal-->
+        <div id="shareModal" class="modal hidden">
+            <div class="modal-content">
+                <textarea id="shareText" readonly></textarea>
+                <button onclick="navigator.share ? navigator.share({text: document.getElementById('shareText').value}) : alert('المشاركة غير مدعومة');">مشاركة</button>
+                <button onclick="closeModal('shareModal')">إغلاق</button>
+            </div>
+        </div>
+        <!--End Share Modal-->
+
+        <!--Start Delete Modal-->
+        <div id="deleteModal" class="modal hidden">
+            <div class="modal-content">
+                <p>هل أنت متأكد من حذف العملية؟</p>
+                <button id="confirmDeleteBtn">نعم، احذف</button>
+                <button onclick="closeModal('deleteModal')">إلغاء</button>
+            </div>
+        </div>
+        <!--End Delete Modal-->
+
+    </<body>
+
+</html>
