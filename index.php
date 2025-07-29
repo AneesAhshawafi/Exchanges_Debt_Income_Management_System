@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <div class="add-client-overlay hidden" id="add-client-overlay">
                     <div class="add-client">
                         <form action="" method="POST" class="add-client-form">
-                            <span class="close-modal" id="closeAddClientBtn">&rarr;</span>
+                            <span class="close-modal close-modal-form" id="closeAddClientBtn">&rarr;</span>
                             <div class="add-client-form-title">
                                 <h3>اضافة عميل</h3>
                             </div>
@@ -137,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <div class="edit-client-overlay hidden" id="edit-client-overlay">
                     <div class="edit-client">
                         <form action="update_client.php" method="POST" class="edit-client-form">
-                            <span class="close-modal" id="closeEditClientBtn">&rarr;</span>
+                            <span class="close-modal close-modal-form" id="closeEditClientBtn">&rarr;</span>
                             <div class="edit-client-form-title">
                                 <h3>تعديل اسم العميل</h3>
                             </div>

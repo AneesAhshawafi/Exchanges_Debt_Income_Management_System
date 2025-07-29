@@ -65,12 +65,11 @@
 
         <div class="exchanges-list-overlay " id="exchanges-list-overlay">
             <div class="exchanges-list" id="exchanges-list">
-                <span class="close-modal" id="closeExchangeListBtn">&times;</span>
+                <a href="index.php" ><span class="close-modal" id="closeExchangeListBtn">&rarr;</span></a> 
                 <div class="exchanges-list-title">
                     <h2>قائمة العمليات (حوالات/ايداع)</h2>
                 </div>
                 <div class="exchanges-list-container" >
-
 
                     <div class="exchanges-list-header">
                         <h3 >اسم المرسل/المودع</h3>
@@ -82,6 +81,7 @@
                         <h3 >له/عليه</h3>
                         <h3>التاريخ</h3>
                         <h3>الصراف</h3>
+                        <h3>الرسوم</h3>
                         <h3>الاجمالي قعيطي</h3>
                         <h3>الاجمالي قديم</h3>
                         <h3>الإجمالي سعودي</h3>
@@ -104,11 +104,12 @@
         <div id="addExchangeForm" class="modal-overlay hidden">
             <div class="add-exchange">
                 <form class="add-exchange-form" id="add-exchange-form" action="" method="POST">
-                    <span class="close-modal" id="closeAddExchangeBtn">&times;</span>
+                    <span class="close-modal close-modal-form" id="closeAddExchangeBtn">&rarr;</span>
                     <div class="add-exchange-title">
                         <h3>اضافة عملية حوالة/ايداع</h3>
                     </div>
-                    <select name="type" required>
+
+                    <select name="type" id="oper-type-input" required>
                         <option value="" disabled selected>اختر نوع العملية</option>
                         <option value="حوالة">حوالة</option>
                         <option value="إيداع">إيداع</option>
@@ -125,13 +126,18 @@
                         <option value="له">له</option>
                         <option value="عليه">عليه</option>
                     </select>
-                    <div class="input-group">
-                        <label for="sender">المرسل</label>
-                        <input type="text" id="sender" name="sender-name" placeholder=" اسم المرسل او المودع" required />
+                    <div class="input-group" id="sender-input-group" >
+                        <label for="sender" id="sender-input-label">المودع</label>
+                        <input type="text" id="sender" name="sender-name" placeholder=" المودع" required />
                     </div>
-                    <div class="input-group">
-                        <label for="id-exchange">رقم الحوالة</label>
-                        <input type="text" id="id-exchange" name="transfer-no" placeholder="رقم الحوالة " />
+                    <div class="input-group hidden" id="reciver-input-group" >
+                        <label for="reciver"> المستلم</label>
+                        <input type="text" id="reciver-input" name="reciver-name" placeholder=" المستلم " required />
+                    </div>
+                    
+                    <div class="input-group hidden"  id="transfer-no-input-group">
+                        <label for="transfer-no">رقم الحوالة</label>
+                        <input type="text" id="transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
                     </div>
                     <div class="input-group">
                         <label for="ammount">المبلغ</label>
@@ -165,13 +171,147 @@
 
 
 
+        <!--Start Edit Exchange Form-->
+        <div id="editExchangeModal" class="modal-overlay    hidden">
+
+            <div class="edit-exchangef">
+
+                <form class="edit-exchange-form" id="edit-exchange-form" action="update_exchange.php" method="POST">
+
+                    <span class="close-modal" id="closeEditExchangeListBtn">&rarr;</span>
+
+                    <div class="edit-exchange-title">
+
+
+
+                        <h3>تعديل بيانات عملية إيداع/حوالة</h3>
+
+                    </div>
+
+                    <input type="hidden" name="exchange_id" id="edit-exchange-id" />
+
+
+
+                    <!-- باقي الحقول -->
+
+
+
+                    <select name="type"  id="edit-type" required>
+
+                        <option value="" disabled selected>اختر نوع العملية</option>
+
+                        <option value="حوالة">حوالة</option>
+
+                        <option value="إيداع">إيداع</option>
+
+                        <!--<option value="transfer_btwn_accounts">تحويل بين الحسابات</option>-->
+
+                    </select>
+
+                    <select name="currency" id="edit-currency" required>
+
+                        <option value="" disabled selected>اختر العملة</option>
+
+                        <option value="new">قعيطي</option>
+
+                        <option value="old">قديم</option>
+
+                        <option value="sa">سعودي</option>
+
+                    </select>
+
+                    <select name="for-or-on" id="edit-for-or-on" required>
+
+                        <option value="" disabled selected>له / عليه</option>
+
+                        <option value="له">له</option>
+
+                        <option value="عليه">عليه</option>
+
+                    </select>
+
+                    <div class="input-group" id="edit-sender-input-group">
+
+                       <label for="sender" id="sender-input-label">المودع</label>
+
+                        <input type="text" name="sender" id="edit-sender" placeholder="المودع" required />
+                    </div>
+                     <div class="input-group hidden" id="edit-reciver-input-group" >
+                        <label for="reciver"> المستلم</label>
+                    <input type="text" id="reciver" name="reciver" placeholder=" المستلم " required />
+                    </div>
+
+                       
+                    <div class="input-group hidden"  id="edit-transfer-no-input-group">
+                        <label for="transfer-no">رقم الحوالة</label>
+                        <input type="text" id="edit-transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
+                    </div>
+                    
+              
+                    <div class="input-group">
+
+                        <label for="ammount">المبلغ</label>
+
+                        <input  type="number" name="ammount" id="edit-ammount" placeholder="المبلغ" required />
+
+                    </div>
+
+
+
+                    <div class="input-group">
+
+                        <label for="fees">الرسوم</label>
+
+                        <input type="number" name="fees" id="edit-fees" placeholder="الرسوم" required>
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label for="date">التاريخ والوقت</label>
+
+                        <input class="date" type="datetime-local" name="date" id="edit-date" placeholder="التاريخ والوقت" />
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label for="atm">الصراف</label>
+
+                        <input type="text" name="atm" id="edit-atm" placeholder="الصراف" required />
+
+                    </div>
+
+
+
+                    <div class="input-group">
+
+                        <label for="note">ملاحظة</label>
+
+                        <input type="text" id="edit-note" name="note" placeholder=" ملاحظة" />
+
+                    </div>
+
+                    <button class="btn" type="submit" name="submit-edit-exchange">تحديث</button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+
+        <!--End Edit Exchange Form-->
+
+
 
 
         <!--Start Share Modal-->
         <div id="shareModal" class="modal hidden">
             <div class="modal-content">
                 <textarea id="shareText" readonly></textarea>
-                <button onclick="navigator.share ? navigator.share({text: document.getElementById('shareText').value}) : alert('المشاركة غير مدعومة');">مشاركة</button>
+                <button id="shareBtn" >مشاركة</button>
                 <button onclick="closeModal('shareModal')">إغلاق</button>
             </div>
         </div>
@@ -181,11 +321,17 @@
         <div id="deleteModal" class="modal hidden">
             <div class="modal-content">
                 <p>هل أنت متأكد من حذف العملية؟</p>
-                <button id="confirmDeleteBtn">نعم، احذف</button>
+                <button id="confirmDeleteBtn">نعم</button>
                 <button onclick="closeModal('deleteModal')">إلغاء</button>
             </div>
         </div>
         <!--End Delete Modal-->
+
+
+        <script src="JS/exchanges_list_modal.js"></script>
+        <script src="JS/add_exchange.js"></script>
+        <script src="JS/switch_withdraw_exchange.js"></script>
+        
 
     </<body>
 

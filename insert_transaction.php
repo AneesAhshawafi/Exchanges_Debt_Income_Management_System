@@ -6,12 +6,15 @@
  */
 
 // insert_transaction.php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
 
 header("Content-Type: application/json");
+//header("Content-Type: application/json");
 
+include 'dbconn.php';
+include 'total_ammounts_calc.php';
 // التحقق من أن الطلب هو POST وأن جميع البيانات موجودة
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     date_default_timezone_set("Asia/Aden");
@@ -24,37 +27,46 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $ammount = floatval($_POST["ammount"]);
     $fees = floatval($_POST["fees"]);
 //    $tra_date = trim($_POST["tra-date"]);
-    $tra_date_raw = trim($_POST["tra-date"]);
-    $tra_date = $tra_date_raw ? date("Y/m/d H:i:s A", strtotime($tra_date_raw)) : date("Y/m/d H:i:s  A");
+    $tra_date_raw = $_POST["tra-date"];
+    $tra_date = $tra_date_raw ? date("Y-m-d", strtotime($tra_date_raw)) : date("Y-m-d");
 
     $atm = trim($_POST["atm"]);
     $note = trim($_POST["note"]);
     $client_id = intval($_POST["client_id"]);
-   
-
 
     // تضمين الاتصال بقاعدة البيانات
-    include("dbconn.php");
-    $resualt_sum_ammount_new = $conn->query("SELECT SUM(AMMOUNT) as total FROM TRANSACTION WHERE CURRENCY ='new'and CLIENT_ID= " . $client_id);
-    $resualt_sum_ammount_old = $conn->query("SELECT SUM(AMMOUNT) as total FROM TRANSACTION WHERE CURRENCY ='old' and CLIENT_ID= " . $client_id);
-    $resualt_sum_ammount_sa = $conn->query("SELECT SUM(AMMOUNT) as total FROM TRANSACTION WHERE CURRENCY ='sa' and CLIENT_ID= " . $client_id);
-    $row_new = $resualt_sum_ammount_new->fetch_assoc();
-    $sum_ammount_new = is_null($row_new['total']) ? 0 : $row_new['total'];
+   
+    $sum_ammounts = calc_total_ammounts($client_id);
+    $sum_ammount_new = $sum_ammounts[0];
+    $sum_ammount_old = $sum_ammounts[1];
+    $sum_ammount_sa = $sum_ammounts[2];
 
-    $row_old = $resualt_sum_ammount_old->fetch_assoc();
-    $sum_ammount_old = is_null($row_old['total']) ? 0 : $row_old['total'];
-
-    $row_sa = $resualt_sum_ammount_sa->fetch_assoc();
-    $sum_ammount_sa = is_null($row_sa['total']) ? 0 : $row_sa['total'];
+    if ($currency == "new") {
+        if ($for_or_on == "له") {
+            $sum_ammount_new += $ammount;
+        } else {
+             $sum_ammount_new -= $ammount;
+        }
+    } elseif ($currency == "old") {
+        if ($for_or_on == "له") {
+             $sum_ammount_old += $ammount;
+        } else {
+             $sum_ammount_old -= $ammount;
+        }
+    } else {
+        if ($for_or_on == "له") {
+             $sum_ammount_sa += $ammount;
+        } else {
+             $sum_ammount_sa -= $ammount;
+        }
+    }
 
     // تجهيز الاستعلام
-    $sql = "INSERT INTO transaction 
-        (TYPE, CURRENCY, FOR_OR_ON, SENDER_NAME, TRANSFER_NO, AMMOUNT, TRA_FEES, TRA_DATE, ATM, NOTE, CLIENT_ID,sum_ammount_new,sum_ammount_old,sum_ammount_sa)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO transaction (TYPE, CURRENCY, FOR_OR_ON, SENDER_NAME, TRANSFER_NO, AMMOUNT, TRA_FEES, TRA_DATE, ATM, NOTE, CLIENT_ID,sum_ammount_new,sum_ammount_old,sum_ammount_sa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sssssddsssiddd", $type, $currency, $for_or_on, $sender_name, $transfer_no,
-            $ammount, $fees, $tra_date, $atm, $note, $client_id,$sum_ammount_new,$sum_ammount_old,$sum_ammount_sa);
+            $ammount, $fees, $tra_date, $atm, $note, $client_id, $sum_ammount_new, $sum_ammount_old, $sum_ammount_sa);
 
     if ($stmt->execute()) {
         echo json_encode(["success" => "تمت إضافة المعاملة بنجاح"]);

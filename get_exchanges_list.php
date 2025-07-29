@@ -21,7 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["client_id"])) {
 
     $transactions = [];
     while ($row = $result->fetch_assoc()) {
+        
+        $row['TRA_DATE']=date("Y-m-d", strtotime($row['TRA_DATE']));
         $transactions[] = $row;
+        
     }
 
     echo json_encode($transactions);
