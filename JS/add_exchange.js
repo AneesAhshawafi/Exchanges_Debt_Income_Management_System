@@ -22,6 +22,7 @@ addExchangeForm.addEventListener("submit", function (e) {
     e.preventDefault();
     const formData = new FormData(this);
     formData.append("client_id", currentClientId);
+    
     fetch("insert_transaction.php", {
         method: "POST",
         body: formData

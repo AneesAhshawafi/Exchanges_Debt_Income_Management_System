@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $currency = trim($_POST["currency"]);
     $for_or_on = trim($_POST["for-or-on"]);
     $sender_name = trim($_POST["sender-name"]);
+    $receiver_name= trim($_POST['receiver-name']);
     $transfer_no = trim($_POST["transfer-no"]);
     $ammount = floatval($_POST["ammount"]);
     $fees = floatval($_POST["fees"]);
@@ -62,10 +63,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     // تجهيز الاستعلام
-    $sql = "INSERT INTO transaction (TYPE, CURRENCY, FOR_OR_ON, SENDER_NAME, TRANSFER_NO, AMMOUNT, TRA_FEES, TRA_DATE, ATM, NOTE, CLIENT_ID,sum_ammount_new,sum_ammount_old,sum_ammount_sa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO transaction (TYPE, CURRENCY, FOR_OR_ON, SENDER_NAME,RECEIVER_NAME, TRANSFER_NO, AMMOUNT, TRA_FEES, TRA_DATE, ATM, NOTE, CLIENT_ID,sum_ammount_new,sum_ammount_old,sum_ammount_sa) VALUES (?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssddsssiddd", $type, $currency, $for_or_on, $sender_name, $transfer_no,
+    $stmt->bind_param("ssssssddsssiddd", $type, $currency, $for_or_on, $sender_name,$receiver_name, $transfer_no,
             $ammount, $fees, $tra_date, $atm, $note, $client_id, $sum_ammount_new, $sum_ammount_old, $sum_ammount_sa);
 
     if ($stmt->execute()) {

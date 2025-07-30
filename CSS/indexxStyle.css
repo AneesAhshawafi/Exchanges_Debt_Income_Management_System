@@ -64,7 +64,7 @@
     min-width: max-content;
     position: relative;
     display: grid;
-    grid-template-columns: repeat(14, 170px);
+    grid-template-columns: repeat(15, 170px);
     /*text-align: center;*/
     /*justify-content: center;*/
     border-bottom: 1px solid green;
@@ -144,7 +144,7 @@
 }
 
 .exchanges-list-overlay {
-    position: fixed;
+    /*position: fixed;*/
     top: 0;
     right: 0;
     bottom: 0;

@@ -35,31 +35,7 @@
     </head>
 
     <body>
-        <!-- رأس الصفحة ويحتوي على الشعار والقائمة -->
-        <header>
-            <section class="container">
-                <nav>
-                    <!-- أيقونة القائمة المنسدلة (للهواتف) -->
-                    <i class="fas fa-bars toggle-menu" id="fa-bar"></i>
-                    <!-- قائمة الروابط -->
-                    <ul id="menu">
 
-                        <li><a class="active" href="index.html"> قسم الحوالات</a></li>
-                        <li><a href="debt.html">قسم الديون</a></li>
-                        <li><a href="income.html">قسم الدخل</a></li>
-
-                        <!-- زر تسجيل الدخول -->
-                        <li id="login-li">
-                            <a href="login.html" data-lang="login-btn" class="login-buttn" id="login-link">تسجيل الدخول</a>
-                        </li>
-                    </ul>
-                </nav>
-                <!-- شعار الموقع -->
-                <a href="#" class="logo">
-                    <img src="images/logo.png" alt="logo" />
-                </a>
-            </section>
-        </header>
 
         <!-- Start exchanges List -->
 
@@ -73,6 +49,7 @@
 
                     <div class="exchanges-list-header">
                         <h3 >اسم المرسل/المودع</h3>
+                        <h3>المستلم</h3>
                         <h3>نوع العملية</h3>
                         <h3 class="no-exchanges">رقم الحوالة</h3>
                         <h3>المبلغ قعيطي</h3>
@@ -82,9 +59,9 @@
                         <h3>التاريخ</h3>
                         <h3>الصراف</h3>
                         <h3>الرسوم</h3>
-                        <h3>الاجمالي قعيطي</h3>
-                        <h3>الاجمالي قديم</h3>
-                        <h3>الإجمالي سعودي</h3>
+                        <h3>الاجمالي قعيطي له</h3>
+                        <h3>الاجمالي قديم له</h3>
+                        <h3>الإجمالي سعودي له</h3>
                         <h3>ملاحظة</h3>
                     </div>
                     <div class="exchanges-list-body" id="exchanges-list-body">
@@ -130,9 +107,9 @@
                         <label for="sender" id="sender-input-label">المودع</label>
                         <input type="text" id="sender" name="sender-name" placeholder=" المودع" required />
                     </div>
-                    <div class="input-group hidden" id="reciver-input-group" >
+                    <div class="input-group " id="reciver-input-group" >
                         <label for="reciver"> المستلم</label>
-                        <input type="text" id="reciver-input" name="reciver-name" placeholder=" المستلم " required />
+                        <input type="text" id="reciver-input" name="receiver-name" placeholder=" المستلم "  />
                     </div>
                     
                     <div class="input-group hidden"  id="transfer-no-input-group">
@@ -146,11 +123,11 @@
 
                     <div class="input-group">
                         <label for="fees">الرسوم</label>
-                        <input type="text" id="fees" name="fees" placeholder="الرسوم" required>
+                        <input type="text" id="fees" name="fees" placeholder="الرسوم" >
                     </div>
                     <div class="input-group">
                         <label for="date">التاريخ والوقت</label>
-                        <input type="datetime-local" id="date" name="tra-date" placeholder="التاريخ والوقت" />
+                        <input type="date" id="date" name="tra-date" placeholder="التاريخ والوقت" />
                     </div>
                     <div class="input-group">
                         <label for="atm">الصراف</label>
@@ -232,13 +209,13 @@
 
                     <div class="input-group" id="edit-sender-input-group">
 
-                       <label for="sender" id="sender-input-label">المودع</label>
+                       <label for="sender" id="edit-sender-input-label">المودع</label>
 
                         <input type="text" name="sender" id="edit-sender" placeholder="المودع" required />
                     </div>
-                     <div class="input-group hidden" id="edit-reciver-input-group" >
+                     <div class="input-group " id="edit-reciver-input-group" >
                         <label for="reciver"> المستلم</label>
-                    <input type="text" id="reciver" name="reciver" placeholder=" المستلم " required />
+                    <input type="text" id="reciver" name="receiver-name" placeholder=" المستلم "  />
                     </div>
 
                        
@@ -270,7 +247,7 @@
 
                         <label for="date">التاريخ والوقت</label>
 
-                        <input class="date" type="datetime-local" name="date" id="edit-date" placeholder="التاريخ والوقت" />
+                        <input class="date" type="date" name="date" id="edit-date" placeholder="التاريخ والوقت" />
 
                     </div>
 
