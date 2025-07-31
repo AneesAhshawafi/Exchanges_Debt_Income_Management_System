@@ -45,6 +45,8 @@
                 <div class="exchanges-list-title">
                     <h2>قائمة العمليات (حوالات/ايداع)</h2>
                 </div>
+                <input type="text" id="exchangeSearchInput" placeholder="🔍 ابحث عن مرسل، مستلم، رقم حوالة، نوع العملية، التاريخ..." class="search-input" />
+
                 <div class="exchanges-list-container" >
 
                     <div class="exchanges-list-header">
@@ -63,6 +65,7 @@
                         <h3>الاجمالي قديم له</h3>
                         <h3>الإجمالي سعودي له</h3>
                         <h3>ملاحظة</h3>
+                        <h3>حالة الحوالة</h3>
                     </div>
                     <div class="exchanges-list-body" id="exchanges-list-body">
 
@@ -103,6 +106,14 @@
                         <option value="له">له</option>
                         <option value="عليه">عليه</option>
                     </select>
+                    <select class="hidden" name="status" id="status">
+                        <option value="" disabled selected>حالة الحوالة</option>
+
+                        <option value="استلمت">استلمت</option>
+
+                        <option value="لم تستلم">لم تستلم</option>
+
+                    </select>
                     <div class="input-group" id="sender-input-group" >
                         <label for="sender" id="sender-input-label">المودع</label>
                         <input type="text" id="sender" name="sender-name" placeholder=" المودع" required />
@@ -111,7 +122,7 @@
                         <label for="reciver"> المستلم</label>
                         <input type="text" id="reciver-input" name="receiver-name" placeholder=" المستلم "  />
                     </div>
-                    
+
                     <div class="input-group hidden"  id="transfer-no-input-group">
                         <label for="transfer-no">رقم الحوالة</label>
                         <input type="text" id="transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
@@ -206,25 +217,33 @@
                         <option value="عليه">عليه</option>
 
                     </select>
+                    <select class="hidden" name="status" id="edit-status">
+                        <option value="" disabled selected>حالة الحوالة</option>
+
+                        <option value="استلمت">استلمت</option>
+
+                        <option value="لم تستلم">لم تستلم</option>
+
+                    </select>
 
                     <div class="input-group" id="edit-sender-input-group">
 
-                       <label for="sender" id="edit-sender-input-label">المودع</label>
+                        <label for="sender" id="edit-sender-input-label">المودع</label>
 
                         <input type="text" name="sender" id="edit-sender" placeholder="المودع" required />
                     </div>
-                     <div class="input-group " id="edit-reciver-input-group" >
+                    <div class="input-group " id="edit-reciver-input-group" >
                         <label for="reciver"> المستلم</label>
-                    <input type="text" id="reciver" name="receiver-name" placeholder=" المستلم "  />
+                        <input type="text" id="reciver" name="receiver-name" placeholder=" المستلم "  />
                     </div>
 
-                       
+
                     <div class="input-group hidden"  id="edit-transfer-no-input-group">
                         <label for="transfer-no">رقم الحوالة</label>
                         <input type="text" id="edit-transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
                     </div>
-                    
-              
+
+
                     <div class="input-group">
 
                         <label for="ammount">المبلغ</label>
@@ -287,9 +306,12 @@
         <!--Start Share Modal-->
         <div id="shareModal" class="modal hidden">
             <div class="modal-content">
-                <textarea id="shareText" readonly></textarea>
-                <button id="shareBtn" >مشاركة</button>
-                <button onclick="closeModal('shareModal')">إغلاق</button>
+                <textarea id="shareText" ></textarea>
+                <div class="shareModalBtns">     
+                    <button id="shareBtn" >مشاركة بدون الإجمالي</button>
+                    <button id="shareWithTotalBtn" >مشاركة مع الإجمالي</button>
+                    <button onclick="closeModal('shareModal')">إغلاق</button>
+                </div>
             </div>
         </div>
         <!--End Share Modal-->
@@ -308,7 +330,18 @@
         <script src="JS/exchanges_list_modal.js"></script>
         <script src="JS/add_exchange.js"></script>
         <script src="JS/switch_withdraw_exchange.js"></script>
-        
+        <script>
+                    document.getElementById("exchangeSearchInput").addEventListener("input", function () {
+                        const searchText = this.value.toLowerCase();
+                        const exchangeItems = document.querySelectorAll(".exchanges-data-container");
+
+                        exchangeItems.forEach(item => {
+                            const textContent = item.innerText.toLowerCase();
+                            item.style.display = textContent.includes(searchText) ? "block" : "none";
+                        });
+                    });
+
+        </script>
 
     </<body>
 

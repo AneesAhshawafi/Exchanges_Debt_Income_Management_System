@@ -80,6 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <div class="clients-list-title">
                         <h2 class="clients-list-title">قائمة العملاء</h2>
                     </div>
+                    <input type="text" id="searchInput" placeholder="🔍 ابحث عن اسم عميل..." class="search-input" />
 
                     <div class="clients-list-header">
                         <h3 class="name" id="name">الاسم</h3>
@@ -96,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <i class="fas fa-plus fa-2x"></i>
                     </button>
                 </div>
-                
+
                 <!-- End Clients List -->
 
                 <!-- start add-client-form -->
@@ -122,11 +123,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
                 <!--Start Share Modal-->
-                <div id="shareModal" class="modal hidden">
+                <!--                <div id="shareModal" class="modal hidden">
+                                    <div class="modal-content">
+                                        <textarea id="shareText" ></textarea>
+                                        <button id="share-btn" onclick="navigator.share ? navigator.share({text: document.getElementById('shareText').value}) : alert('المشاركة غير مدعومة');">مشاركة</button>
+                                        <button onclick="closeModal('shareModal')">إغلاق</button>
+                                    </div>
+                                </div>-->
+                <!-- Modal تأكيد المشاركة -->
+                <div id="confirmShareModal" class="modal hidden">
                     <div class="modal-content">
-                        <!--<textarea id="shareText" ></textarea>-->
-                        <button id="share-btn" onclick="navigator.share ? navigator.share({text: document.getElementById('shareText').value}) : alert('المشاركة غير مدعومة');">مشاركة</button>
-                        <button onclick="closeModal('shareModal')">إغلاق</button>
+                        <p>هل تريد تحميل ملف PDF لجميع حوالات هذا العميل؟</p>
+                        <button id="confirmShareBtn">نعم</button>
+                        <button onclick="closeModal('confirmShareModal')">إلغاء</button>
                     </div>
                 </div>
 
@@ -179,7 +188,43 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <script src="JS/add_client_modal.js"></script>
         <script src="JS/set_current_client_id.js"></script>
         <script src="JS/operations_on_client.js"></script>
-         <script src="JS/lazy_loading_clients.js"></script>
+        <script src="JS/lazy_loading_clients.js"></script>
+        <script>
+                            const searchInput = document.getElementById("searchInput");
+                            const clientsListDiv = document.getElementById("clients-list");
+
+                            searchInput.addEventListener("input", function () {
+                                const searchValue = this.value.trim();
+
+                                fetch("get_clients_search.php?search=" + encodeURIComponent(searchValue))
+                                        .then(res => res.text())
+                                        .then(data => {
+                                            clientsListDiv.innerHTML = data;
+                                        })
+                                        .catch(err => {
+                                            console.error("فشل البحث عن العملاء:", err);
+                                        });
+                            });
+
+        </script>
+        <script>
+            function openShareClientModal(clientId) {
+                document.getElementById("confirmShareModal").classList.remove("hidden");
+
+                const confirmBtn = document.getElementById("confirmShareBtn");
+
+                // إزالة أي حدث سابق لمنع التكرار
+                const newBtn = confirmBtn.cloneNode(true);
+                confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
+
+                newBtn.addEventListener("click", function () {
+                    window.open("generate_client_pdf.php?client_id=" + encodeURIComponent(clientId), "_blank");
+                    closeModal("confirmShareModal");
+                });
+            }
+
+
+        </script>
     </body>
 
 </html>

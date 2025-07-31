@@ -1,17 +1,39 @@
 
 <?php
-include 'dbconn.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tra_id'])) {
-    $tra_id = $_POST['tra_id'];
+include 'dbconn.php';
+include 'update_sum_ammounts.php';
+$error_file= fopen("eror_delet", "w");
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['TRA_ID'])) {
+    $tra_id = intval($_POST['TRA_ID']);
+    $exchangesListData = json_decode($_POST['exchanges_List'], true);
+
+    //start get old transaction data
+    $stmt = $conn->prepare("SELECT * FROM transaction WHERE TRA_ID = ?");
+    $stmt->bind_param("i", $tra_id);
+    if ($stmt->execute()) {
+        fwrite($error_file, ' تم استخراج الببيانات القديمة' . "\r\n");
+//        echo json_encode(["success" => "تم التعديل بنجاح"]);
+    } else {
+        fwrite($error_file, ' لم يتم استخراج الببيانات القديمة' . "\r\n");
+    }
+    $result = $stmt->get_result();
+    $oldData = $result->fetch_assoc();
+    //end get old transaction data
+
+    $currency = $oldData['CURRENCY'];
+    $for_or_on = $oldData['FOR_OR_ON'];
+    $ammount_differ = $oldData['AMMOUNT'];
+
+    update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $tra_id, $error_file);
 
     $stmt = $conn->prepare("DELETE FROM transaction WHERE TRA_ID = ?");
     $stmt->bind_param("s", $tra_id);
 
     if ($stmt->execute()) {
-        echo "تم الحذف بنجاح";
+        echo json_encode(["success" => "تم الحذف بنجاح"]);
     } else {
-        echo "حدث خطأ أثناء الحذف";
+        echo json_encode(["error" => "حدث خطأ أثناء الحذف".$stmt->error]);
     }
 
     $stmt->close();

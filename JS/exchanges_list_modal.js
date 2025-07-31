@@ -25,26 +25,65 @@ function numberFormat(value, decimals = 2) {
 
 }
 
-function openDeleteModal(traNo) {
+//function openDeleteModal(traNo, exchangesList) {
+//    postData={
+//        TRA_ID : traNo,
+//        exchanges_List , exchangesList
+//    };
+//    
+//
+//    document.getElementById("deleteModal").classList.remove("hidden");
+//    document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
+//        
+//        fetch("delete_exchange.php", {
+//            method: "POST",
+////            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+//            body: "tra_id=" + encodeURIComponent(traNo)
+//
+//        }).then(res => res.text()).then(response => {
+//
+//            alert("تم الحذف");
+//
+//            closeModal("deleteModal");
+//            location.reload();
+//        });
+//
+//    });
+//}
 
+function openDeleteModal(traNo, exchangesList) {
+    const postData = {
+        TRA_ID: traNo,
+        exchanges_List: exchangesList
+    };
 
     document.getElementById("deleteModal").classList.remove("hidden");
+
     document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
+        const formData = new FormData();
+        formData.append("TRA_ID", postData.TRA_ID);
+        formData.append("exchanges_List", JSON.stringify(postData.exchanges_List));
+
         fetch("delete_exchange.php", {
             method: "POST",
-            headers: {"Content-Type": "application/x-www-form-urlencoded"},
-            body: "tra_id=" + encodeURIComponent(traNo)
-
-        }).then(res => res.text()).then(response => {
-
-            alert("تم الحذف");
-
-            closeModal("deleteModal");
-            location.reload();
-        });
-
+            body: formData
+        })
+                .then(res => res.json())
+                .then(response => {
+                    if (response.success) {
+                        alert(response.success);
+                        closeModal("deleteModal");
+                        location.reload();
+                    } else {
+                        alert(response.error);
+                    }
+                })
+                .catch(err => {
+                    console.error("خطأ أثناء الحذف:", err);
+                });
     });
 }
+
 
 function openShareModal(traNo) {
 
@@ -61,48 +100,134 @@ function openShareModal(traNo) {
             .then(res => res.json())
 
             .then(data => {
+                traData = data;
 
-                shareExchange(data);
+                if (traData.CURRENCY == 'new') {
+                    currency = ' ري قعيطي ';
+                } else if (traData.CURRENCY == 'old') {
+                    currency = 'ري قديم';
+                } else {
+                    currency = 'ريال سعودي';
+                }
+                ammount = numberFormat(traData.AMMOUNT, 2);
+                textWithoutTotal = `بن عبود للصرافة والتحويلات
+`;
+                if (traData.TYPE == 'حوالة') {
+                    if (traData.FOR_OR_ON == 'له') {
+                        textWithoutTotal += `(استلام حوالة)
+لكم ${ammount} ${currency}
+ مقابل حوالة واردة عن طريق ${traData.ATM}
+المرسل: ${traData.SENDER_NAME}
+المستلم: ${traData.RECEIVER_NAME}
+رقم الحوالة: ${traData.TRANSFER_NO}
+المبلغ: ${ammount} ${currency}
+التاريخ: ${traData.TRA_DATE}`;
+
+                    } else {
+                        textWithoutTotal += `(ارسال حوالة)
+عليكم ${ammount} ${currency}
+ مقابل حوالة صادرة عن طريق ${traData.ATM}
+المرسل: ${traData.SENDER_NAME}
+المستلم: ${traData.RECEIVER_NAME}
+رقم الحوالة: ${traData.TRANSFER_NO}
+المبلغ: ${ammount} ${currency}
+التاريخ: ${traData.TRA_DATE}`;
+                    }
+
+                } else {
+                    if (traData.FOR_OR_ON == 'له') {
+                        textWithoutTotal += `( عملية إيداع لحسابكم)
+أودع ${traData.SENDER_NAME} لحسابكم مبلغ ${ammount} ${currency}
+  عن طريق ${traData.ATM}
+المودع: ${traData.SENDER_NAME}
+المستلم: ${traData.RECEIVER_NAME}
+المبلغ: ${ammount} ${currency}
+التاريخ: ${traData.TRA_DATE}`;
+
+
+                    } else {
+                        textWithoutTotal += `( عملية إيداع من حسابكم)
+أودع ${traData.SENDER_NAME} لحساب${traData.RECEIVER_NAME}  مبلغ ${ammount} ${currency}
+  عن طريق ${traData.ATM}
+المودع: ${traData.SENDER_NAME}
+المستلم: ${traData.RECEIVER_NAME}
+المبلغ: ${ammount} ${currency}
+التاريخ: ${traData.TRA_DATE}`;
+                    }
+                }
+                if (traData.NOTE) {
+                    textWithoutTotal += `
+ملاحظة:
+${traData.NOTE}`;
+                }
+
+                const shareText = document.getElementById("shareText");
+                shareText.value = textWithoutTotal + getTextOfTotalAmmounts(traData);
+                shareText.style.direction = 'rtl';
+
                 document.getElementById("shareModal").classList.remove("hidden");
-
+                document.getElementById("shareBtn").addEventListener("click", () => {
+                    shareExchange(textWithoutTotal);
+                });
+                document.getElementById('shareWithTotalBtn').addEventListener("click", () => {
+                    shareExchange(textWithoutTotal + getTextOfTotalAmmounts(traData));
+                });
             });
 
 }
-
-function shareExchange(traData) {
-    const text = `
-رقم العملية: ${traData.TRANSFER_NO}
-النوع: ${traData.TYPE}
-المبلغ: ${traData.AMMOUNT} ${traData.CURRENCY}
-المرسل: ${traData.SENDER_NAME}
-الرسوم: ${traData.TRA_FEES}
-التاريخ: ${traData.TRA_DATE}
-الملاحظات: ${traData.NOTE}
+function getTextOfTotalAmmounts(traData) {
+    textTotal = `
+ الرصيد :
 `;
-    const shareText = document.getElementById("shareText");
-    shareText.value = text;
-    shareText.style.direction = 'rtl';
-    document.getElementById("shareBtn").addEventListener("click", () => {
 
-        // فتح واجهة المشاركة إن أحببت
-        if (navigator.share) {
-            navigator.share({
-                title: "بيانات الحوالة",
-                text: text
-            }).catch(err => {
-                console.error("فشل المشاركة:", err);
-            });
+    if (traData.CURRENCY == 'new') {
+        if (traData.sum_ammount_new > 0) {
+            textTotal += ` لكم `;
+        } else {
+            textTotal += ` عليكم `;
         }
-        // نسخ النص للحافظة
-        navigator.clipboard.writeText(text).then(() => {
-//        alert("تم نسخ بيانات الحوالة! يمكنك الآن لصقها في أي تطبيق.");
+        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_new), 2)} ري قعيطي
+`;
+
+    } else if (traData.CURRENCY == 'old') {
+        if (traData.sum_ammount_new > 0) {
+            textTotal += ` لكم `;
+        } else {
+            textTotal += ` عليكم `;
+        }
+        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_old), 2)} ري قديم
+`;
+    } else {
+        if (traData.sum_ammount_sa > 0) {
+            textTotal += ` لكم `;
+        } else {
+            textTotal += ` عليكم `;
+        }
+        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_sa), 2)} ريال سعودي
+`;
+    }
+    return textTotal;
+}
+function shareExchange(text) {
+    // فتح واجهة المشاركة إن أحببت
+    if (navigator.share) {
+        navigator.share({
+            title: "بيانات الحوالة",
+            text: text
         }).catch(err => {
-            console.error("خطأ في النسخ:", err);
+            console.error("فشل المشاركة:", err);
         });
+    }
+    // نسخ النص للحافظة
+    navigator.clipboard.writeText(text).then(() => {
+//        alert("تم نسخ بيانات الحوالة! يمكنك الآن لصقها في أي تطبيق.");
+    }).catch(err => {
+        console.error("خطأ في النسخ:", err);
+    });
 
 
-        document.getElementById("shareModal").classList.add("hidden");
-    })
+    document.getElementById("shareModal").classList.add("hidden");
+
 
 
 }
@@ -141,9 +266,25 @@ function openEditModal(traData, data) {
 
     document.getElementById("reciver").value = traData.RECEIVER_NAME;
 
+    const editTransferInputGroup = document.getElementById('edit-transfer-no-input-group')
+    const editStatus = document.getElementById('edit-status');
+    if (traData.TYPE == 'حوالة') {
 
+        if (traData.TRANSFER_NO) {
+            const transfer_no = document.getElementById("edit-transfer-no");
+            transfer_no.value = traData.TRANSFER_NO;
+            editTransferInputGroup.classList.remove('hidden');
+        }
+        if (traData.STATUS) {
 
-    document.getElementById("edit-transfer-no").value = traData.TRANSFER_NO;
+            editStatus.value = traData.STATUS;
+            editStatus.classList.remove('hidden');
+        }
+
+    } else {
+        editTransferInputGroup.classList.add('hidden');
+        editStatus.classList.add('hidden');
+    }
 
 
     document.getElementById("edit-ammount").value = traData.AMMOUNT;
@@ -176,15 +317,15 @@ function openEditModal(traData, data) {
             method: "POST",
             body: formData
         })
-                .then(res => res.json())
-                .then(response => {
-                    if (response.success) {
-                        alert(response.success);
-                    } else {
-                        alert(response.error);
-                    }
-                })
-                .catch(err => alert("حدث خطأ: " + err));
+//                .then(res => res.json())
+//                .then(response => {
+//                    if (response.success) {
+//                        alert(response.success);
+//                    } else {
+//                        alert(response.error);
+//                    }
+//                })
+//                .catch(err => alert("حدث خطأ: " + err));
 
         editExchangeForm.reset();
         location.reload();
@@ -192,7 +333,7 @@ function openEditModal(traData, data) {
 
     closeEditExchangeBtn.addEventListener("click", () => {
         closeModal('editExchangeModal');
-
+        editExchangeForm.reset();
     });
 
 }
@@ -246,7 +387,7 @@ fetch("get_exchanges_list.php", {
                         exchangeDataContent += `<h3>0</h3><h3>0</h3><h3>${numberFormat(row.AMMOUNT)}</h3>`;
 
                     }
-                    exchangeDataContent += `<h3>${row.FOR_OR_ON}</h3><h3 class="date">${row.TRA_DATE}</h3><h3>${row.ATM}</h3><h3>${numberFormat(row.TRA_FEES)}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><h3 class="note">${row.NOTE}</h3></div>`
+                    exchangeDataContent += `<h3>${row.FOR_OR_ON}</h3><h3 class="date">${row.TRA_DATE}</h3><h3>${row.ATM}</h3><h3>${numberFormat(row.TRA_FEES)}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><h3 class="note">${row.NOTE}</h3><h3>${row.STATUS}</h3></div>`
 
                     exchangesDataContainer.innerHTML = exchangeDataContent;
                     exchangesListBody.insertBefore(exchangesDataContainer, exchangesListBody.firstChild);
@@ -264,7 +405,7 @@ fetch("get_exchanges_list.php", {
 
                         if (operaion == "tras") {
 
-                            openDeleteModal(traNo);
+                            openDeleteModal(traNo, data);
                         } else if (operaion == "edit") {
                             traData = null;
                             data.forEach(row => {

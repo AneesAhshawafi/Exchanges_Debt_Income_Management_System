@@ -64,7 +64,7 @@
     min-width: max-content;
     position: relative;
     display: grid;
-    grid-template-columns: repeat(15, 170px);
+    grid-template-columns: repeat(16, 170px);
     /*text-align: center;*/
     /*justify-content: center;*/
     border-bottom: 1px solid green;
@@ -75,9 +75,7 @@
     transition: all 0.3s ease;
 }
 
-.exchanges .clients-data:hover,
-.exchanges .exchanges-data-container:hover ,
-.exchanges-data:hover{
+.exchanges .clients-data:hover{
     /*transform: scale(1.005);*/
     background-color: #ab9eee;
     cursor: pointer;
@@ -476,6 +474,23 @@ width: 100%;
     direction: ltr;
     /*text-align: center;*/
 }
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
 
 @media (max-width: 900px) {
     .exchange-overlay {
@@ -517,7 +532,16 @@ button {
     border: none;
     cursor: pointer;
 }
-
+.shareModalBtns{
+    display: flex;
+    flex-direction: column;
+}
+#shareWithTotalBtn{
+    background-color: lightgreen;
+}
+#shareWithTotalBtn:hover{
+    background-color: #c5f6c5;
+}
 @media (max-width: 676px) {
 
     .clients-data,

@@ -3,6 +3,8 @@
 <?php
 
 include 'dbconn.php';
+include 'update_sum_ammounts.php';
+$error_file = fopen("er_file.txt", "w");
 header("Content-Type: application/json");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -10,159 +12,92 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $id = $_POST['exchange_id'];
     $type = $_POST['type'];
-    $currency = $_POST['currency'];
+    $newCurrency = $_POST['currency'];
     $newForOrOn = $_POST['for-or-on'];
     $sender = trim($_POST['sender']);
-    $receiver = trim($_POST['reciever-name']);
-    $transfer_no = trim($_POST['transfer_no']);
+    $receiver = trim($_POST['receiver-name']);
+    $transfer_no = trim($_POST['transfer-no']);
     $newAmmount = trim($_POST['ammount']);
     $fees = $_POST['fees'];
     $tra_date_raw = $_POST["date"];
-    $date = $tra_date_raw ? date("Y-m-d", strtotime($tra_date_raw)) : date("Y-m-d");
+    $satus= trim($_POST['status']);
     $atm = $_POST['atm'];
     $note = trim($_POST["note"]);
     $exchangesListData = json_decode($_POST['exchanges_list'], true);
+    if (!$exchangesListData) {
+        echo json_encode(["error" => "بيانات العمليات غير صالحة"]);
+        echo 'بيانات العمليات غير صالح';
+        exit();
+    }
+
     $stmt = $conn->prepare("SELECT * FROM transaction WHERE TRA_ID = ?");
     $stmt->bind_param("i", $id);
     if ($stmt->execute()) {
+        fwrite($error_file, ' تم استخراج الببيانات القديمة' . "\r\n");
 //        echo json_encode(["success" => "تم التعديل بنجاح"]);
     } else {
-        echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
-        exit();
-        $stmt->close();
-        $conn->close();
+        fwrite($error_file, ' لم يتم استخراج الببيانات القديمة' . "\r\n");
     }
     $result = $stmt->get_result();
     $oldData = $result->fetch_assoc();
+    $date = $tra_date_raw ? date("Y-m-d", strtotime($tra_date_raw)) : date("Y-m-d", strtotime($oldData['TRA_DATE']));
 //    $exchangesListData[array_keys($oldData)]['FOR_OR_ON'] = $newForOrOn;
-    $for_or_on=$newForOrOn;
+    $for_or_on = $oldData['FOR_OR_ON'];
+
     $oldAmmount = is_numeric($oldData['AMMOUNT']) ? $oldData['AMMOUNT'] : floatval($oldData['AMMOUNT']);
-    $ammount_differ = $oldAmmount - $newAmmount;
+    $currency = $oldData['CURRENCY'];
+    if ($currency != $newCurrency || $oldAmmount != $newAmmount || $for_or_on != $newForOrOn) {
+        if ($currency == $newCurrency) {
 
-    if ($currency == "new") {
-        if ($for_or_on == "له") {
-            foreach ($exchangesListData as $traData) {
-                if ($traData['TRA_ID'] >= $id) {
-                    $sum_ammount_new = is_numeric($traData['sum_ammount_new']) ? $traData['sum_ammount_new'] : floatval($traData['sum_ammount_new']);
-                    $sum_ammount_new -= $ammount_differ;
-                    $stmt = $conn->prepare("UPDATE transaction SET sum_ammount_new =? WHERE TRA_ID = ?");
-                    $stmt->bind_param("di", $sum_ammount_new,$traData['TRA_ID']);
-                    if ($stmt->execute()) {
-//                        echo json_encode(["success" => "تم التعديل بنجاح"]);
-                    } else {
-                        echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
-                        exit();
-                        $stmt->close();
-                        $conn->close();
-                    }
-                }
+            if ($for_or_on == $newForOrOn) {
+                $ammount_differ = $oldAmmount - $newAmmount;
+                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
+                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
+                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
+                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+            } else {
+                $ammount_differ = $oldAmmount + $newAmmount;
+                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
+                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
+                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
+                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
             }
-        } //end if new for
-        else {
-            foreach ($exchangesListData as $traData) {
-                if ($traData['TRA_ID'] >= $id) {
-                    $sum_ammount_new = is_numeric($traData['sum_ammount_new']) ? $traData['sum_ammount_new'] : floatval($traData['sum_ammount_new']);
-                    $sum_ammount_new += $ammount_differ;
-                    $stmt = $conn->prepare("UPDATE transaction SET sum_ammount_new =? WHERE TRA_ID = ?");
-                    $stmt->bind_param("di", $sum_ammount_new,$traData['TRA_ID']);
-                    if ($stmt->execute()) {
-//                        echo json_encode(["success" => "تم التعديل بنجاح"]);
-                    } else {
-                        echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
-                        exit();
-                        $stmt->close();
-                        $conn->close();
-                    }
-                }
-            }
-        }
-    }//end if new 
-    elseif ($currency == "old") {
-        if ($for_or_on == "له") {
+        } else {
+            if ($for_or_on == $newForOrOn) {
+                $ammount_differ = $oldAmmount;
+                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
+                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
+                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
+                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+                $ammount_differ = $newAmmount;
+                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
+                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
+                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
+                if ($for_or_on == 'له') {
 
-//                    $sum_ammount_old += $ammount_differ;
-            foreach ($exchangesListData as $traData) {
-                if ($traData['TRA_ID'] >= $id) {
-                    $sum_ammount_old = is_numeric($traData['sum_ammount_old']) ? $traData['sum_ammount_old'] : floatval($traData['sum_ammount_old']);
-                    $sum_ammount_old -= $oldAmmount;
-                    $stmt = $conn->prepare("UPDATE transaction SET sum_ammount_old =? WHERE TRA_ID = ?");
-                    $stmt->bind_param("di", $sum_ammount_old,$traData['TRA_ID']);
-                    if ($stmt->execute()) {
-//                        echo json_encode(["success" => "تم التعديل بنجاح"]);
-                    } else {
-                        echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
-                        exit();
-                        $stmt->close();
-                        $conn->close();
-                    }
+                    update_sum_ammount($newCurrency, 'عليه', $exchangesListData, $ammount_differ, $id, $error_file);
+                } else {
+                    update_sum_ammount($newCurrency, 'له', $exchangesListData, $ammount_differ, $id, $error_file);
                 }
-            }
-        } //end elseif old for
-        else {
-//                    $sum_ammount_old -= $ammount_differ;
-            foreach ($exchangesListData as $traData) {
-                if ($traData['TRA_ID'] >= $id) {
-                    $sum_ammount_old = is_numeric($traData['sum_ammount_old']) ? $traData['sum_ammount_old'] : floatval($traData['sum_ammount_old']);
-                    $sum_ammount_old += $oldAmmount;
-                    $stmt = $conn->prepare("UPDATE transaction SET sum_ammount_old =? WHERE TRA_ID = ?");
-                    $stmt->bind_param("di", $sum_ammount_old,$traData['TRA_ID']);
-                    if ($stmt->execute()) {
-//                        echo json_encode(["success" => "تم التعديل بنجاح"]);
-                    } else {
-                        echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
-                        exit();
-                        $stmt->close();
-                        $conn->close();
-                    }
-                }
+            } else {
+                $ammount_differ = $oldAmmount;
+                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
+                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
+                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
+                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+
+                $ammount_differ = $newAmmount;
+                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
+                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
+                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
+                update_sum_ammount($newCurrency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
             }
         }
-    }//end elseif old
-    else {
-        if ($for_or_on == "له") {
-//                    $sum_ammount_sa += $ammount_differ;
-            foreach ($exchangesListData as $traData) {
-                if ($traData['TRA_ID'] >= $id) {
-                    $sum_ammount_sa = is_numeric($traData['sum_ammount_sa']) ? $traData['sum_ammount_sa'] : floatval($traData['sum_ammount_sa']);
-                    $sum_ammount_sa -= $ammount_differ;
-                    $stmt = $conn->prepare("UPDATE transaction SET sum_ammount_sa =? WHERE TRA_ID = ?");
-                    $stmt->bind_param("di", $sum_ammount_sa,$traData['TRA_ID']);
-                    if ($stmt->execute()) {
-//                        echo json_encode(["success" => "تم التعديل بنجاح"]);
-                    } else {
-                        echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
-                        exit();
-                        $stmt->close();
-                        $conn->close();
-                    }
-                }
-            }
-        }//end else sa for
-        else {
-//                    $sum_ammount_sa -= $ammount_differ;
-
-            foreach ($exchangesListData as $traData) {
-                if ($traData['TRA_ID'] >= $id) {
-                    $sum_ammount_sa = is_numeric($traData['sum_ammount_sa']) ? $traData['sum_ammount_sa'] : floatval($traData['sum_ammount_sa']);
-                    $sum_ammount_sa += $ammount_differ;
-                    $stmt = $conn->prepare("UPDATE transaction SET sum_ammount_sa =? WHERE TRA_ID = ?");
-                    $stmt->bind_param("di", $sum_ammount_sa,$traData['TRA_ID']);
-                    if ($stmt->execute()) {
-//                        echo json_encode(["success" => "تم التعديل بنجاح"]);
-                    } else {
-                        echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
-                        exit();
-                        $stmt->close();
-                        $conn->close();
-                    }
-                }
-            }
-        }
-    }//end else sa
+    }
 
 
 
-
+    fwrite($error_file, "done with update sums");
 
     $sql = "UPDATE transaction SET 
                 TYPE = ?, 
@@ -175,20 +110,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 TRA_FEES = ?, 
                 TRA_DATE = ?, 
                 ATM = ?, 
-                NOTE = ?
+                NOTE = ?,
+                STATUS = ?
             WHERE TRA_ID = ?";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssddsssi", $type, $currency, $newForOrOn, $sender, $receiver, $transfer_no, $newAmmount, $fees, $date, $atm, $note, $id);
+    fwrite($error_file, "type:" . $type ."  receiver : ".$receiver."  transfer number : ".$transfer_no. "  currency: " . $newCurrency . "new ammount : " . $newAmmount . "\r\n");
+    $stmt->bind_param("ssssssddssssi", $type, $newCurrency, $newForOrOn, $sender, $receiver, $transfer_no, $newAmmount, $fees, $date, $atm, $note,$status, $id);
 
     if ($stmt->execute()) {
-        echo json_encode(["success" => "تم التعديل بنجاح"]);
+//        echo json_encode(["success" => "تم التعديل بنجاح"]);
+
+        echo 'تم التعديل';
     } else {
-        echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
+//        echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
+        echo 'حدث خطا';
     }
 
-    $stmt->close();
-    $conn->close();
-    exit();
+//    $stmt->close();
+//    $conn->close();
+//    exit();
 }
 ?>
