@@ -20,7 +20,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $newAmmount = trim($_POST['ammount']);
     $fees = $_POST['fees'];
     $tra_date_raw = $_POST["date"];
-    $satus= trim($_POST['status']);
+    $satus= $_POST['status'];
+//    if ($type!='حوالة') {
+//        $satus='تم الإيداع';
+//    }
     $atm = $_POST['atm'];
     $note = trim($_POST["note"]);
     $exchangesListData = json_decode($_POST['exchanges_list'], true);
@@ -99,7 +102,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     fwrite($error_file, "done with update sums");
 
-    $sql = "UPDATE transaction SET 
+    
+      if (!$transfer_no && $type == 'حوالة') {
+        $sql = "SELECT TRA_ID FROM transaction ORDER BY TRA_ID DESC LIMIT 1";
+        $result = $conn->query($sql);
+        $result_tra_id_for_transfer_no = $result->fetch_assoc();
+        $tra_id_for_transfer_no = $result_tra_id_for_transfer_no['TRA_ID'];
+        fwrite($error_file, "tra_id_for_transfer_no = " . $tra_id_for_transfer_no . " type :" . gettype($tra_id_for_transfer_no) . "\r\n");
+
+        $transfer_no = 'BA-' . date("md", strtotime($tra_date)) . str_pad($tra_id_for_transfer_no + 1, 8, '0', STR_PAD_LEFT);
+    // تجهيز الاستعلام
+       $sql = "UPDATE transaction SET 
                 TYPE = ?, 
                 CURRENCY = ?, 
                 FOR_OR_ON = ?, 
@@ -117,7 +130,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $conn->prepare($sql);
     fwrite($error_file, "type:" . $type ."  receiver : ".$receiver."  transfer number : ".$transfer_no. "  currency: " . $newCurrency . "new ammount : " . $newAmmount . "\r\n");
     $stmt->bind_param("ssssssddssssi", $type, $newCurrency, $newForOrOn, $sender, $receiver, $transfer_no, $newAmmount, $fees, $date, $atm, $note,$status, $id);
+    } else {
+           $sql = "UPDATE transaction SET 
+                TYPE = ?, 
+                CURRENCY = ?, 
+                FOR_OR_ON = ?, 
+                SENDER_NAME = ?,
+                RECEIVER_NAME = ?,
+                TRANSFER_NO = ?, 
+                AMMOUNT = ?, 
+                TRA_FEES = ?, 
+                TRA_DATE = ?, 
+                ATM = ?, 
+                NOTE = ?
+            WHERE TRA_ID = ?";
 
+    $stmt = $conn->prepare($sql);
+    fwrite($error_file, "type:" . $type ."  receiver : ".$receiver."  transfer number : ".$transfer_no. "  currency: " . $newCurrency . "new ammount : " . $newAmmount . "\r\n");
+    $stmt->bind_param("ssssssddsssi", $type, $newCurrency, $newForOrOn, $sender, $receiver, $transfer_no, $newAmmount, $fees, $date, $atm, $note, $id);
+
+    }
+    
+ 
     if ($stmt->execute()) {
 //        echo json_encode(["success" => "تم التعديل بنجاح"]);
 

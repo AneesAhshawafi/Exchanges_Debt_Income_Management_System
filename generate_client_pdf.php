@@ -1,68 +1,120 @@
 <?php
-require('fpdf/tfpdf.php');
+
+require_once __DIR__ . '/vendor/autoload.php';
 include 'dbconn.php';
 
-function reverseArabic($text) {
-    preg_match_all('/./us', $text, $matches);
-    return implode('', array_reverse($matches[0]));
-}
-
+ob_end_clean(); // تنظيف أي buffer محتمل
+error_reporting(E_ERROR | E_PARSE); // تجاهل التحذيرات
 $client_id = isset($_GET['client_id']) ? intval($_GET['client_id']) : 0;
-
 if (!$client_id) {
     die("معرّف العميل غير صالح.");
 }
 
-$stmt = $conn->prepare("SELECT CLIENT_NAME FROM client WHERE CLIENT_ID = ?");
+// اسم العميل
+$stmt = $conn->prepare("SELECT CLIENT_NAME FROM client WHERE CLIENT_ID = ? ");
 $stmt->bind_param("i", $client_id);
 $stmt->execute();
 $result = $stmt->get_result();
-if ($result->num_rows == 0) {
-    die("العميل غير موجود.");
-}
 $client = $result->fetch_assoc();
 $client_name = $client['CLIENT_NAME'];
 
-$pdf = new tFPDF();
-$pdf->AddPage();
-$pdf->AddFont('DejaVu', '', 'DejaVuSans.ttf', true);
-$pdf->SetFont('DejaVu', '', 14);
-$pdf->SetAutoPageBreak(true, 15);
-
-// عنوان التقرير
-$pdf->Cell(0, 10, reverseArabic("قائمة العمليات للعميل: ") . reverseArabic($client_name), 0, 1, 'C');
-$pdf->Ln(5);
-
-// رأس الجدول (من اليمين لليسار)
-$pdf->SetFont('DejaVu', '', 11);
-$pdf->SetFillColor(220, 220, 220);
-$pdf->Cell(30, 10, reverseArabic('التاريخ'), 1, 0, 'C', true);
-$pdf->Cell(20, 10, reverseArabic('العملة'), 1, 0, 'C', true);
-$pdf->Cell(25, 10, reverseArabic('المبلغ'), 1, 0, 'C', true);
-$pdf->Cell(25, 10, reverseArabic('له/عليه'), 1, 0, 'C', true);
-$pdf->Cell(30, 10, reverseArabic('المرسل'), 1, 0, 'C', true);
-$pdf->Cell(25, 10, reverseArabic('النوع'), 1, 0, 'C', true);
-$pdf->Cell(15, 10, 'ID', 1, 0, 'C', true);
-$pdf->Ln();
-
-// استعلام البيانات
-$query = "SELECT TRA_ID, TYPE, SENDER_NAME, FOR_OR_ON, AMMOUNT, CURRENCY, TRA_DATE FROM transaction WHERE CLIENT_ID = ?";
+// العمليات
+$query = "SELECT * FROM transaction WHERE CLIENT_ID = ? ORDER BY TRA_ID DESC";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $client_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-$pdf->SetFont('DejaVu', '', 10);
+// إعداد mPDF
+$mpdf = new \Mpdf\Mpdf([
+     'mode' => 'utf-8',
+    'format' => 'A3',       // حجم الورقة A3
+    'orientation' => 'L',   // الاتجاه أفقي (Landscape)
+    'default_font' => 'kfgqpcuthmantahanaskh',
+    'default_font_size' => 14,
+    'mirrorMargins' => true,
+        ]);
+
+$mpdf->SetDirectionality('rtl');
+
+// عنوان التقرير
+$html = "<h3 style='text-align: center;'>قائمة العمليات للعميل: $client_name</h3><br>";
+
+// رأس الجدول
+$html .= "
+<table border='1' cellpadding='5' style='text-align:center' cellspacing='0' width='100%'>
+<thead>
+<tr style='background-color: #f2f2f2;'>
+     <th>اسم المرسل/المودع</th>
+    <th>المستلم</th>
+    <th>نوع العملية</th>
+    <th>رقم الحوالة</th>
+    <th>المبلغ</th>
+    <th>له/عليه</th>
+    <th>التاريخ</th>
+    <th>الصراف</th>
+    <th>الرسوم</th>
+    <th>الرصيد قعيطي </th>
+    <th>الرصيد قديم </th>
+    <th>الرصيد سعودي </th>
+    <th>ملاحظة</th>
+    <th>حالة الحوالة</th>
+
+</tr>
+</thead>
+<tbody>
+";
+
+// بيانات العمليات
 while ($row = $result->fetch_assoc()) {
-    $pdf->Cell(30, 10, $row['TRA_DATE'], 1);
-    $pdf->Cell(20, 10, reverseArabic($row['CURRENCY']), 1);
-    $pdf->Cell(25, 10, number_format($row['AMMOUNT'], 2), 1);
-    $pdf->Cell(25, 10, reverseArabic($row['FOR_OR_ON']), 1);
-    $pdf->Cell(30, 10, reverseArabic($row['SENDER_NAME']), 1);
-    $pdf->Cell(25, 10, reverseArabic($row['TYPE']), 1);
-    $pdf->Cell(15, 10, $row['TRA_ID'], 1);
-    $pdf->Ln();
+    $html .= "<tr>";
+    $html .= "<td>" . htmlspecialchars($row['SENDER_NAME']) . "</td>";
+    $html .= "<td>" . htmlspecialchars($row['RECEIVER_NAME']) . "</td>";
+    $html .= "<td>" . htmlspecialchars($row['TYPE']) . "</td>";
+    $html .= "<td>" . htmlspecialchars($row['TRANSFER_NO']) . "</td>";
+    if ($row['CURRENCY'] == 'new') {
+        $html .= "<td>" . number_format($row['AMMOUNT'], 2).' ري قعيطي' . "</td>";
+//        $html .= "<td>" . number_format(0, 2) . "</td>";
+//        $html .= "<td>" . number_format(0, 2) . "</td>";
+    } elseif ($row['CURRENCY'] == 'old') {
+
+//        $html .= "<td>" . number_format(0, 2) . "</td>";
+        $html .= "<td>" . number_format($row['AMMOUNT'], 2).' ري قديم' . "</td>";
+//        $html .= "<td>" . number_format(0, 2) . "</td>";
+    } else {
+//        $html .= "<td>" . number_format(0, 2) . "</td>";
+//        $html .= "<td>" . number_format(0, 2) . "</td>";
+        $html .= "<td>" . number_format($row['AMMOUNT'], 2) .' ر سعودي'. "</td>";
+    }
+    $html .= "<td>" . htmlspecialchars($row['FOR_OR_ON']) . "</td>";
+    $html .= "<td>" . htmlspecialchars(date("Y-m-d", strtotime($row['TRA_DATE']))) . "</td>";
+    $html .= "<td>" . htmlspecialchars($row['ATM']) . "</td>";
+    $html .= "<td>" . number_format($row['TRA_FEES'], 2) . "</td>";
+    if($row['sum_ammount_new']>=0){
+        
+    $html .= "<td>" . number_format($row['sum_ammount_new'], 2) .' لكم'. "</td>";
+    } else {
+        $html .= "<td>" . number_format($row['sum_ammount_new']*-1, 2) .' عليكم'. "</td>";
+    }
+    if($row['sum_ammount_old']>=0){
+        
+    $html .= "<td>" . number_format($row['sum_ammount_old'], 2) .' لكم'. "</td>";
+    } else {
+        $html .= "<td>" . number_format($row['sum_ammount_old']*-1, 2) .' عليكم'. "</td>";
+    }
+    if($row['sum_ammount_sa']>=0){
+        
+    $html .= "<td>" . number_format($row['sum_ammount_sa'], 2) .' لكم'. "</td>";
+    } else {
+        $html .= "<td>" . number_format($row['sum_ammount_sa']*-1, 2) .' عليكم'. "</td>";
+    }
+    $html .= "<td>" . htmlspecialchars($row['NOTE']) . "</td>";
+    $html .= "<td>" . htmlspecialchars($row['STATUS']) . "</td>";
+    $html .= "</tr>";
 }
 
-$pdf->Output("I", "client_transactions.pdf");
-?>
+$html .= "</tbody></table>";
+
+// إخراج PDF
+$mpdf->WriteHTML($html);
+$mpdf->Output("client_transactions.pdf", "I");

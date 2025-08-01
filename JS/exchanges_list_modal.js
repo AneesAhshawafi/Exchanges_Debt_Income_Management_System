@@ -387,7 +387,7 @@ fetch("get_exchanges_list.php", {
                         exchangeDataContent += `<h3>0</h3><h3>0</h3><h3>${numberFormat(row.AMMOUNT)}</h3>`;
 
                     }
-                    exchangeDataContent += `<h3>${row.FOR_OR_ON}</h3><h3 class="date">${row.TRA_DATE}</h3><h3>${row.ATM}</h3><h3>${numberFormat(row.TRA_FEES)}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><h3 class="note">${row.NOTE}</h3><h3>${row.STATUS}</h3></div>`
+                    exchangeDataContent += `<h3>${row.FOR_OR_ON}</h3><h3 class="date">${row.TRA_DATE}</h3><h3>${row.ATM}</h3><h3>${numberFormat(row.TRA_FEES)}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><textarea class="note">${row.NOTE}</textarea><h3>${row.STATUS}</h3></div>`
 
                     exchangesDataContainer.innerHTML = exchangeDataContent;
                     exchangesListBody.insertBefore(exchangesDataContainer, exchangesListBody.firstChild);
