@@ -208,7 +208,7 @@ fetch("income_get_income_list.php", {
                         } else {
                             traData = null;
                             data.forEach(row => {
-                                if (row.DEBT_ID == traNo) {
+                                if (row.INCM_ID == traNo) {
 
                                     traData = row;
                                 }

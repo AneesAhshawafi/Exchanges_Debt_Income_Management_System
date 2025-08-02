@@ -2,9 +2,9 @@
 <?php
 
 include 'dbconn.php';
-include 'debt_update_sum_ammounts.php';
+include 'income_update_sum_ammounts.php';
 $error_file= fopen("eror_delet", "w");
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['DEBT_ID'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['INCM_ID'])) {
     $tra_id = intval($_POST['INCM_ID']);
     $exchangesListData = json_decode($_POST['income_list'], true);
 
