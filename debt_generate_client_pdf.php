@@ -11,7 +11,7 @@ if (!$client_id) {
 }
 
 // اسم العميل
-$stmt = $conn->prepare("SELECT CLIENT_NAME FROM client WHERE CLIENT_ID = ? and DEPT_NO = 1 ");
+$stmt = $conn->prepare("SELECT CLIENT_NAME FROM client WHERE CLIENT_ID = ? and DEPT_NO = 2");
 $stmt->bind_param("i", $client_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -19,7 +19,7 @@ $client = $result->fetch_assoc();
 $client_name = $client['CLIENT_NAME'];
 
 // العمليات
-$query = "SELECT * FROM transaction WHERE CLIENT_ID = ? ORDER BY TRA_ID DESC";
+$query = "SELECT * FROM debt WHERE CLIENT_ID = ? ORDER BY DEBT_ID DESC";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $client_id);
 $stmt->execute();
@@ -45,20 +45,14 @@ $html .= "
 <table border='1' cellpadding='5' style='text-align:center' cellspacing='0' width='100%'>
 <thead>
 <tr style='background-color: #f2f2f2;'>
-     <th>اسم المرسل/المودع</th>
-    <th>المستلم</th>
-    <th>نوع العملية</th>
-    <th>رقم الحوالة</th>
+     <th>الغرض</th>
     <th>المبلغ</th>
     <th>له/عليه</th>
     <th>التاريخ</th>
-    <th>الصراف</th>
-    <th>الرسوم</th>
-    <th>الرصيد قعيطي </th>
-    <th>الرصيد قديم </th>
-    <th>الرصيد سعودي </th>
+    <th>الإجمالي قعيطي </th>
+    <th>الإجمالي قديم </th>
+    <th>الإجمالي سعودي </th>
     <th>ملاحظة</th>
-    <th>حالة الحوالة</th>
 
 </tr>
 </thead>
@@ -68,10 +62,7 @@ $html .= "
 // بيانات العمليات
 while ($row = $result->fetch_assoc()) {
     $html .= "<tr>";
-    $html .= "<td>" . htmlspecialchars($row['SENDER_NAME']) . "</td>";
-    $html .= "<td>" . htmlspecialchars($row['RECEIVER_NAME']) . "</td>";
-    $html .= "<td>" . htmlspecialchars($row['TYPE']) . "</td>";
-    $html .= "<td>" . htmlspecialchars($row['TRANSFER_NO']) . "</td>";
+    $html .= "<td>" . htmlspecialchars($row['DESCRIPTION']) . "</td>";
     if ($row['CURRENCY'] == 'new') {
         $html .= "<td>" . number_format($row['AMMOUNT'], 2).' ري قعيطي' . "</td>";
 //        $html .= "<td>" . number_format(0, 2) . "</td>";
@@ -88,8 +79,6 @@ while ($row = $result->fetch_assoc()) {
     }
     $html .= "<td>" . htmlspecialchars($row['FOR_OR_ON']) . "</td>";
     $html .= "<td>" . htmlspecialchars(date("Y-m-d", strtotime($row['TRA_DATE']))) . "</td>";
-    $html .= "<td>" . htmlspecialchars($row['ATM']) . "</td>";
-    $html .= "<td>" . number_format($row['TRA_FEES'], 2) . "</td>";
     if($row['sum_ammount_new']>=0){
         
     $html .= "<td>" . number_format($row['sum_ammount_new'], 2) .' لكم'. "</td>";
@@ -109,7 +98,6 @@ while ($row = $result->fetch_assoc()) {
         $html .= "<td>" . number_format($row['sum_ammount_sa']*-1, 2) .' عليكم'. "</td>";
     }
     $html .= "<td>" . htmlspecialchars($row['NOTE']) . "</td>";
-    $html .= "<td>" . htmlspecialchars($row['STATUS']) . "</td>";
     $html .= "</tr>";
 }
 
@@ -117,4 +105,4 @@ $html .= "</tbody></table>";
 
 // إخراج PDF
 $mpdf->WriteHTML($html);
-$mpdf->Output("client_transactions.pdf", "I");
+$mpdf->Output("client_debts.pdf", "I");

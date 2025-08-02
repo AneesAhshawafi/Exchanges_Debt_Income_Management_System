@@ -2,9 +2,9 @@
 // * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 // * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
 // */
-let currentClientId = localStorage.getItem("currentClientId");
+ currentClientId = localStorage.getItem("currentClientId");
 
-let currentExchangesListData = null;
+ currentExchangesListData = null;
 
 let deleteTraNo = null;
 
@@ -25,46 +25,20 @@ function numberFormat(value, decimals = 2) {
 
 }
 
-//function openDeleteModal(traNo, exchangesList) {
-//    postData={
-//        TRA_ID : traNo,
-//        exchanges_List , exchangesList
-//    };
-//    
-//
-//    document.getElementById("deleteModal").classList.remove("hidden");
-//    document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
-//        
-//        fetch("delete_exchange.php", {
-//            method: "POST",
-////            headers: {"Content-Type": "application/x-www-form-urlencoded"},
-//            body: "tra_id=" + encodeURIComponent(traNo)
-//
-//        }).then(res => res.text()).then(response => {
-//
-//            alert("تم الحذف");
-//
-//            closeModal("deleteModal");
-//            location.reload();
-//        });
-//
-//    });
-//}
-
 function openDeleteModal(traNo, exchangesList) {
     const postData = {
-        TRA_ID: traNo,
-        exchanges_List: exchangesList
+        DEBT_ID: traNo,
+        debts_list: exchangesList
     };
 
     document.getElementById("deleteModal").classList.remove("hidden");
 
     document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
         const formData = new FormData();
-        formData.append("TRA_ID", postData.TRA_ID);
-        formData.append("exchanges_List", JSON.stringify(postData.exchanges_List));
+        formData.append("DEBT_ID", postData.DEBT_ID);
+        formData.append("debts_list", JSON.stringify(postData.debts_list));
 
-        fetch("delete_exchange.php", {
+        fetch("debt_delete_debt.php", {
             method: "POST",
             body: formData
         })
@@ -87,13 +61,13 @@ function openDeleteModal(traNo, exchangesList) {
 
 function openShareModal(traNo) {
 
-    fetch("share_exchange.php", {
+    fetch("debt_share_debt.php", {
 
         method: "POST",
 
         headers: {"Content-Type": "application/x-www-form-urlencoded"},
 
-        body: "tra_no=" + encodeURIComponent(traNo)
+        body: "debt_id=" + encodeURIComponent(traNo)
 
     })
 
@@ -110,51 +84,13 @@ function openShareModal(traNo) {
                     currency = 'ريال سعودي';
                 }
                 ammount = numberFormat(traData.AMMOUNT, 2);
-                textWithoutTotal = `بن عبود للصرافة والتحويلات
+                textWithoutTotal = `بقالة بن عيود 
 `;
-                if (traData.TYPE == 'حوالة') {
-                    if (traData.FOR_OR_ON == 'له') {
-                        textWithoutTotal += `(استلام حوالة)
-لكم ${ammount} ${currency}
- مقابل حوالة واردة عن طريق ${traData.ATM}
-المرسل: ${traData.SENDER_NAME}
-المستلم: ${traData.RECEIVER_NAME}
-رقم الحوالة: ${traData.TRANSFER_NO}
-المبلغ: ${ammount} ${currency}
-التاريخ: ${traData.TRA_DATE}`;
-
-                    } else {
-                        textWithoutTotal += `(ارسال حوالة)
+                textWithoutTotal += `
 عليكم ${ammount} ${currency}
- مقابل حوالة صادرة عن طريق ${traData.ATM}
-المرسل: ${traData.SENDER_NAME}
-المستلم: ${traData.RECEIVER_NAME}
-رقم الحوالة: ${traData.TRANSFER_NO}
+ مقابل ${traData.DESCRIPTION}
 المبلغ: ${ammount} ${currency}
-التاريخ: ${traData.TRA_DATE}`;
-                    }
-
-                } else {
-                    if (traData.FOR_OR_ON == 'له') {
-                        textWithoutTotal += `( عملية إيداع لحسابكم)
-أودع ${traData.SENDER_NAME} لحسابكم مبلغ ${ammount} ${currency}
-  عن طريق ${traData.ATM}
-المودع: ${traData.SENDER_NAME}
-المستلم: ${traData.RECEIVER_NAME}
-المبلغ: ${ammount} ${currency}
-التاريخ: ${traData.TRA_DATE}`;
-
-
-                    } else {
-                        textWithoutTotal += `( عملية إيداع من حسابكم)
-أودع ${traData.SENDER_NAME} لحساب${traData.RECEIVER_NAME}  مبلغ ${ammount} ${currency}
-  عن طريق ${traData.ATM}
-المودع: ${traData.SENDER_NAME}
-المستلم: ${traData.RECEIVER_NAME}
-المبلغ: ${ammount} ${currency}
-التاريخ: ${traData.TRA_DATE}`;
-                    }
-                }
+التاريخ: ${traData.DEBT_DATE}`;
                 if (traData.NOTE) {
                     textWithoutTotal += `
 ملاحظة:
@@ -177,7 +113,7 @@ ${traData.NOTE}`;
 }
 function getTextOfTotalAmmounts(traData) {
     textTotal = `
- الرصيد :
+ الإجمالي :
 `;
 
     if (traData.CURRENCY == 'new') {
@@ -212,7 +148,7 @@ function shareExchange(text) {
     // فتح واجهة المشاركة إن أحببت
     if (navigator.share) {
         navigator.share({
-            title: "بيانات الحوالة",
+            title: "بيانات الدين",
             text: text
         }).catch(err => {
             console.error("فشل المشاركة:", err);
@@ -247,10 +183,8 @@ function openEditModal(traData, data) {
 
     }
 
-    document.getElementById("edit-exchange-id").value = traData.TRA_ID;
+    document.getElementById("edit-exchange-id").value = traData.DEBT_ID;
 
-
-    document.getElementById("edit-type").value = traData.TYPE;
 
 
 
@@ -262,42 +196,17 @@ function openEditModal(traData, data) {
 
 
 
-    document.getElementById("edit-sender").value = traData.SENDER_NAME;
-
-    document.getElementById("reciver").value = traData.RECEIVER_NAME;
-
-    const editTransferInputGroup = document.getElementById('edit-transfer-no-input-group')
-    const editStatus = document.getElementById('edit-status');
-    if (traData.TYPE == 'حوالة') {
-
-        if (traData.TRANSFER_NO) {
-            const transfer_no = document.getElementById("edit-transfer-no");
-            transfer_no.value = traData.TRANSFER_NO;
-            editTransferInputGroup.classList.remove('hidden');
-        }
-        if (traData.STATUS) {
-
-            editStatus.value = traData.STATUS;
-            editStatus.classList.remove('hidden');
-        }
-
-    } else {
-        editTransferInputGroup.classList.add('hidden');
-        editStatus.classList.add('hidden');
-    }
+    document.getElementById("edit-description").value = traData.DESCRIPTION;
 
 
     document.getElementById("edit-ammount").value = traData.AMMOUNT;
 
 
 
-    document.getElementById("edit-fees").value = traData.TRA_FEES;
+
+    document.getElementById("edit-date").value = traData.DEBT_DATE;
 
 
-    document.getElementById("edit-date").value = traData.TRA_DATE.replace(' ', 'T').slice(0, 16);
-
-
-    document.getElementById("edit-atm").value = traData.ATM;
     document.getElementById("edit-note").value = traData.NOTE;
     const editExchangeModal = document.getElementById("editExchangeModal");
     editExchangeModal.classList.remove("hidden");
@@ -312,8 +221,8 @@ function openEditModal(traData, data) {
     editExchangeForm.addEventListener("submit", (event) => {
         event.preventDefault();
         const formData = new FormData(editExchangeForm);
-        formData.append("exchanges_list", JSON.stringify(data));
-        fetch("update_exchange.php", {
+        formData.append("debts_list", JSON.stringify(data));
+        fetch("debt_update_debt.php", {
             method: "POST",
             body: formData
         })
@@ -346,7 +255,7 @@ function closeModal(id) {
 
 
 const exchangesListBody = document.getElementById("exchanges-list-body");
-fetch("get_exchanges_list.php", {
+fetch("debt_get_debts_list.php", {
     method: "POST",
     headers: {
         "Content-Type": "application/x-www-form-urlencoded"
@@ -361,7 +270,7 @@ fetch("get_exchanges_list.php", {
                 return;
             }
             if (data.length === 0) {
-                exchangesListBody.innerHTML = "<p>لا توجد حوالات لهذا العميل.</p>";
+                exchangesListBody.innerHTML = "<p>لا يوجد ديون لهذا العميل.</p>";
 
 
             } else {
@@ -372,12 +281,12 @@ fetch("get_exchanges_list.php", {
                     exchangesDataContainer.classList.add("exchanges-data-container");
                     exchangeDataContent = `
                                     <div class="oper">
-                                        <i  class="fas fa-trash-alt  operation" data-id="trash${row.TRA_ID}"></i>
-                                        <i class="fas fa-edit  operation" data-id="edit${row.TRA_ID}"> </i>
-                                        <i class="fas fa-share-alt  operation" data-id="share${row.TRA_ID}"></i>
+                                        <i  class="fas fa-trash-alt  operation" data-id="trash${row.DEBT_ID}"></i>
+                                        <i class="fas fa-edit  operation" data-id="edit${row.DEBT_ID}"> </i>
+                                        <i class="fas fa-share-alt  operation" data-id="share${row.DEBT_ID}"></i>
                                     </div>
-                                    <div class="exchanges-data" data-id="exchange-data-${row.TRA_ID}">`;
-                    exchangeDataContent += `<h3>${row.SENDER_NAME}</h3><h3>${row.RECEIVER_NAME}</h3><h3>${row.TYPE}</h3><h3>${row.TRANSFER_NO}</h3>`;
+                                    <div class="debts-data" data-id="exchange-data-${row.DEBT_ID}">`;
+                    exchangeDataContent += `<textarea rows="2" cols="20" >${row.DESCRIPTION}</textarea>`;
                     if (row.CURRENCY === "new") {
                         exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قعيطي</h3>`;
                     } else if (row.CURRENCY === "old") {
@@ -387,7 +296,7 @@ fetch("get_exchanges_list.php", {
                         exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} سعودي</h3>`;
 
                     }
-                    exchangeDataContent += `<h3>${row.FOR_OR_ON}</h3><h3 class="date">${row.TRA_DATE}</h3><h3>${row.ATM}</h3><h3>${numberFormat(row.TRA_FEES)}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><textarea class="note">${row.NOTE}</textarea><h3>${row.STATUS}</h3></div>`
+                    exchangeDataContent += `<h3>${row.FOR_OR_ON}</h3><h3 class="date">${row.DEBT_DATE}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><textarea class="note" rows="2" cols="20">${row.NOTE}</textarea></div>`
 
                     exchangesDataContainer.innerHTML = exchangeDataContent;
                     exchangesListBody.insertBefore(exchangesDataContainer, exchangesListBody.firstChild);
@@ -409,7 +318,7 @@ fetch("get_exchanges_list.php", {
                         } else if (operaion == "edit") {
                             traData = null;
                             data.forEach(row => {
-                                if (row.TRA_ID == traNo) {
+                                if (row.DEBT_ID == traNo) {
 
                                     traData = row;
                                 }

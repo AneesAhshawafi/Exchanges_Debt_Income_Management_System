@@ -9,7 +9,7 @@ include 'total_ammounts_calc.php';
 
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-$sql = "SELECT CLIENT_ID, CLIENT_NAME FROM CLIENT WHERE CLIENT_NAME LIKE ? AND DEPT_NO = 1 ORDER BY CLIENT_ID DESC LIMIT 20";
+$sql = "SELECT CLIENT_ID, CLIENT_NAME FROM CLIENT WHERE CLIENT_NAME LIKE ? AND DEPT_NO = 2 ORDER BY CLIENT_ID DESC LIMIT 20";
 $stmt = $conn->prepare($sql);
 $searchTerm = "%" . $search . "%";
 $stmt->bind_param("s", $searchTerm);

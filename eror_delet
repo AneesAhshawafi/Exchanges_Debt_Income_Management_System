@@ -1,8 +1,5 @@
  تم استخراج الببيانات القديمة
 دخلنا صفحة sum
-exchanges number 18
-sum_ammount_old= 200000.00
-sum_ammount_old= 200000
-exchanges number 19
-sum_ammount_old= 200000.00
-sum_ammount_old= 200000
+old_for current-id=3
+sum_ammount_old= 20000.00
+sum_ammount_new= 0

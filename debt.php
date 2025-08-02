@@ -4,7 +4,7 @@ include 'total_ammounts_calc.php';
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //add client
     $client_name = $_POST["client_name"];
-    $sql_add_client = "INSERT INTO CLIENT (CLIENT_NAME, DEPT_NO, USER_ID) VALUES ('$client_name', 1, 1)";
+    $sql_add_client = "INSERT INTO CLIENT (CLIENT_NAME, DEPT_NO, USER_ID) VALUES ('$client_name', 2, 1)";
     mysqli_query($conn, $sql_add_client);
     header("Location: index.php");
     exit;
@@ -51,8 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <!-- قائمة الروابط -->
                     <ul id="menu">
 
-                        <li><a class="active" href="index.php"> قسم الحوالات</a></li>
-                        <li><a href="debt.php">قسم الديون</a></li>
+                        <li><a  href="index.php"> قسم الحوالات</a></li>
+                        <li><a class="active" href="debt.php">قسم الديون</a></li>
                         <li><a href="income_list.php">قسم الدخل</a></li>
 
                         <!-- زر تسجيل الدخول -->
@@ -60,20 +60,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <a href="login.html" data-lang="login-btn" class="login-buttn" id="login-link">تسجيل الدخول</a>
                         </li>
                     </ul>
-                 
+                    
                     <h1>بن عبود للصرافة والتحويلات</h1>
                 <!-- شعار الموقع -->
                 <a href="#" class="logo">
-                     <img src="images/logo2.jpg" alt="logo" />
+                    <img src="images/logo2.jpg" alt="logo" />
                 </a>
                 </nav>
             </section>
         </header>
 
-        <div class="exchanges" id="exchanges">
+        <div class="debts" id="debts">
             <div class="container">
                 <!-- عنوان القسم -->
-                <h2 class="special-heading">الحوالات والايداع</h2>
+                <h2 class="special-heading">قسم إدارة الديون</h2>
 
 
                 <!-- Start Clients List -->
@@ -87,9 +87,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         
                     <div class="clients-list-header">
                         <h3 class="name" id="name">الاسم</h3>
-                        <h3 class="no-exchanges">الرصيد قعيطي</h3>
-                        <h3 class="total-for">الرصيد قديم</h3>
-                        <h3 class="total-on">الرصيد سعودي له</h3>
+                        <h3 class="no-exchanges">الإجمالي قعيطي</h3>
+                        <h3 class="total-for">الإجمالي قديم</h3>
+                        <h3 class="total-on">الإجمالي سعودي</h3>
                     </div>
 
                     <div id="clients-list"></div> <!-- سنملأ هذا بواسطة JavaScript -->
@@ -137,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <!-- Modal تأكيد المشاركة -->
                 <div id="confirmShareModal" class="modal hidden">
                     <div class="modal-content">
-                        <p>هل تريد تحميل ملف PDF لجميع حوالات هذا العميل؟</p>
+                        <p>هل تريد تحميل ملف PDF لسجل ديون هذا العميل؟</p>
                         <button id="confirmShareBtn">نعم</button>
                         <button onclick="closeModal('confirmShareModal')">إلغاء</button>
                     </div>
@@ -149,14 +149,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 <div class="edit-client-overlay hidden" id="edit-client-overlay">
                     <div class="edit-client">
-                        <form action="update_client.php" method="POST" class="edit-client-form">
+                        <form action="debt_update_client.php" method="POST" class="edit-client-form">
                             <span class="close-modal close-modal-form" id="closeEditClientBtn">&rarr;</span>
                             <div class="edit-client-form-title">
                                 <h3>تعديل اسم العميل</h3>
                             </div>
                             <input type="hidden" name="client-id" id="client-id" />
                             <div class="input-group">
-                                <label for="client">اسم العميل</label>
+                                <label for="client-name-e">اسم العميل</label>
                                 <input type="text" id="client-name-e" name="client-name" placeholder=" اسم العميل" required />
                             </div>
 
@@ -190,9 +190,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <!-- زر تسجيل لدخول / تسجيل الخروج -->
         <!--            <script src="JS/variables.js"></script>-->
         <script src="JS/add_client_modal.js"></script>
-        <script src="JS/set_current_client_id.js"></script>
+        <script src="JS/debt_set_current_client.js"></script>
         <script src="JS/operations_on_client.js"></script>
-        <script src="JS/lazy_loading_clients.js"></script>
+        <script src="JS/debt_lazy_loading_clients.js"></script>
         <script>
                             const searchInput = document.getElementById("searchInput");
                             const clientsListDiv = document.getElementById("clients-list");
@@ -222,7 +222,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
 
                 newBtn.addEventListener("click", function () {
-                    window.open("generate_client_pdf.php?client_id=" + encodeURIComponent(clientId), "_blank");
+                    window.open("debt_generate_client_pdf.php?client_id=" + encodeURIComponent(clientId), "_blank");
                     closeModal("confirmShareModal");
                 });
             }
