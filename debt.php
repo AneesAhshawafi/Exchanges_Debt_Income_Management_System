@@ -23,16 +23,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <!-- جعل التصميم متجاوباً مع مختلف الشاشات -->
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+        <!-- إعادة ضبط تنسيقات المتصفح الافتراضية -->
+        <link rel="stylesheet" type="text/css" media="screen" href="CSS/normalize.css" />
+        <!-- مكتبة أيقونات Font Awesome -->
+        <link rel="stylesheet" href="CSS/all.min.css" />
         <!-- استيراد التنسيقات العامة للموقع -->
         <link rel="stylesheet" href="CSS/GlobalRulesStyle.css" />
         <!-- تنسيقات الوضع الليلي -->
         <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
         <!-- تنسيقات خاصة بالصفحة الرئيسية -->
         <link rel="stylesheet" href="CSS/indexxStyle.css" />
-        <!-- إعادة ضبط تنسيقات المتصفح الافتراضية -->
-        <link rel="stylesheet" type="text/css" media="screen" href="CSS/normalize.css" />
-        <!-- مكتبة أيقونات Font Awesome -->
-        <link rel="stylesheet" href="CSS/all.min.css" />
 
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />

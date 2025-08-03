@@ -16,16 +16,16 @@
         <!-- جعل التصميم متجاوباً مع مختلف الشاشات -->
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+        <!-- إعادة ضبط تنسيقات المتصفح الافتراضية -->
+        <link rel="stylesheet" type="text/css" media="screen" href="CSS/normalize.css" />
+        <!-- مكتبة أيقونات Font Awesome -->
+        <link rel="stylesheet" href="CSS/all.min.css" />
         <!-- استيراد التنسيقات العامة للموقع -->
         <link rel="stylesheet" href="CSS/GlobalRulesStyle.css" />
         <!-- تنسيقات الوضع الليلي -->
         <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
         <!-- تنسيقات خاصة بالصفحة الرئيسية -->
         <link rel="stylesheet" href="CSS/indexxStyle.css" />
-        <!-- إعادة ضبط تنسيقات المتصفح الافتراضية -->
-        <link rel="stylesheet" type="text/css" media="screen" href="CSS/normalize.css" />
-        <!-- مكتبة أيقونات Font Awesome -->
-        <link rel="stylesheet" href="CSS/all.min.css" />
 
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -92,19 +92,15 @@
                         <option value="عليه">عليه</option>
                     </select>
                     <div class="input-group" id="description" >
-                        <label for="description" >الغرض</label>
                         <textarea id="description" name="description" rows="3" cols="30" placeholder="الغرض"></textarea>
                     </div>
                     <div class="input-group">
-                        <label for="ammount">المبلغ</label>
                         <input type="text" id="ammount" name="ammount" placeholder="المبلغ" required />
                     </div>
                     <div class="input-group">
-                        <label for="date">التاريخ </label>
                         <input type="date" id="date" name="date" placeholder="التاريخ والوقت" />
                     </div>
                     <div class="input-group">
-                        <label for="note">ملاحظة</label>
                         <input type="text" id="note" name="note" placeholder=" ملاحظة" />
                     </div>
 
@@ -164,12 +160,10 @@
 
                     </select>
                     <div class="input-group" id="edit-description" >
-                        <label for="description" >الغرض</label>
                         <textarea id="description" name="description" rows="3" cols="30" placeholder="الغرض"></textarea>
                     </div>
                     <div class="input-group">
 
-                        <label for="ammount">المبلغ</label>
 
                         <input  type="number" name="ammount" id="edit-ammount" placeholder="المبلغ" required />
 
@@ -179,7 +173,6 @@
 
                     <div class="input-group">
 
-                        <label for="date">التاريخ</label>
 
                         <input class="date" type="date" name="date" id="edit-date" placeholder="التاريخ والوقت" />
 
@@ -189,7 +182,6 @@
 
                     <div class="input-group">
 
-                        <label for="note">ملاحظة</label>
 
                         <input type="text" id="edit-note" name="note" placeholder=" ملاحظة" />
 

@@ -16,16 +16,16 @@
         <!-- جعل التصميم متجاوباً مع مختلف الشاشات -->
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+        <!-- إعادة ضبط تنسيقات المتصفح الافتراضية -->
+        <link rel="stylesheet" type="text/css" media="screen" href="CSS/normalize.css" />
+        <!-- مكتبة أيقونات Font Awesome -->
+        <link rel="stylesheet" href="CSS/all.min.css" />
         <!-- استيراد التنسيقات العامة للموقع -->
         <link rel="stylesheet" href="CSS/GlobalRulesStyle.css" />
         <!-- تنسيقات الوضع الليلي -->
         <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
         <!-- تنسيقات خاصة بالصفحة الرئيسية -->
         <link rel="stylesheet" href="CSS/indexxStyle.css" />
-        <!-- إعادة ضبط تنسيقات المتصفح الافتراضية -->
-        <link rel="stylesheet" type="text/css" media="screen" href="CSS/normalize.css" />
-        <!-- مكتبة أيقونات Font Awesome -->
-        <link rel="stylesheet" href="CSS/all.min.css" />
 
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -119,19 +119,15 @@
                         <option value="عليه">تم السحب</option>
                     </select>
                     <div class="input-group" id="description" >
-                        <label for="source" >المصدر</label>
                         <textarea id="source" name="source" rows="3" cols="30" placeholder="المصدر"></textarea>
                     </div>
                     <div class="input-group">
-                        <label for="ammount">المبلغ</label>
                         <input type="text" id="ammount" name="ammount" placeholder="المبلغ" required />
                     </div>
                     <div class="input-group">
-                        <label for="date">التاريخ </label>
                         <input type="date" id="date" name="date" placeholder="التاريخ " />
                     </div>
                     <div class="input-group">
-                        <label for="note">ملاحظة</label>
                         <input type="text" id="note" name="note" placeholder=" ملاحظة" />
                     </div>
 
@@ -181,19 +177,17 @@
 
                     </select>
 
-                   
-                   <select name="for-or-on" id="edit-for-or-on" required>
+
+                    <select name="for-or-on" id="edit-for-or-on" required>
                         <option value="" disabled selected>هل تم االسحب؟</option>
                         <option value="له">لم يتم السحب</option>
                         <option value="عليه">تم السحب</option>
                     </select>
                     <div class="input-group" id="edit-description" >
-                        <label for="source" >المصدر</label>
                         <textarea id="edit-source" name="source" rows="3" cols="30" placeholder="المصدر"></textarea>
                     </div>
                     <div class="input-group">
 
-                        <label for="ammount">المبلغ</label>
 
                         <input  type="number" name="ammount" id="edit-ammount" placeholder="المبلغ" required />
 
@@ -203,7 +197,6 @@
 
                     <div class="input-group">
 
-                        <label for="date">التاريخ</label>
 
                         <input class="date" type="date" name="date" id="edit-date" placeholder="التاريخ" />
 
@@ -213,7 +206,6 @@
 
                     <div class="input-group">
 
-                        <label for="note">ملاحظة</label>
 
                         <input type="text" id="edit-note" name="note" placeholder=" ملاحظة" />
 
@@ -235,16 +227,16 @@
 
 
         <!--Start Share Modal-->
-<!--        <div id="shareModal" class="modal hidden">
-            <div class="modal-content">
-                <textarea id="shareText" ></textarea>
-                <div class="shareModalBtns">     
-                    <button id="shareBtn" >مشاركة بدون الإجمالي</button>
-                    <button id="shareWithTotalBtn" >مشاركة مع الإجمالي</button>
-                    <button onclick="closeModal('shareModal')">إغلاق</button>
-                </div>
-            </div>
-        </div>-->
+        <!--        <div id="shareModal" class="modal hidden">
+                    <div class="modal-content">
+                        <textarea id="shareText" ></textarea>
+                        <div class="shareModalBtns">     
+                            <button id="shareBtn" >مشاركة بدون الإجمالي</button>
+                            <button id="shareWithTotalBtn" >مشاركة مع الإجمالي</button>
+                            <button onclick="closeModal('shareModal')">إغلاق</button>
+                        </div>
+                    </div>
+                </div>-->
         <!--End Share Modal-->
 
         <!--Start Delete Modal-->

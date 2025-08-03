@@ -16,16 +16,16 @@
         <!-- جعل التصميم متجاوباً مع مختلف الشاشات -->
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+        <!-- إعادة ضبط تنسيقات المتصفح الافتراضية -->
+        <link rel="stylesheet" type="text/css" media="screen" href="CSS/normalize.css" />
+        <!-- مكتبة أيقونات Font Awesome -->
+        <link rel="stylesheet" href="CSS/all.min.css" />
         <!-- استيراد التنسيقات العامة للموقع -->
         <link rel="stylesheet" href="CSS/GlobalRulesStyle.css" />
         <!-- تنسيقات الوضع الليلي -->
         <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
         <!-- تنسيقات خاصة بالصفحة الرئيسية -->
         <link rel="stylesheet" href="CSS/indexxStyle.css" />
-        <!-- إعادة ضبط تنسيقات المتصفح الافتراضية -->
-        <link rel="stylesheet" type="text/css" media="screen" href="CSS/normalize.css" />
-        <!-- مكتبة أيقونات Font Awesome -->
-        <link rel="stylesheet" href="CSS/all.min.css" />
 
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -113,38 +113,30 @@
 
                     </select>
                     <div class="input-group" id="sender-input-group" >
-                        <label for="sender" id="sender-input-label">المودع</label>
                         <input type="text" id="sender" name="sender-name" placeholder=" المودع" required />
                     </div>
                     <div class="input-group " id="reciver-input-group" >
-                        <label for="reciver"> المستلم</label>
                         <input type="text" id="reciver-input" name="receiver-name" placeholder=" المستلم "  />
                     </div>
 
                     <div class="input-group hidden"  id="transfer-no-input-group">
-                        <label for="transfer-no">رقم الحوالة</label>
                         <input type="text" id="transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
                     </div>
                     <div class="input-group">
-                        <label for="ammount">المبلغ</label>
                         <input type="text" id="ammount" name="ammount" placeholder="المبلغ" required />
                     </div>
 
                     <div class="input-group">
-                        <label for="fees">الرسوم</label>
                         <input type="text" id="fees" name="fees" placeholder="الرسوم" >
                     </div>
                     <div class="input-group">
-                        <label for="date">التاريخ والوقت</label>
                         <input type="date" id="date" name="tra-date" placeholder="التاريخ والوقت" />
                     </div>
                     <div class="input-group">
-                        <label for="atm">الصراف</label>
                         <input type="text" id="atm" name="atm" placeholder="الصراف" required />
                     </div>
 
                     <div class="input-group">
-                        <label for="note">ملاحظة</label>
                         <input type="text" id="note" name="note" placeholder=" ملاحظة" />
                     </div>
 
@@ -164,13 +156,13 @@
 
                 <form class="edit-exchange-form" id="edit-exchange-form" action="update_exchange.php" method="POST">
 
-                    <span class="close-modal" id="closeEditExchangeListBtn">&rarr;</span>
+                    <span class="close-modal close-modal-form" id="closeEditExchangeListBtn">&rarr;</span>
 
                     <div class="edit-exchange-title">
 
 
 
-                        <h3>تعديل بيانات عملية إيداع/حوالة</h3>
+                        <h3>تعديل بيانات العملية</h3>
 
                     </div>
 
@@ -226,25 +218,21 @@
 
                     <div class="input-group" id="edit-sender-input-group">
 
-                        <label for="sender" id="edit-sender-input-label">المودع</label>
 
                         <input type="text" name="sender" id="edit-sender" placeholder="المودع" required />
                     </div>
                     <div class="input-group " id="edit-reciver-input-group" >
-                        <label for="reciver"> المستلم</label>
                         <input type="text" id="reciver" name="receiver-name" placeholder=" المستلم "  />
                     </div>
 
 
                     <div class="input-group hidden"  id="edit-transfer-no-input-group">
-                        <label for="transfer-no">رقم الحوالة</label>
                         <input type="text" id="edit-transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
                     </div>
 
 
                     <div class="input-group">
 
-                        <label for="ammount">المبلغ</label>
 
                         <input  type="number" name="ammount" id="edit-ammount" placeholder="المبلغ" required />
 
@@ -254,7 +242,6 @@
 
                     <div class="input-group">
 
-                        <label for="fees">الرسوم</label>
 
                         <input type="number" name="fees" id="edit-fees" placeholder="الرسوم" required>
 
@@ -262,7 +249,6 @@
 
                     <div class="input-group">
 
-                        <label for="date">التاريخ والوقت</label>
 
                         <input class="date" type="date" name="date" id="edit-date" placeholder="التاريخ والوقت" />
 
@@ -270,7 +256,6 @@
 
                     <div class="input-group">
 
-                        <label for="atm">الصراف</label>
 
                         <input type="text" name="atm" id="edit-atm" placeholder="الصراف" required />
 
@@ -280,7 +265,6 @@
 
                     <div class="input-group">
 
-                        <label for="note">ملاحظة</label>
 
                         <input type="text" id="edit-note" name="note" placeholder=" ملاحظة" />
 

@@ -80,14 +80,15 @@ function openEditModal(traData, data) {
     document.getElementById("edit-currency").value = traData.CURRENCY;
 
 
-    if (traData.FOR_OR_ON=='له') {
-        
+    if (traData.FOR_OR_ON==='له') {
+        console.log("تم السحب");
     document.getElementById("edit-for-or-on").value ='لم يتم السحب';
     }else{
+        console.log("تم ابسلسحب");
         document.getElementById("edit-for-or-on").value ='تم السحب';
     }
 
-
+document.getElementById("edit-for-or-on").value =traData.FOR_OR_ON;
 
     document.getElementById("edit-source").value = traData.SOURCE;
 
