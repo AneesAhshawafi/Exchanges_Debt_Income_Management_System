@@ -3,7 +3,6 @@
 
 include 'dbconn.php';
 include 'income_update_sum_ammounts.php';
-$error_file= fopen("eror_delet", "w");
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['INCM_ID'])) {
     $tra_id = intval($_POST['INCM_ID']);
     $exchangesListData = json_decode($_POST['income_list'], true);
@@ -11,25 +10,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['INCM_ID'])) {
     //start get old transaction data
     $stmt = $conn->prepare("SELECT * FROM income WHERE INCM_ID = ?");
     $stmt->bind_param("i", $tra_id);
-    if ($stmt->execute()) {
-        fwrite($error_file, ' تم استخراج الببيانات القديمة' . "\r\n");
-//        echo json_encode(["success" => "تم التعديل بنجاح"]);
-    } else {
-        fwrite($error_file, ' لم يتم استخراج الببيانات القديمة' . "\r\n");
-    }
+    $stmt->execute();
     $result = $stmt->get_result();
     $oldData = $result->fetch_assoc();
-    //end get old transaction data
 
+    //end get old transaction data
     $currency = $oldData['CURRENCY'];
     $for_or_on = $oldData['FOR_OR_ON'];
     $ammount_differ = $oldData['AMMOUNT'];
-
-    update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $tra_id, $error_file);
-
+    update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $tra_id);
     $stmt = $conn->prepare("DELETE FROM income WHERE INCM_ID = ? and USER_ID = 1");
     $stmt->bind_param("i", $tra_id);
-
     if ($stmt->execute()) {
         echo json_encode(["success" => "تم الحذف بنجاح"]);
     } else {

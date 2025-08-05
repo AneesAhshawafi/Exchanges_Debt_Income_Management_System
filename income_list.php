@@ -68,7 +68,7 @@
 
         <div class="exchanges-list-overlay " id="exchanges-list-overlay">
             <div class="exchanges-list" id="exchanges-list">
-                <a href="debt.php" ><span class="close-modal" id="closeExchangeListBtn">&rarr;</span></a> 
+                <a href="index.php" ><span class="close-modal" id="closeExchangeListBtn">&rarr;</span></a> 
                 <div class="exchanges-list-title">
                     <h2>قسم الدخل </h2>
                 </div>
@@ -118,8 +118,8 @@
                         <option value="له">لم يتم السحب</option>
                         <option value="عليه">تم السحب</option>
                     </select>
-                    <div class="input-group" id="description" >
-                        <textarea id="source" name="source" rows="3" cols="30" placeholder="المصدر"></textarea>
+                    <div class="input-group"  >
+                        <input type="text" id="source" name="source" placeholder="المصدر" required>
                     </div>
                     <div class="input-group">
                         <input type="text" id="ammount" name="ammount" placeholder="المبلغ" required />
@@ -154,7 +154,7 @@
 
 
 
-                        <h3>تعديل غرض</h3>
+                        <h3>تعديل مصدر الدخل</h3>
 
                     </div>
 
@@ -184,8 +184,8 @@
                         <option value="له">لم يتم السحب</option>
                         <option value="عليه">تم السحب</option>
                     </select>
-                    <div class="input-group" id="edit-description" >
-                        <textarea id="edit-source" name="source" rows="3" cols="30" placeholder="المصدر"></textarea>
+                    <div class="input-group" >
+                        <input type="text" id="edit-source" name="source"  placeholder="المصدر" required>
                     </div>
                     <div class="input-group">
 
@@ -249,7 +249,7 @@
             </div>
         </div>
         <!--End Delete Modal-->
-
+        <script src="JS/loginLogoutBtn.js"></script>
         <script src="JS/navbar.js"></script>
         <script src="JS/income_list_modal.js"></script>
         <script src="JS/add_income.js"></script>

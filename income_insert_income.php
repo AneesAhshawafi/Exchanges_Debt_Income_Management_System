@@ -6,10 +6,6 @@
  */
 
 // insert_transaction.php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-$error_file = fopen("er_file.txt", "w");
 header("Content-Type: application/json");
 //header("Content-Type: application/json");
 
@@ -36,28 +32,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $sum_ammount_old = $sum_ammounts[1];
     $sum_ammount_sa = $sum_ammounts[2];
 
-    if ($currency == "new") {
-        if ($for_or_on == "له") {
+    if ($currency == "new" && $for_or_on == "له") {
             $sum_ammount_new += $ammount;
-        } else {
-//            $sum_ammount_new -= $ammount;
-        }
-    } elseif ($currency == "old") {
-        if ($for_or_on == "له") {
+    } elseif ($currency == "old"  && $for_or_on == "له") {
             $sum_ammount_old += $ammount;
-        } else {
-//            $sum_ammount_old -= $ammount;
-        }
     } else {
         if ($for_or_on == "له") {
             $sum_ammount_sa += $ammount;
-        } else {
-//            $sum_ammount_sa -= $ammount;
-        }
+        } 
     }
 
-
-    
         $sql = "INSERT INTO income (SOURCE, CURRENCY, FOR_OR_ON, AMMOUNT, INCM_DATE, NOTE, USER_ID,sum_ammount_new,sum_ammount_old,sum_ammount_sa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $conn->prepare($sql);
@@ -71,7 +55,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             echo json_encode(["success" => "تمت إضافة المعاملة بنجاح"]);
         } else {
             echo json_encode(["error" => "فشل في إدخال المعاملة: " . $stmt->error]);
-            fwrite($error_file, "فشل في إدخال المعاملة: " . $stmt->error . "\r\n");
         }
    
 

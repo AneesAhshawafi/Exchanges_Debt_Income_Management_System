@@ -91,8 +91,8 @@
                         <option value="له">له</option>
                         <option value="عليه">عليه</option>
                     </select>
-                    <div class="input-group" id="description" >
-                        <textarea id="description" name="description" rows="3" cols="30" placeholder="الغرض"></textarea>
+                    <div class="input-group"  >
+                        <input type="text" id="description" name="description" placeholder="الغرض">
                     </div>
                     <div class="input-group">
                         <input type="text" id="ammount" name="ammount" placeholder="المبلغ" required />
@@ -160,8 +160,8 @@
                         <option value="عليه">عليه</option>
 
                     </select>
-                    <div class="input-group" id="edit-description" >
-                        <textarea id="description" name="description" rows="3" cols="30" placeholder="الغرض"></textarea>
+                    <div class="input-group"  >
+                       <input type="text" id="edit-description" name="description" placeholder="الغرض">
                     </div>
                     <div class="input-group">
 
@@ -173,7 +173,6 @@
 
 
                     <div class="input-group">
-
                         <label for="edit-date">التاربخ</label>
                         <input class="date" type="date" name="date" id="edit-date" placeholder="التاريخ والوقت" />
 
@@ -226,7 +225,7 @@
         </div>
         <!--End Delete Modal-->
 
-        <script src="JS/navbar.js"></script>
+
         <script src="JS/debt_list_modal.js"></script>
         <script src="JS/add_debt.js"></script>
         <script>

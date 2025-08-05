@@ -38,7 +38,7 @@ $mpdf = new \Mpdf\Mpdf([
 $mpdf->SetDirectionality('rtl');
 
 // عنوان التقرير
-$html = "<h3 style='text-align: center;'>قائمة العمليات للعميل: $client_name</h3><br>";
+$html = "<h3 style='text-align: center;'>قائمة الديون للعميل: $client_name</h3><br>";
 
 // رأس الجدول
 $html .= "

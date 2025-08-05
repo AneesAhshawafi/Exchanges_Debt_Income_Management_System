@@ -104,7 +104,7 @@
                         <option value="له">له</option>
                         <option value="عليه">عليه</option>
                     </select>
-                    <select class="hidden" name="status" id="status">
+                    <select class="" name="status" id="status">
                         <option value="" disabled selected>حالة الحوالة</option>
 
                         <option value="استلمت">استلمت</option>
@@ -119,7 +119,7 @@
                         <input type="text" id="reciver-input" name="receiver-name" placeholder=" المستلم "  />
                     </div>
 
-                    <div class="input-group hidden"  id="transfer-no-input-group">
+                    <div class="input-group "  id="transfer-no-input-group">
                         <input type="text" id="transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
                     </div>
                     <div class="input-group">
@@ -208,7 +208,7 @@
                         <option value="عليه">عليه</option>
 
                     </select>
-                    <select class="hidden" name="status" id="edit-status">
+                    <select class="" name="status" id="edit-status">
                         <option value="" disabled selected>حالة الحوالة</option>
 
                         <option value="استلمت">استلمت</option>
@@ -227,7 +227,7 @@
                     </div>
 
 
-                    <div class="input-group hidden"  id="edit-transfer-no-input-group">
+                    <div class="input-group"  id="edit-transfer-no-input-group">
                         <input type="text" id="edit-transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
                     </div>
 
@@ -249,7 +249,6 @@
                     </div>
 
                     <div class="input-group">
-
                         <label for="edit-date">التاربخ</label>
                         <input class="date" type="date" name="date" id="edit-date" placeholder="التاريخ والوقت" />
 

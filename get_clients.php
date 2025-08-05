@@ -6,7 +6,7 @@ $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
 
 // استعلام العملاء بالحد والبدء
-$sql = "SELECT CLIENT_ID, CLIENT_NAME FROM CLIENT WHERE DEPT_NO = 1 ORDER BY CLIENT_ID DESC LIMIT $limit OFFSET $offset";
+$sql = "SELECT CLIENT_ID, CLIENT_NAME FROM client WHERE DEPT_NO = 1 ORDER BY CLIENT_ID DESC LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
 
 if ($result && $result->num_rows > 0) {

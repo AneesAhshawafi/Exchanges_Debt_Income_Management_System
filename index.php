@@ -4,7 +4,7 @@ include 'total_ammounts_calc.php';
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //add client
     $client_name = $_POST["client_name"];
-    $sql_add_client = "INSERT INTO CLIENT (CLIENT_NAME, DEPT_NO, USER_ID) VALUES ('$client_name', 1, 1)";
+    $sql_add_client = "INSERT INTO client (CLIENT_NAME, DEPT_NO, USER_ID) VALUES ('$client_name', 1, 1)";
     mysqli_query($conn, $sql_add_client);
     header("Location: index.php");
     exit;
@@ -22,10 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <title data-lang="page-title">الرئيسية</title>
         <!-- جعل التصميم متجاوباً مع مختلف الشاشات -->
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="manifest" href="manifest.json" />
 
-        <link rel="stylesheet" type="text/css" media="screen" href="CSS/normalize.css" />
-        <!-- مكتبة أيقونات Font Awesome -->
-        <link rel="stylesheet" href="CSS/all.min.css" />
         <!-- استيراد التنسيقات العامة للموقع -->
         <link rel="stylesheet" href="CSS/GlobalRulesStyle.css" />
         <!-- تنسيقات الوضع الليلي -->
@@ -33,6 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <!-- تنسيقات خاصة بالصفحة الرئيسية -->
         <link rel="stylesheet" href="CSS/indexxStyle.css" />
         <!-- إعادة ضبط تنسيقات المتصفح الافتراضية -->
+        <link rel="stylesheet" type="text/css" media="screen" href="CSS/normalize.css" />
+        <!-- مكتبة أيقونات Font Awesome -->
+        <link rel="stylesheet" href="CSS/all.min.css" />
 
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -228,6 +229,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
 
 
+        </script>
+        <script>
+        if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      })
+      .catch(err => {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+  });
+}
         </script>
     </body>
 

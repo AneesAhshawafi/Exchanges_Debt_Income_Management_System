@@ -4,9 +4,9 @@ include 'total_ammounts_calc.php';
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //add client
     $client_name = $_POST["client_name"];
-    $sql_add_client = "INSERT INTO CLIENT (CLIENT_NAME, DEPT_NO, USER_ID) VALUES ('$client_name', 2, 1)";
+    $sql_add_client = "INSERT INTO client (CLIENT_NAME, DEPT_NO, USER_ID) VALUES ('$client_name', 2, 1)";
     mysqli_query($conn, $sql_add_client);
-    header("Location: index.php");
+    header("Location: debt.php");
     exit;
 }
 ?>

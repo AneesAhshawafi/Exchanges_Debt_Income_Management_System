@@ -64,13 +64,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
 
-    if (!$transfer_no && $type == 'حوالة') {
+    if (!$transfer_no) {
         $sql = "SELECT TRA_ID FROM transaction ORDER BY TRA_ID DESC LIMIT 1";
         $result = $conn->query($sql);
+        if (mysqli_num_rows($result) > 0) {
         $result_tra_id_for_transfer_no = $result->fetch_assoc();
         $tra_id_for_transfer_no = $result_tra_id_for_transfer_no['TRA_ID'];
-        fwrite($error_file, "tra_id_for_transfer_no = " . $tra_id_for_transfer_no . " type :" . gettype($tra_id_for_transfer_no) . "\r\n");
-
+        }else{
+            $tra_id_for_transfer_no=0;
+        }
+        
         $transfer_no = 'BA-' . date("md", strtotime($tra_date)) . str_pad($tra_id_for_transfer_no + 1, 8, '0', STR_PAD_LEFT);
     // تجهيز الاستعلام
     $sql = "INSERT INTO transaction (TYPE, CURRENCY, FOR_OR_ON, SENDER_NAME,RECEIVER_NAME, TRANSFER_NO, AMMOUNT, TRA_FEES, TRA_DATE, ATM, NOTE, CLIENT_ID,sum_ammount_new,sum_ammount_old,sum_ammount_sa,STATUS) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
