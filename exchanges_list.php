@@ -130,6 +130,7 @@
                         <input type="text" id="fees" name="fees" placeholder="الرسوم" >
                     </div>
                     <div class="input-group">
+                        <label for="date">التاربخ</label>
                         <input type="date" id="date" name="tra-date" placeholder="التاريخ والوقت" />
                     </div>
                     <div class="input-group">
@@ -249,7 +250,7 @@
 
                     <div class="input-group">
 
-
+                        <label for="edit-date">التاربخ</label>
                         <input class="date" type="date" name="date" id="edit-date" placeholder="التاريخ والوقت" />
 
                     </div>

@@ -44,47 +44,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($currency == $newCurrency) {
 
             if ($for_or_on == $newForOrOn) {
-                $ammount_differ = $oldAmmount - $newAmmount;
-                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
-                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
-                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
-                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+                if ($for_or_on == 'له') {
+
+                    $ammount_differ = $oldAmmount - $newAmmount;
+                    fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
+                    fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
+                    fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
+                    update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+                }
             } else {
-                $ammount_differ = $oldAmmount + $newAmmount;
-                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
-                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
-                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
-                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+                if ($newForOrOn == 'عليه') {
+
+                    $ammount_differ = $oldAmmount;
+                    fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
+                    fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
+                    fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
+                    update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+                } else {
+                    $ammount_differ = $newAmmount;
+                    fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
+                    fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
+                    fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
+                    update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+                }
             }
         } else {
             if ($for_or_on == $newForOrOn) {
-                $ammount_differ = $oldAmmount;
-                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
-                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
-                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
-                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
-                $ammount_differ = $newAmmount;
-                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
-                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
-                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
                 if ($for_or_on == 'له') {
-
+                    $ammount_differ = $oldAmmount;
+                    fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
+                    fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
+                    fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
+                    update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+                    $ammount_differ = $newAmmount;
+                    fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
+                    fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
+                    fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
                     update_sum_ammount($newCurrency, 'عليه', $exchangesListData, $ammount_differ, $id, $error_file);
-                } else {
-                    update_sum_ammount($newCurrency, 'له', $exchangesListData, $ammount_differ, $id, $error_file);
                 }
             } else {
+                if($for_or_on=='له'){
+                    
                 $ammount_differ = $oldAmmount;
                 fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
                 fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
                 fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
                 update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
-
+                }
+                if($newForOrOn=='له'){
+                    
                 $ammount_differ = $newAmmount;
                 fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
                 fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
                 fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
-                update_sum_ammount($newCurrency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+                update_sum_ammount($newCurrency, 'عليه', $exchangesListData, $ammount_differ, $id, $error_file);
+                }
             }
         }
     }
@@ -93,8 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     fwrite($error_file, "done with update sums");
 
-    
-           $sql = "UPDATE income SET 
+    $sql = "UPDATE income SET 
                 SOURCE = ?, 
                 CURRENCY = ?, 
                 FOR_OR_ON = ?,
@@ -107,9 +120,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 //    fwrite($error_file, "type:" . $type ."  receiver : ".$receiver."  transfer number : ".$transfer_no. "  currency: " . $newCurrency . "new ammount : " . $newAmmount . "\r\n");
     $stmt->bind_param("sssdssi", $source, $newCurrency, $newForOrOn, $newAmmount, $date, $note, $id);
 
-    
-    
- 
     if ($stmt->execute()) {
 //        echo json_encode(["success" => "تم التعديل بنجاح"]);
 

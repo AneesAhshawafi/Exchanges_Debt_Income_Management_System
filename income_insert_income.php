@@ -40,19 +40,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($for_or_on == "له") {
             $sum_ammount_new += $ammount;
         } else {
-            $sum_ammount_new -= $ammount;
+//            $sum_ammount_new -= $ammount;
         }
     } elseif ($currency == "old") {
         if ($for_or_on == "له") {
             $sum_ammount_old += $ammount;
         } else {
-            $sum_ammount_old -= $ammount;
+//            $sum_ammount_old -= $ammount;
         }
     } else {
         if ($for_or_on == "له") {
             $sum_ammount_sa += $ammount;
         } else {
-            $sum_ammount_sa -= $ammount;
+//            $sum_ammount_sa -= $ammount;
         }
     }
 

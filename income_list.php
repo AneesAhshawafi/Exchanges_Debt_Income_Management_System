@@ -125,6 +125,7 @@
                         <input type="text" id="ammount" name="ammount" placeholder="المبلغ" required />
                     </div>
                     <div class="input-group">
+                        <label for="date">التاربخ</label>
                         <input type="date" id="date" name="date" placeholder="التاريخ " />
                     </div>
                     <div class="input-group">
@@ -197,7 +198,7 @@
 
                     <div class="input-group">
 
-
+                        <label for="edit-date">التاربخ</label>
                         <input class="date" type="date" name="date" id="edit-date" placeholder="التاريخ" />
 
                     </div>
@@ -249,7 +250,7 @@
         </div>
         <!--End Delete Modal-->
 
-
+        <script src="JS/navbar.js"></script>
         <script src="JS/income_list_modal.js"></script>
         <script src="JS/add_income.js"></script>
         <script>

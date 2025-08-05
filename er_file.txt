@@ -1,0 +1,12 @@
+ تم استخراج الببيانات القديمة
+old ammount=5000.00
+new ammount=5000.00
+differ ammount=5000.00
+دخلنا صفحة sum
+exchanges number 5
+sum_ammount_old= 5000.00
+sum_ammount_new= 0
+exchanges number 6
+sum_ammount_old= 5000.00
+sum_ammount_new= 0
+done with update sums
