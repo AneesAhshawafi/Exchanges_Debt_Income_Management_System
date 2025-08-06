@@ -4,7 +4,7 @@
  */
 
 
- currentExchangesListData = null;
+currentExchangesListData = null;
 
 let deleteTraNo = null;
 
@@ -42,19 +42,19 @@ function openDeleteModal(traNo, exchangesList) {
             method: "POST",
             body: formData
         })
-                .then(res => res.json())
-                .then(response => {
-                    if (response.success) {
-                        alert(response.success);
-                        closeModal("deleteModal");
-                        location.reload();
-                    } else {
-                        alert(response.error);
-                    }
-                })
-                .catch(err => {
-                    console.error("خطأ أثناء الحذف:", err);
-                });
+            .then(res => res.json())
+            .then(response => {
+                if (response.success) {
+                    alert(response.success);
+                    closeModal("deleteModal");
+                    location.reload();
+                } else {
+                    alert(response.error);
+                }
+            })
+            .catch(err => {
+                console.error("خطأ أثناء الحذف:", err);
+            });
     });
 }
 
@@ -80,15 +80,15 @@ function openEditModal(traData, data) {
     document.getElementById("edit-currency").value = traData.CURRENCY;
 
 
-    if (traData.FOR_OR_ON==='له') {
-        console.log("تم السحب");
-    document.getElementById("edit-for-or-on").value ='لم يتم السحب';
-    }else{
-        console.log("تم ابسلسحب");
-        document.getElementById("edit-for-or-on").value ='تم السحب';
+    if (traData.FOR_OR_ON == 'له') {
+
+        document.getElementById("edit-for-or-on").value = 'لم يتم السحب';
+    } else {
+        document.getElementById("edit-for-or-on").value = 'تم السحب';
     }
 
-document.getElementById("edit-for-or-on").value =traData.FOR_OR_ON;
+    document.getElementById("edit-for-or-on").value = traData.FOR_OR_ON;
+
 
     document.getElementById("edit-source").value = traData.SOURCE;
 
@@ -109,7 +109,7 @@ document.getElementById("edit-for-or-on").value =traData.FOR_OR_ON;
 
     const closeEditExchangeBtn = document.getElementById("closeEditExchangeListBtn");
 
-//    const editExchangeForm = document.getElementById("edit-exchange-form");
+    //    const editExchangeForm = document.getElementById("edit-exchange-form");
 
     const editExchangeForm = document.getElementById("edit-exchange-form");
     editExchangeForm.addEventListener("submit", (event) => {
@@ -147,81 +147,81 @@ fetch("income_get_income_list.php", {
     },
     body: "user_id=" + encodeURIComponent(1)
 })
-        .then(res => res.json())
-        .then(data => {
-            if (data.error) {
-                exchangesListBody.innerHTML = `<p>${data.erro}</p>`;
-//                exchange.classList.remove("hidden");
-                return;
-            }
-            if (data.length === 0) {
-                exchangesListBody.innerHTML = "<p>لا توجد مصادر دخل حتى الآن  .</p>";
+    .then(res => res.json())
+    .then(data => {
+        if (data.error) {
+            exchangesListBody.innerHTML = `<p>${data.erro}</p>`;
+            //                exchange.classList.remove("hidden");
+            return;
+        }
+        if (data.length === 0) {
+            exchangesListBody.innerHTML = "<p>لا توجد مصادر دخل حتى الآن  .</p>";
 
 
-            } else {
+        } else {
 
-                data.forEach(row => {
-                    const exchangesDataContainer = document.createElement("div");
-//                            exchangesData.id = "exchangesData" + row.TRA_ID;
-                    exchangesDataContainer.classList.add("exchanges-data-container");
-                    exchangeDataContent = `
+            data.forEach(row => {
+                const exchangesDataContainer = document.createElement("div");
+                //                            exchangesData.id = "exchangesData" + row.TRA_ID;
+                exchangesDataContainer.classList.add("exchanges-data-container");
+                exchangeDataContent = `
                                     <div class="oper">
                                         <i  class="fas fa-trash-alt  operation" data-id="trash${row.INCM_ID}"></i>
                                         <i class="fas fa-edit  operation" data-id="edit${row.INCM_ID}"> </i>
                                     </div>
                                     <div class="debts-data" data-id="exchange-data-${row.INCM_ID}">`;
-                    exchangeDataContent += `<h3>${row.SOURCE}</h3>`;
-//                    exchangeDataContent += `<textarea rows="2" cols="20" >${row.SOURCE}</textarea>`; 
-                    if (row.CURRENCY === "new") {
-                        exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قعيطي</h3>`;
-                    } else if (row.CURRENCY === "old") {
-                        exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قديم</h3>`;
+                exchangeDataContent += `<h3>${row.SOURCE}</h3>`;
+                //                    exchangeDataContent += `<textarea rows="2" cols="20" >${row.SOURCE}</textarea>`; 
+                if (row.CURRENCY === "new") {
+                    exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قعيطي</h3>`;
+                } else if (row.CURRENCY === "old") {
+                    exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قديم</h3>`;
 
+                } else {
+                    exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} سعودي</h3>`;
+
+                }
+
+                if (row.FOR_OR_ON == 'له') {
+                    exchangeDataContent += '<h3>لم يتم السحب</h3>';
+                } else {
+                    exchangeDataContent += '<h3>تم السحب</h3>';
+                }
+                exchangeDataContent += `<h3 class="date">${row.INCM_DATE}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><textarea class="note" rows="2" cols="20">${row.NOTE}</textarea></div>`;
+
+                exchangesDataContainer.innerHTML = exchangeDataContent;
+                exchangesListBody.insertBefore(exchangesDataContainer, exchangesListBody.firstChild);
+            });
+
+
+
+            //    ===============================================================================================================                    
+            // إضافة أحداث بعد تحميل العناصر الديناميكية
+            document.querySelectorAll(".operation").forEach(icon => {
+                icon.addEventListener("click", function () {
+                    const id = this.dataset.id;
+                    const operaion = id.slice(0, 4);
+                    const traNo = Number(id.replace(/\D/g, ""));
+
+                    if (operaion == "tras") {
+
+                        openDeleteModal(traNo, data);
                     } else {
-                        exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} سعودي</h3>`;
+                        traData = null;
+                        data.forEach(row => {
+                            if (row.INCM_ID == traNo) {
 
+                                traData = row;
+                            }
+                        });
+                        openEditModal(traData, data);
                     }
-                    
-                    if (row.FOR_OR_ON=='له'){
-                        exchangeDataContent += '<h3>لم يتم سحبها</h3>';
-                    }else{
-                        exchangeDataContent +='تم سحبها';
-                    }
-                    exchangeDataContent += `<h3 class="date">${row.INCM_DATE}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><textarea class="note" rows="2" cols="20">${row.NOTE}</textarea></div>`;
-
-                    exchangesDataContainer.innerHTML = exchangeDataContent;
-                    exchangesListBody.insertBefore(exchangesDataContainer, exchangesListBody.firstChild);
                 });
+            });
+        }
 
 
 
-//    ===============================================================================================================                    
-                // إضافة أحداث بعد تحميل العناصر الديناميكية
-                document.querySelectorAll(".operation").forEach(icon => {
-                    icon.addEventListener("click", function () {
-                        const id = this.dataset.id;
-                        const operaion = id.slice(0, 4);
-                        const traNo = Number(id.replace(/\D/g, ""));
-
-                        if (operaion == "tras") {
-
-                            openDeleteModal(traNo, data);
-                        } else {
-                            traData = null;
-                            data.forEach(row => {
-                                if (row.INCM_ID == traNo) {
-
-                                    traData = row;
-                                }
-                            });
-                            openEditModal(traData, data);
-                        } 
-                    });
-                });
-            }
-
-
-
-        }).catch(err => {
-    exchangesListBody.innerHTML = `<p>حدث خطأأثناء تحميل البيانات          ${err}</p>`;
-});
+    }).catch(err => {
+        exchangesListBody.innerHTML = `<p>حدث خطأأثناء تحميل البيانات          ${err}</p>`;
+    });

@@ -299,21 +299,25 @@ body {
 
 .input-group {
     display: flex;
+    flex-direction: row;
+}
+.transfer-input-group{
     flex-direction: column;
 }
 
 
 .input-group input,
 select {
-    padding: 0.4rem 1rem;
-    font-size: 1.2rem;
+       padding: 0.4rem 1rem;
+    font-size: 17PX;
     border: 2px solid rgba(99, 102, 241, 0.2);
     border-radius: var(--border-radius);
     background: var(--bg-card);
     color: var(--text-primary);
     transition: all var(--transition-normal);
     font-family: inherit;
-    margin: 10px;
+    margin: 5px;
+    HEIGHT: 44px;
 }
 .input-group input{
     height: 2rem;

@@ -3,7 +3,8 @@
 
 include 'dbconn.php';
 include 'update_sum_ammounts.php';
-$error_file= fopen("eror_delet", "w");
+include 'calc_result_of_transfer_btwn_accounts.php';
+$error_file = fopen("eror_delet", "w");
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['TRA_ID'])) {
     $tra_id = intval($_POST['TRA_ID']);
     $exchangesListData = json_decode($_POST['exchanges_List'], true);
@@ -23,17 +24,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['TRA_ID'])) {
 
     $currency = $oldData['CURRENCY'];
     $for_or_on = $oldData['FOR_OR_ON'];
-    $ammount_differ = $oldData['AMMOUNT'];
+    if ($oldData['TYPE'] != 'تحويل') {
+        $ammount_differ = $oldData['AMMOUNT'];
+        update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $tra_id, $error_file);
+    } else {
+        $ammount = $oldData['AMMOUNT'];
+        $selectFrom=$oldData['FROM_CURRENCY'];
+        update_sum_ammount($selectFrom, 'عليه', $exchangesListData, $ammount, $tra_id, $error_file);
+        $selectTo=$oldData['TO_CURRENCY'];
+        $price=$oldData['PRICE'];
+        $ammount=get_result_of_transfer_btwn_accounts($selectFrom,$selectTo,$ammount,$price);
+        update_sum_ammount($selectTo, 'له', $exchangesListData, $ammount, $tra_id, $error_file);
 
-    update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $tra_id, $error_file);
+        
+    }
 
     $stmt = $conn->prepare("DELETE FROM transaction WHERE TRA_ID = ?");
-    $stmt->bind_param("s", $tra_id);
-
+    $stmt->bind_param("i", $tra_id);
     if ($stmt->execute()) {
         echo json_encode(["success" => "تم الحذف بنجاح"]);
     } else {
-        echo json_encode(["error" => "حدث خطأ أثناء الحذف".$stmt->error]);
+        echo json_encode(["error" => "حدث خطأ أثناء الحذف" . $stmt->error]);
     }
 
     $stmt->close();

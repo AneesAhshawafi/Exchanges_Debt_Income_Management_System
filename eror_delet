@@ -1,6 +1,9 @@
  تم استخراج الببيانات القديمة
 دخلنا صفحة sum
-new_for current-id=1
-exchanges number 1
+old_for current-id=33
+exchanges number 33     sender_name:  سمير
 sum_ammount_old= 20000.00
 sum_ammount_new= 0
+exchanges number 36     sender_name:  
+sum_ammount_old= 15000.00
+sum_ammount_new= -5000

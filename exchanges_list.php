@@ -87,46 +87,66 @@
                         <h3>اضافة عملية حوالة/ايداع</h3>
                     </div>
 
-                    <select name="type" id="oper-type-input" required>
+                    <select name="type" id="oper-type-input" >
                         <option value="" disabled selected>اختر نوع العملية</option>
                         <option value="حوالة">حوالة</option>
                         <option value="إيداع">إيداع</option>
-                        <!--<option value="transfer_btwn_accounts">تحويل بين الحسابات</option>-->
+                        <option value="تحويل">تحويل بين الحسابات</option>
                     </select>
-                    <select name="currency" required>
+                    <select class="hidden" name="currency" id="currency" >
                         <option value="" disabled selected>اختر العملة</option>
                         <option value="new">قعيطي</option>
                         <option value="old">قديم</option>
                         <option value="sa">سعودي</option>
                     </select>
-                    <select name="for-or-on" id="for-or-on" required>
+                    <select class="hidden" name="for-or-on" id="for-or-on" >
                         <option value="" disabled selected>له / عليه</option>
                         <option value="له">له</option>
                         <option value="عليه">عليه</option>
                     </select>
-                    <select class="" name="status" id="status">
+                    <select  class="hidden" name="status" id="status">
                         <option value="" disabled selected>حالة الحوالة</option>
 
                         <option value="استلمت">استلمت</option>
 
                         <option value="لم تستلم">لم تستلم</option>
-
+                    
                     </select>
-                    <div class="input-group" id="sender-input-group" >
-                        <input type="text" id="sender" name="sender-name" placeholder=" المودع" required />
+                     <div class="input-group" id="ammount-input-group">
+                        <input type="text" id="ammount" name="ammount" placeholder="المبلغ" required />
                     </div>
-                    <div class="input-group " id="reciver-input-group" >
+                    <div class="input-group transfer-input-group hidden" id="transfer-input-group">  
+                        <select class="" name="select-from" id="select-from">
+                      <option value="" disabled selected >التحويل من العملة</option>
+                        <option value="new">القعيطي</option>
+                        <option value="old">القديم</option>
+                        <option value="sa">السعودي</option>
+                    </select>
+                    <div class="input-group" id="price-input-group">
+                        <label for="price">السعر</label>
+                        <input id="price" name="price" placeholder="السعر" >
+                    </div>
+                    <select class="" name="select-to" id="select-to">
+                       <option value="" disabled selected >إلى العملة</option>
+                        <option value="new">القعيطي</option>
+                        <option value="old">القديم</option>
+                        <option value="sa">السعودي</option>
+                    </select>
+                    
+                    </div>
+                    <div class="input-group hidden" id="sender-input-group" >
+                        <input type="text" id="sender" name="sender-name" placeholder=" المودع"  />
+                    </div>
+                    <div class="input-group hiddens" id="receiver-input-group" >
                         <input type="text" id="reciver-input" name="receiver-name" placeholder=" المستلم "  />
                     </div>
 
                     <div class="input-group "  id="transfer-no-input-group">
                         <input type="text" id="transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
                     </div>
-                    <div class="input-group">
-                        <input type="text" id="ammount" name="ammount" placeholder="المبلغ" required />
-                    </div>
+                   
 
-                    <div class="input-group">
+                    <div class="input-group ">
                         <input type="text" id="fees" name="fees" placeholder="الرسوم" >
                     </div>
                     <div class="input-group">
@@ -175,19 +195,18 @@
 
 
 
-                    <select name="type"  id="edit-type" required>
+                    <select name="type"  id="edit-type" >
 
                         <option value="" disabled selected>اختر نوع العملية</option>
 
                         <option value="حوالة">حوالة</option>
 
                         <option value="إيداع">إيداع</option>
-
-                        <!--<option value="transfer_btwn_accounts">تحويل بين الحسابات</option>-->
+                        <option value="تحويل">تحويل بين الحسابات</option>
 
                     </select>
 
-                    <select name="currency" id="edit-currency" required>
+                    <select class="hidden" name="currency" id="edit-currency" >
 
                         <option value="" disabled selected>اختر العملة</option>
 
@@ -199,7 +218,7 @@
 
                     </select>
 
-                    <select name="for-or-on" id="edit-for-or-on" required>
+                    <select class="hidden" name="for-or-on" id="edit-for-or-on" >
 
                         <option value="" disabled selected>له / عليه</option>
 
@@ -216,13 +235,39 @@
                         <option value="لم تستلم">لم تستلم</option>
 
                     </select>
+                    <div class="input-group" id="edit-ammount-input-group">
+
+
+                        <input  type="number" name="ammount" id="edit-ammount" placeholder="المبلغ"  readonly />
+
+                    </div>
+                    <div class="input-group transfer-input-group" id="edit-transfer-input-group">
+                        
+                    <select class="" id="edit-select-from" readonly>
+                        <option value="" disabled selected>التحويل من العملة</option>
+                        <option value="new">القعيطي</option>
+                        <option value="old">القديم</option>
+                        <option value="sa">السعودي</option>
+                    </select>
+                    <div class="input-group" id="edit-price-input-group">
+                        <label for="price">السعر</label>
+                        <input id="edit-price" name="price" placeholder="السعر" readonly >
+                    </div>
+                    <select class="" name="select-to" id="edit-select-to" readonly>
+                        <option value="" disabled selected>الى العملة</option>
+                        <option value="new">القعيطي</option>
+                        <option value="old">القديم</option>
+                        <option value="sa">السعودي</option>
+                    </select>
+                    
+                    </div>
 
                     <div class="input-group" id="edit-sender-input-group">
 
 
-                        <input type="text" name="sender" id="edit-sender" placeholder="المودع" required />
+                        <input type="text" name="sender" id="edit-sender" placeholder="المودع"  />
                     </div>
-                    <div class="input-group " id="edit-reciver-input-group" >
+                    <div class="input-group " id="edit-receiver-input-group" >
                         <input type="text" id="reciver" name="receiver-name" placeholder=" المستلم "  />
                     </div>
 
@@ -232,19 +277,14 @@
                     </div>
 
 
-                    <div class="input-group">
-
-
-                        <input  type="number" name="ammount" id="edit-ammount" placeholder="المبلغ" required />
-
-                    </div>
+                    
 
 
 
                     <div class="input-group">
 
 
-                        <input type="number" name="fees" id="edit-fees" placeholder="الرسوم" required>
+                        <input type="number" name="fees" id="edit-fees" placeholder="الرسوم" readonly >
 
                     </div>
 

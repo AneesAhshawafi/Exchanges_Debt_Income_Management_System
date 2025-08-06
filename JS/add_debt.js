@@ -4,10 +4,10 @@
  */
 
 currentClientId = localStorage.getItem("currentClientId");
- addExchangeFormOverlay=document.getElementById("addExchangeForm");
- addExchangeForm=document.getElementById("add-exchange-form");
- addExchangeBtn=document.getElementById("addExchangeBtn");
- closeAddExchangeBtn=document.getElementById("closeAddExchangeBtn");
+const addExchangeFormOverlay=document.getElementById("addExchangeForm");
+const addExchangeForm=document.getElementById("add-exchange-form");
+const addExchangeBtn=document.getElementById("addExchangeBtn");
+const closeAddExchangeBtn=document.getElementById("closeAddExchangeBtn");
 
 
 addExchangeBtn.addEventListener("click",()=>{

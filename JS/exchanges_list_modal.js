@@ -25,31 +25,6 @@ function numberFormat(value, decimals = 2) {
 
 }
 
-//function openDeleteModal(traNo, exchangesList) {
-//    postData={
-//        TRA_ID : traNo,
-//        exchanges_List , exchangesList
-//    };
-//    
-//
-//    document.getElementById("deleteModal").classList.remove("hidden");
-//    document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
-//        
-//        fetch("delete_exchange.php", {
-//            method: "POST",
-////            headers: {"Content-Type": "application/x-www-form-urlencoded"},
-//            body: "tra_id=" + encodeURIComponent(traNo)
-//
-//        }).then(res => res.text()).then(response => {
-//
-//            alert("تم الحذف");
-//
-//            closeModal("deleteModal");
-//            location.reload();
-//        });
-//
-//    });
-//}
 
 function openDeleteModal(traNo, exchangesList) {
     const postData = {
@@ -110,13 +85,13 @@ function openShareModal(traNo) {
                     currency = 'ريال سعودي';
                 }
                 ammount = numberFormat(traData.AMMOUNT, 2);
-                textWithoutTotal = `بن عبود للصرافة والتحويلات
+                textWithoutTotal = `*|بن عبود للصرافة والتحويلات|*
 `;
                 if (traData.TYPE == 'حوالة') {
                     if (traData.FOR_OR_ON == 'له') {
                         textWithoutTotal += `(استلام حوالة)
 لكم ${ammount} ${currency}
- مقابل حوالة واردة عن طريق ${traData.ATM}
+مقابل حوالة واردة عن طريق ${traData.ATM}
 المرسل: ${traData.SENDER_NAME}
 المستلم: ${traData.RECEIVER_NAME}
 رقم الحوالة: ${traData.TRANSFER_NO}
@@ -126,7 +101,7 @@ function openShareModal(traNo) {
                     } else {
                         textWithoutTotal += `(ارسال حوالة)
 عليكم ${ammount} ${currency}
- مقابل حوالة صادرة عن طريق ${traData.ATM}
+مقابل حوالة صادرة عن طريق ${traData.ATM}
 المرسل: ${traData.SENDER_NAME}
 المستلم: ${traData.RECEIVER_NAME}
 رقم الحوالة: ${traData.TRANSFER_NO}
@@ -136,75 +111,69 @@ function openShareModal(traNo) {
 
                 } else {
                     if (traData.FOR_OR_ON == 'له') {
-                        textWithoutTotal += `( عملية إيداع لحسابكم)
+                        textWithoutTotal += `(عملية إيداع لحسابك)
 أودع ${traData.SENDER_NAME} لحسابكم مبلغ ${ammount} ${currency}
-  عن طريق ${traData.ATM}
+عن طريق ${traData.ATM}
 المودع: ${traData.SENDER_NAME}
 المستلم: ${traData.RECEIVER_NAME}
 المبلغ: ${ammount} ${currency}
-التاريخ: ${traData.TRA_DATE}`;
-
-
+التاريخ: ${traData.TRA_DATE}
+رقم الإيداع : ${traData.TRANSFER_NO}`;
                     } else {
-                        textWithoutTotal += `( عملية إيداع من حسابكم)
-أودع ${traData.SENDER_NAME} لحساب${traData.RECEIVER_NAME}  مبلغ ${ammount} ${currency}
-  عن طريق ${traData.ATM}
-المودع: ${traData.SENDER_NAME}
-المستلم: ${traData.RECEIVER_NAME}
-المبلغ: ${ammount} ${currency}
-التاريخ: ${traData.TRA_DATE}`;
+                        textWithoutTotal += `(سند قيد بسيط)
+تم تحويل مبلغ ${ammount} ${currency} من حسابك إلى حساب ${traData.RECEIVER_NAME}
+عن طريق ${traData.ATM}
+التاريخ: ${traData.TRA_DATE}
+رقم السند: ${traData.TRANSFER_NO}`;
                     }
                 }
+                note = '';
                 if (traData.NOTE) {
-                    textWithoutTotal += `
-ملاحظة:
-${traData.NOTE}`;
+                    note += `
+ملاحظة: ${traData.NOTE}`;
                 }
 
                 const shareText = document.getElementById("shareText");
-                shareText.value = textWithoutTotal + getTextOfTotalAmmounts(traData);
+                shareText.value = textWithoutTotal + getTextOfTotalAmmounts(traData) + note;
                 shareText.style.direction = 'rtl';
 
                 document.getElementById("shareModal").classList.remove("hidden");
                 document.getElementById("shareBtn").addEventListener("click", () => {
-                    shareExchange(textWithoutTotal);
+                    shareExchange(textWithoutTotal + note);
                 });
                 document.getElementById('shareWithTotalBtn').addEventListener("click", () => {
-                    shareExchange(textWithoutTotal + getTextOfTotalAmmounts(traData));
+
+                    shareExchange(textWithoutTotal + getTextOfTotalAmmounts(traData) + note);
                 });
             });
 
 }
 function getTextOfTotalAmmounts(traData) {
     textTotal = `
- الرصيد :
 `;
 
     if (traData.CURRENCY == 'new') {
         if (traData.sum_ammount_new > 0) {
-            textTotal += ` لكم `;
+            textTotal += `الرصيد لكم `;
         } else {
-            textTotal += ` عليكم `;
+            textTotal += `الرصيد عليكم `;
         }
-        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_new), 2)} ري قعيطي
-`;
+        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_new), 2)} ري قعيطي`;
 
     } else if (traData.CURRENCY == 'old') {
-        if (traData.sum_ammount_new > 0) {
-            textTotal += ` لكم `;
+        if (traData.sum_ammount_old > 0) {
+            textTotal += `الرصيد لكم `;
         } else {
-            textTotal += ` عليكم `;
+            textTotal += `الرصيد عليكم `;
         }
-        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_old), 2)} ري قديم
-`;
+        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_old), 2)} ري قديم`;
     } else {
         if (traData.sum_ammount_sa > 0) {
-            textTotal += ` لكم `;
+            textTotal += `الرصيد لكم `;
         } else {
-            textTotal += ` عليكم `;
+            textTotal += `الرصيد عليكم `;
         }
-        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_sa), 2)} ريال سعودي
-`;
+        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_sa), 2)} ريال سعودي`;
     }
     return textTotal;
 }
@@ -220,7 +189,7 @@ function shareExchange(text) {
     }
     // نسخ النص للحافظة
     navigator.clipboard.writeText(text).then(() => {
-//        alert("تم نسخ بيانات الحوالة! يمكنك الآن لصقها في أي تطبيق.");
+        //        alert("تم نسخ بيانات الحوالة! يمكنك الآن لصقها في أي تطبيق.");
     }).catch(err => {
         console.error("خطأ في النسخ:", err);
     });
@@ -266,25 +235,28 @@ function openEditModal(traData, data) {
 
     document.getElementById("reciver").value = traData.RECEIVER_NAME;
 
-    const editTransferInputGroup = document.getElementById('edit-transfer-no-input-group')
+//    const editTransferInputGroup = document.getElementById('edit-transfer-no-input-group')
     const editStatus = document.getElementById('edit-status');
+    const transfer_no = document.getElementById("edit-transfer-no");
+    transfer_no.value = traData.TRANSFER_NO;
     if (traData.TYPE == 'حوالة') {
-
-        if (traData.TRANSFER_NO) {
-            const transfer_no = document.getElementById("edit-transfer-no");
-            transfer_no.value = traData.TRANSFER_NO;
-            editTransferInputGroup.classList.remove('hidden');
-        }
-        if (traData.STATUS) {
-
-            editStatus.value = traData.STATUS;
-            editStatus.classList.remove('hidden');
-        }
-
+        editStatus.value = traData.STATUS;
+        editStatus.classList.remove('hidden');
     } else {
-        editTransferInputGroup.classList.add('hidden');
         editStatus.classList.add('hidden');
     }
+    editSelectFrom.value = traData.FROM_CURRENCY;
+    editSelectFrom.addEventListener("mousedown", function (e) {
+        e.preventDefault();
+    });
+    console.log(traData.FROM_CURRENCY);
+    console.log(traData.TO_CURRENCY);
+    console.log(traData.PRICE);
+    editSelectTo.value = traData.TO_CURRENCY;
+    editSelectTo.addEventListener("mousedown", function (e) {
+        e.preventDefault();
+    });
+    document.getElementById('edit-price').value = traData.PRICE;
 
 
     document.getElementById("edit-ammount").value = traData.AMMOUNT;
@@ -306,7 +278,7 @@ function openEditModal(traData, data) {
 
     const closeEditExchangeBtn = document.getElementById("closeEditExchangeListBtn");
 
-//    const editExchangeForm = document.getElementById("edit-exchange-form");
+    //    const editExchangeForm = document.getElementById("edit-exchange-form");
 
     const editExchangeForm = document.getElementById("edit-exchange-form");
     editExchangeForm.addEventListener("submit", (event) => {
@@ -317,15 +289,6 @@ function openEditModal(traData, data) {
             method: "POST",
             body: formData
         })
-//                .then(res => res.json())
-//                .then(response => {
-//                    if (response.success) {
-//                        alert(response.success);
-//                    } else {
-//                        alert(response.error);
-//                    }
-//                })
-//                .catch(err => alert("حدث خطأ: " + err));
 
         editExchangeForm.reset();
         location.reload();
@@ -357,7 +320,7 @@ fetch("get_exchanges_list.php", {
         .then(data => {
             if (data.error) {
                 exchangesListBody.innerHTML = `<p>${data.erro}</p>`;
-//                exchange.classList.remove("hidden");
+                //                exchange.classList.remove("hidden");
                 return;
             }
             if (data.length === 0) {
@@ -368,7 +331,7 @@ fetch("get_exchanges_list.php", {
 
                 data.forEach(row => {
                     const exchangesDataContainer = document.createElement("div");
-//                            exchangesData.id = "exchangesData" + row.TRA_ID;
+                    //                            exchangesData.id = "exchangesData" + row.TRA_ID;
                     exchangesDataContainer.classList.add("exchanges-data-container");
                     exchangeDataContent = `
                                     <div class="oper">
@@ -395,7 +358,7 @@ fetch("get_exchanges_list.php", {
 
 
 
-//    ===============================================================================================================                    
+                //    ===============================================================================================================                    
                 // إضافة أحداث بعد تحميل العناصر الديناميكية
                 document.querySelectorAll(".operation").forEach(icon => {
                     icon.addEventListener("click", function () {

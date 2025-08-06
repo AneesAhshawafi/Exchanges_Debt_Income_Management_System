@@ -77,17 +77,24 @@ function openShareModal(traNo) {
                 traData = data;
 
                 if (traData.CURRENCY == 'new') {
-                    currency = ' ري قعيطي ';
+                    currency = ' ريال قعيطي ';
                 } else if (traData.CURRENCY == 'old') {
-                    currency = 'ري قديم';
+                    currency = 'ريال قديم';
                 } else {
                     currency = 'ريال سعودي';
                 }
                 ammount = numberFormat(traData.AMMOUNT, 2);
                 textWithoutTotal = `بقالة بن عيود 
 `;
+if(traData.FOR_OR_ON=='عليه'){
+    textWithoutTotal += `
+عليكم ${ammount} ${currency} `;
+    
+}else{
+    textWithoutTotal += `
+لكم ${ammount} ${currency} `;
+}
                 textWithoutTotal += `
-عليكم ${ammount} ${currency}
  مقابل ${traData.DESCRIPTION}
 المبلغ: ${ammount} ${currency}
 التاريخ: ${traData.DEBT_DATE}`;
@@ -113,31 +120,30 @@ ${traData.NOTE}`;
 }
 function getTextOfTotalAmmounts(traData) {
     textTotal = `
- الإجمالي :
-`;
+ الإجمالي `;
 
     if (traData.CURRENCY == 'new') {
         if (traData.sum_ammount_new > 0) {
-            textTotal += ` لكم `;
+            textTotal += `عليكم `;
         } else {
-            textTotal += ` عليكم `;
+            textTotal += `لكم `;
         }
-        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_new), 2)} ري قعيطي
+        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_new), 2)} ريال قعيطي
 `;
 
     } else if (traData.CURRENCY == 'old') {
-        if (traData.sum_ammount_new > 0) {
-            textTotal += ` لكم `;
+        if (traData.sum_ammount_old > 0) {
+            textTotal += `عليكم `;
         } else {
-            textTotal += ` عليكم `;
+            textTotal += `لكم `;
         }
-        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_old), 2)} ري قديم
+        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_old), 2)} ريال قديم
 `;
     } else {
         if (traData.sum_ammount_sa > 0) {
-            textTotal += ` لكم `;
+            textTotal += `عليكم `;
         } else {
-            textTotal += ` عليكم `;
+            textTotal += `لكم `;
         }
         textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_sa), 2)} ريال سعودي
 `;
@@ -286,7 +292,7 @@ fetch("debt_get_debts_list.php", {
                                         <i class="fas fa-share-alt  operation" data-id="share${row.DEBT_ID}"></i>
                                     </div>
                                     <div class="debts-data" data-id="exchange-data-${row.DEBT_ID}">`;
-                    exchangeDataContent += `<textarea rows="2" cols="20" >${row.DESCRIPTION}</textarea>`;
+                    exchangeDataContent += `<h3 >${row.DESCRIPTION}</h3>`;
                     if (row.CURRENCY === "new") {
                         exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قعيطي</h3>`;
                     } else if (row.CURRENCY === "old") {

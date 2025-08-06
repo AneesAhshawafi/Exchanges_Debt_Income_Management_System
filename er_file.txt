@@ -1,0 +1,7 @@
+ammount : 5000
+fees : 0
+selectFrom : 
+selectTo : 
+price : 
+operation type : إيداع
+حوالة ايداع : 
