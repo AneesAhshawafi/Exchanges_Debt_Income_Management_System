@@ -5,6 +5,7 @@
         <group>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/income_list.php</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/income_update_income.php</file>
+            <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/JS/debt_list_modal.js</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/CSS/loginStyle.css</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/JS/switch_withdraw_exchange.js</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/debts_list.php</file>
@@ -16,18 +17,25 @@
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/update_exchange.php</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/index.html</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/JS/set_current_client_id.js</file>
+            <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/JS/signUp.js</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/income_total_ammounts_calc.php</file>
+            <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/JS/add_debt.js</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/get_exchanges_list.php</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/income_update_sum_ammounts.php</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/dbconn.php</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/insert_transaction.php</file>
+            <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/income_delete_income.php</file>
+            <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/delete_exchange.php</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/get_clients.php</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/delete_client.php</file>
+            <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/CSS/indexxStyle.css</file>
+            <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/JS/debt_set_current_client.js</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/exchanges_list.php</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/income_insert_income.php</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/JS/operations_on_client.js</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/generate_client_pdf.php</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/index.php</file>
+            <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/calc_result_of_transfer_btwn_accounts.php</file>
             <file>file:/C:/xampp/htdocs/Exchanges_Debt_Income_Management_System/JS/exchanges_list_modal.js</file>
         </group>
     </open-files>

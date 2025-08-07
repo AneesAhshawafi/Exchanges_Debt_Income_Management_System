@@ -278,6 +278,11 @@ body {
     box-shadow: var(--shadow-xl);
     border: 1px solid rgba(99, 102, 241, 0.1);
 }
+.edit-exchange-form-body{
+    display: flex;
+    flex-wrap: wrap;
+
+}
 
 /* Enhanced Form Styles */
 .add-exchange .add-exchange-title,
@@ -300,15 +305,22 @@ body {
 .input-group {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    margin-right: 10px;
 }
 .transfer-input-group{
+    
     flex-direction: column;
+    align-items: flex-start;
 }
 
-
+ label{
+    height: fit-content;
+    margin-left: 10px;
+}
 .input-group input,
 select {
-       padding: 0.4rem 1rem;
+    padding: 2px 5px;
     font-size: 17PX;
     border: 2px solid rgba(99, 102, 241, 0.2);
     border-radius: var(--border-radius);
@@ -317,7 +329,12 @@ select {
     transition: all var(--transition-normal);
     font-family: inherit;
     margin: 5px;
-    HEIGHT: 44px;
+    HEIGHT: 30px;
+    width: 160px;
+}
+.input-add-exchange{
+    flex: 1;
+    width: 100%;
 }
 .input-group input{
     height: 2rem;
@@ -685,9 +702,14 @@ span {
     .exchanges-list-overlay {
         padding: 1rem 0.5rem;
     }
+    .edit-exchange-form-body{
+        display: grid;
 
+    }
     .input-group {
         margin-bottom: 0.5rem;
+        flex: 1;
+        margin-bottom: -2px;
     }
 
     .input-group label {
@@ -701,11 +723,14 @@ span {
 
     .input-group input,
     select {
+        flex: 1;
         padding: 0.1rem 0.5rem;
         line-height: 1;
         margin: 5px;
         font-size: 0.9rem;
         font-weight: 500;
+        width: auto;
+        margin-right: 10px;
     }
 
 

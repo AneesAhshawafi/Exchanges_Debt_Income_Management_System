@@ -236,22 +236,18 @@ function openEditModal(traData, data) {
     document.getElementById("reciver").value = traData.RECEIVER_NAME;
 
 //    const editTransferInputGroup = document.getElementById('edit-transfer-no-input-group')
-    const editStatus = document.getElementById('edit-status');
+    const editStatusIn = document.getElementById('edit-status');
     const transfer_no = document.getElementById("edit-transfer-no");
     transfer_no.value = traData.TRANSFER_NO;
+    editStatusIn.value = traData.STATUS;
     if (traData.TYPE == 'حوالة') {
-        editStatus.value = traData.STATUS;
         editStatus.classList.remove('hidden');
-    } else {
-        editStatus.classList.add('hidden');
     }
     editSelectFrom.value = traData.FROM_CURRENCY;
     editSelectFrom.addEventListener("mousedown", function (e) {
         e.preventDefault();
     });
-    console.log(traData.FROM_CURRENCY);
-    console.log(traData.TO_CURRENCY);
-    console.log(traData.PRICE);
+
     editSelectTo.value = traData.TO_CURRENCY;
     editSelectTo.addEventListener("mousedown", function (e) {
         e.preventDefault();
@@ -273,6 +269,60 @@ function openEditModal(traData, data) {
     document.getElementById("edit-note").value = traData.NOTE;
     const editExchangeModal = document.getElementById("editExchangeModal");
     editExchangeModal.classList.remove("hidden");
+
+
+    if (editOperSelectTypeInput.value == "حوالة") {
+        editSenderInputGroup.classList.remove('hidden');
+        editReceiverInputGroup.classList.remove('hidden');
+        editCurrency.classList.remove('hidden');
+        editForOrOn.classList.remove('hidden');
+        editStatus.classList.remove('hidden');
+        Array.from(editTransferOperDiv).forEach(e => {
+            e.classList.add('hidden');
+        });
+        editFeesInp.classList.remove('hidden');
+        editSenderNameInput.placeholder = 'اسم المرسل';
+        editTransferNoInput.placeholder = 'رقم الحوالة';
+        editSenderNameInput.required = true;
+        editReceiverInput.required = true;
+        editSelectFrom.required = false;
+        editSelectTo.required = false;
+        editPrice.required = false;
+    } else if (editOperSelectTypeInput.value == "إيداع") {
+        console.log(editOperSelectTypeInput.value);
+        editSenderInputGroup.classList.remove('hidden');
+        editReceiverInputGroup.classList.remove('hidden');
+        editCurrency.classList.remove('hidden');
+        editForOrOn.classList.remove('hidden');
+        editStatus.classList.add('hidden');
+        Array.from(editTransferOperDiv).forEach(e => {
+            e.classList.add('hidden');
+        });
+        editFeesInp.classList.add('hidden');
+        editSenderNameInput.placeholder = 'اسم المودع';
+        editTransferNoInput.placeholder = 'رقم السند';
+        editSenderNameInput.required = true;
+        editReceiverInput.required = true;
+        editSelectFrom.required = false;
+        editSelectTo.required = false;
+        editPrice.required = false;
+    } else {
+        editTransferNoInput.placeholder = 'رقم التحويل';
+        editSenderInputGroup.classList.add('hidden');
+        editReceiverInputGroup.classList.add('hidden');
+        Array.from(editTransferOperDiv).forEach(e => {
+            e.classList.remove('hidden');
+        });
+        editStatus.classList.add('hidden');
+        editCurrency.classList.add('hidden');
+        editForOrOn.classList.add('hidden');
+        editFeesInp.classList.add('hidden');
+        editSenderNameInput.required = false;
+        editReceiverInput.required = false;
+        editSelectFrom.required = true;
+        editSelectTo.required = true;
+        editPrice.required = true;
+    }
 
 
 
