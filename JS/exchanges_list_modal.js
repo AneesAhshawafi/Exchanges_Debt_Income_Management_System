@@ -271,7 +271,7 @@ function openEditModal(traData, data) {
     editExchangeModal.classList.remove("hidden");
 
 
-    if (editOperSelectTypeInput.value == "حوالة") {
+      if (editOperSelectTypeInput.value == "حوالة") {
         editSenderInputGroup.classList.remove('hidden');
         editReceiverInputGroup.classList.remove('hidden');
         editCurrency.classList.remove('hidden');
@@ -281,7 +281,9 @@ function openEditModal(traData, data) {
             e.classList.add('hidden');
         });
         editFeesInp.classList.remove('hidden');
+        labelEditSender.textContent='اسم المرسل';
         editSenderNameInput.placeholder = 'اسم المرسل';
+        labelEditTransferNO.textContent='رقم الحوالة';
         editTransferNoInput.placeholder = 'رقم الحوالة';
         editSenderNameInput.required = true;
         editReceiverInput.required = true;
@@ -289,7 +291,6 @@ function openEditModal(traData, data) {
         editSelectTo.required = false;
         editPrice.required = false;
     } else if (editOperSelectTypeInput.value == "إيداع") {
-        console.log(editOperSelectTypeInput.value);
         editSenderInputGroup.classList.remove('hidden');
         editReceiverInputGroup.classList.remove('hidden');
         editCurrency.classList.remove('hidden');
@@ -299,8 +300,10 @@ function openEditModal(traData, data) {
             e.classList.add('hidden');
         });
         editFeesInp.classList.add('hidden');
+        labelEditSender.textContent='اسم المودع';
         editSenderNameInput.placeholder = 'اسم المودع';
         editTransferNoInput.placeholder = 'رقم السند';
+        labelEditTransferNO.textContent='رقم السند';
         editSenderNameInput.required = true;
         editReceiverInput.required = true;
         editSelectFrom.required = false;
@@ -308,6 +311,7 @@ function openEditModal(traData, data) {
         editPrice.required = false;
     } else {
         editTransferNoInput.placeholder = 'رقم التحويل';
+        labelEditTransferNO.textContent='رقم التحويل';
         editSenderInputGroup.classList.add('hidden');
         editReceiverInputGroup.classList.add('hidden');
         Array.from(editTransferOperDiv).forEach(e => {

@@ -248,7 +248,7 @@
                         </div>
                         <!--</div>-->
                         <div class="input-group hidden" id="edit-sender-input-group">
-                            <label for="edit-sender">المودع</label>
+                            <label for="edit-sender" id="label-edit-sender">المودع</label>
                             <input type="text" name="sender" id="edit-sender" placeholder="المودع"  />
                         </div>
                         <div class="input-group hidden" id="edit-receiver-input-group" >
@@ -257,7 +257,7 @@
                         </div>
 
                         <div class="input-group"  id="edit-transfer-no-input-group">
-                            <label for="edit-transfer-no">رقم الحوالة </label>
+                            <label for="edit-transfer-no" id="label-edit-transfer-no">رقم الحوالة </label>
                             <input type="text" id="edit-transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
                         </div>
                         <div class="input-group">
