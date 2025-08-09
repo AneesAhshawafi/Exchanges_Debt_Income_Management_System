@@ -6,10 +6,12 @@
 
 include 'dbconn.php';
 include 'total_ammounts_calc.php';
+session_start();
+$user_id=$_SESSION['user_id'];
 
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-$sql = "SELECT CLIENT_ID, CLIENT_NAME FROM client WHERE CLIENT_NAME LIKE ? AND DEPT_NO = 1 ORDER BY CLIENT_ID DESC LIMIT 20";
+$sql = "SELECT CLIENT_ID, CLIENT_NAME FROM client WHERE CLIENT_NAME LIKE ? AND DEPT_NO = 1 AND USER_ID = $user_id ORDER BY CLIENT_ID DESC LIMIT 20";
 $stmt = $conn->prepare($sql);
 $searchTerm = "%" . $search . "%";
 $stmt->bind_param("s", $searchTerm);

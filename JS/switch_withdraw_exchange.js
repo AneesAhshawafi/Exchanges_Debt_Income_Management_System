@@ -86,6 +86,7 @@ const editSelectFrom = document.getElementById('edit-select-from');
 const editSelectTo = document.getElementById('edit-select-to');
 const editPrice = document.getElementById('edit-price');
 const editFeesInp = document.getElementById('edit-fees-input-grp');
+const editAmmount = document.getElementById('edit-ammount');
 
 
 editOperSelectTypeInput.addEventListener("change", () => {
@@ -108,6 +109,7 @@ editOperSelectTypeInput.addEventListener("change", () => {
         editSelectFrom.required = false;
         editSelectTo.required = false;
         editPrice.required = false;
+        editAmmount.readonly=false;
     } else if (editOperSelectTypeInput.value == "إيداع") {
         editSenderInputGroup.classList.remove('hidden');
         editReceiverInputGroup.classList.remove('hidden');
@@ -127,6 +129,7 @@ editOperSelectTypeInput.addEventListener("change", () => {
         editSelectFrom.required = false;
         editSelectTo.required = false;
         editPrice.required = false;
+        editAmmount.readonly=false;
     } else {
         editTransferNoInput.placeholder = 'رقم التحويل';
         labelEditTransferNO.textContent='رقم التحويل';
@@ -144,5 +147,6 @@ editOperSelectTypeInput.addEventListener("change", () => {
         editSelectFrom.required = true;
         editSelectTo.required = true;
         editPrice.required = true;
+        editAmmount.readonly=true;
     }
 });

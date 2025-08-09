@@ -127,6 +127,11 @@ body {
     transition: all var(--transition-normal);
 }
 
+.clients-data:hover{
+    cursor: pointer;
+    background: #fee2e2;
+}
+
 .exchanges-list-container,
 .clients-list-container{
     position: relative;

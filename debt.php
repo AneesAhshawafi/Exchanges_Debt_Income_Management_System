@@ -1,10 +1,17 @@
 <?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
 include 'dbconn.php';
 include 'total_ammounts_calc.php';
+session_start();
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $user_id=$_SESSION['user_id'];
     //add client
     $client_name = $_POST["client_name"];
-    $sql_add_client = "INSERT INTO client (CLIENT_NAME, DEPT_NO, USER_ID) VALUES ('$client_name', 2, 1)";
+    $sql_add_client = "INSERT INTO client (CLIENT_NAME, DEPT_NO, USER_ID) VALUES ('$client_name', 2, ".$user_id.")";
     mysqli_query($conn, $sql_add_client);
     header("Location: debt.php");
     exit;

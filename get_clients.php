@@ -1,12 +1,12 @@
 <?php
 include 'dbconn.php';
 include 'total_ammounts_calc.php';
-
 $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
-
+session_start();
+$user_id=$_SESSION['user_id'];
 // استعلام العملاء بالحد والبدء
-$sql = "SELECT CLIENT_ID, CLIENT_NAME FROM client WHERE DEPT_NO = 1 ORDER BY CLIENT_ID DESC LIMIT $limit OFFSET $offset";
+$sql = "SELECT CLIENT_ID, CLIENT_NAME FROM client WHERE DEPT_NO = 1 AND USER_ID = $user_id ORDER BY CLIENT_ID DESC LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
 
 if ($result && $result->num_rows > 0) {

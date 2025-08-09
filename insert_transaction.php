@@ -1,18 +1,9 @@
 <?php
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
- */
-
-// insert_transaction.php
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 $error_file = fopen("er_file.txt", "w");
 header("Content-Type: application/json");
-//header("Content-Type: application/json");
-
 include 'dbconn.php';
 include 'total_ammounts_calc.php';
 include 'calc_result_of_transfer_btwn_accounts.php';
@@ -52,6 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $sum_ammount_old = $sum_ammounts[1];
     $sum_ammount_sa = $sum_ammounts[2];
     fwrite($error_file, 'operation type : ' . $type . "\r\n");
+    $transfered_ammount=0;
     if ($type != 'تحويل') {
         fwrite($error_file, 'حوالة ايداع : ' . "\r\n");
         if ($currency == "new") {
@@ -116,23 +108,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $sum_ammount_sa -= $ammount;
             fwrite($error_file, 'sum_ammount_sa : ' . $sum_ammount_sa . '  after minace' . "\r\n");
         }
-        $tempTotalTo = get_result_of_transfer_btwn_accounts($selectFrom,$selectTo,$ammount,$price);
-        fwrite($error_file, 'tempTotalTo : ' . $tempTotalTo . "\r\n");
+        $transfered_ammount = get_result_of_transfer_btwn_accounts($selectFrom,$selectTo,$ammount,$price);
+        fwrite($error_file, 'transfered_ammount : ' . $transfered_ammount . "\r\n");
        
 
 //        ------------- add to
-        fwrite($error_file, 'tempTotalTo : ' . $tempTotalTo . '  before add' . "\r\n");
+        fwrite($error_file, 'transfered_ammount : ' . $transfered_ammount . '  before add' . "\r\n");
         if ($selectTo == 'new') {
             fwrite($error_file, 'sum_ammount_new : ' . $sum_ammount_new . '  before add' . "\r\n");
-            $sum_ammount_new += $tempTotalTo;
+            $sum_ammount_new += $transfered_ammount;
             fwrite($error_file, 'sum_ammount_new : ' . $sum_ammount_new . '  after add' . "\r\n");
         } elseif ($selectTo == 'old') {
             fwrite($error_file, 'sum_ammount_old : ' . $sum_ammount_old . '  before add' . "\r\n");
-            $sum_ammount_old += $tempTotalTo;
+            $sum_ammount_old += $transfered_ammount;
             fwrite($error_file, 'sum_ammount_old : ' . $sum_ammount_old . '  after add' . "\r\n");
         } else {
             fwrite($error_file, 'sum_ammount_sa : ' . $sum_ammount_sa . '  before add' . "\r\n");
-            $sum_ammount_sa += $tempTotalTo;
+            $sum_ammount_sa += $transfered_ammount;
             fwrite($error_file, 'sum_ammount_sa : ' . $sum_ammount_sa . '  after add' . "\r\n");
         }
     }
@@ -150,17 +142,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $transfer_no = 'BA-' . date("md", strtotime($tra_date)) . str_pad($tra_id_for_transfer_no + 1, 8, '0', STR_PAD_LEFT);
         // تجهيز الاستعلام
-        $sql = "INSERT INTO transaction (TYPE, CURRENCY, FOR_OR_ON, SENDER_NAME,RECEIVER_NAME, TRANSFER_NO, AMMOUNT, TRA_FEES, TRA_DATE, ATM, NOTE, CLIENT_ID,sum_ammount_new,sum_ammount_old,sum_ammount_sa,STATUS,FROM_CURRENCY,PRICE,TO_CURRENCY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO transaction (TYPE, CURRENCY, FOR_OR_ON, SENDER_NAME,RECEIVER_NAME, TRANSFER_NO, AMMOUNT, TRA_FEES, TRA_DATE, ATM, NOTE, CLIENT_ID,sum_ammount_new,sum_ammount_old,sum_ammount_sa,STATUS,FROM_CURRENCY,PRICE,TO_CURRENCY,TRANSFERED_AMMOUNT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
 
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssssddsssidddssds", $type, $currency, $for_or_on, $sender_name, $receiver_name, $transfer_no,
-                $ammount, $fees, $tra_date, $atm, $note, $client_id, $sum_ammount_new, $sum_ammount_old, $sum_ammount_sa, $status, $selectFrom, $price, $selectTo);
+        $stmt->bind_param("ssssssddsssidddssdsd", $type, $currency, $for_or_on, $sender_name, $receiver_name, $transfer_no,
+                $ammount, $fees, $tra_date, $atm, $note, $client_id, $sum_ammount_new, $sum_ammount_old, $sum_ammount_sa, $status, $selectFrom, $price, $selectTo,$transfered_ammount);
     } else {
-        $sql = "INSERT INTO transaction (TYPE, CURRENCY, FOR_OR_ON, SENDER_NAME,RECEIVER_NAME, TRANSFER_NO, AMMOUNT, TRA_FEES, TRA_DATE, ATM, NOTE, CLIENT_ID,sum_ammount_new,sum_ammount_old,sum_ammount_sa,FROM_CURRENCY,PRICE,TO_CURRENCY) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO transaction (TYPE, CURRENCY, FOR_OR_ON, SENDER_NAME,RECEIVER_NAME, TRANSFER_NO, AMMOUNT, TRA_FEES, TRA_DATE, ATM, NOTE, CLIENT_ID,sum_ammount_new,sum_ammount_old,sum_ammount_sa,FROM_CURRENCY,PRICE,TO_CURRENCY,TRANSFERED_AMMOUNT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssssddsssidddsds", $type, $currency, $for_or_on, $sender_name, $receiver_name, $transfer_no,
-                $ammount, $fees, $tra_date, $atm, $note, $client_id, $sum_ammount_new, $sum_ammount_old, $sum_ammount_sa, $selectFrom, $price, $selectTo);
+        $stmt->bind_param("ssssssddsssidddsdsd", $type, $currency, $for_or_on, $sender_name, $receiver_name, $transfer_no,
+                $ammount, $fees, $tra_date, $atm, $note, $client_id, $sum_ammount_new, $sum_ammount_old, $sum_ammount_sa, $selectFrom, $price, $selectTo,$transfered_ammount);
     }
 
     if ($stmt->execute()) {

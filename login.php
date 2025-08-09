@@ -1,0 +1,59 @@
+<?php
+session_start();
+require_once 'dbconn.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username']);
+    $password = $_POST['password'];
+
+    if (empty($username) || empty($password)) {
+        $error = "يرجى تعبئة جميع الحقول.";
+    } else {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE USER_NAME = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($row = $result->fetch_assoc()) {
+            if (password_verify($password, $row['PASSWORD'])) {
+                $_SESSION['user_id'] = $row['USER_ID'];
+                $_SESSION['username'] = $row['USER_NAME'];
+                header("Location: index.php");
+                exit;
+            } else {
+                $error = "كلمة المرور غير صحيحة.";
+            }
+        } else {
+            $error = "اسم المستخدم غير موجود.";
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8">
+        <title>تسجيل الدخول</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <link rel="stylesheet" href="CSS/login.css" />
+    
+    </head>
+    <body>
+        <div class="login-container">
+            <h2>تسجيل الدخول</h2>
+
+            <?php if (!empty($error)) echo "<div class='error'>$error</div>"; ?>
+
+            <form method="POST" action="login.php">
+                <label for="username">اسم المستخدم:</label>
+                <input type="text" name="username" id="username" required>
+
+                <label for="password">كلمة المرور:</label>
+                <input type="password" name="password" id="password" required>
+                <a href="change_password.php">تغيير كلمةالمرور</a>
+                <button type="submit">دخول</button>
+            </form>
+        </div>
+    </body>
+</html>

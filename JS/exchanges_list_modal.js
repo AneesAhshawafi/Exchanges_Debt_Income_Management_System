@@ -1,7 +1,3 @@
-///* 
-// * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-// * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
-// */
 let currentClientId = localStorage.getItem("currentClientId");
 
 let currentExchangesListData = null;
@@ -46,7 +42,7 @@ function openDeleteModal(traNo, exchangesList) {
                 .then(res => res.json())
                 .then(response => {
                     if (response.success) {
-                        alert(response.success);
+                        // alert(response.success);
                         closeModal("deleteModal");
                         location.reload();
                     } else {
@@ -101,6 +97,7 @@ function openShareModal(traNo) {
                     } else {
                         textWithoutTotal += `(ارسال حوالة)
 عليكم ${ammount} ${currency}
+وخدمة تحويل : ${traData.TRA_FEES} ${currency}
 مقابل حوالة صادرة عن طريق ${traData.ATM}
 المرسل: ${traData.SENDER_NAME}
 المستلم: ${traData.RECEIVER_NAME}
@@ -109,7 +106,7 @@ function openShareModal(traNo) {
 التاريخ: ${traData.TRA_DATE}`;
                     }
 
-                } else {
+                } else if (traData.TYPE == 'إيداع') {
                     if (traData.FOR_OR_ON == 'له') {
                         textWithoutTotal += `(عملية إيداع لحسابك)
 أودع ${traData.SENDER_NAME} لحسابكم مبلغ ${ammount} ${currency}
@@ -126,6 +123,28 @@ function openShareModal(traNo) {
 التاريخ: ${traData.TRA_DATE}
 رقم السند: ${traData.TRANSFER_NO}`;
                     }
+                } else {
+                    if (traData.FROM_CURRENCY == 'new') {
+                        from_currency = 'ريال يمني قعيطي';
+                    } else if (traData.FROM_CURRENCY == 'old') {
+                        from_currency = 'ريال يمني قديم';
+                    } else {
+                        from_currency = 'ريال سعودي';
+                    }
+                    if (traData.TO_CURRENCY == 'new') {
+                        to_currency = 'ريال يمني قعيطي';
+                    } else if (traData.TO_CURRENCY == 'old') {
+                        to_currency = 'ريال يمني قديم';
+                    } else {
+                        to_currency = 'ريال سعودي';
+                    }
+                    transfered_ammount = numberFormat(traData.TRANSFERED_AMMOUNT, 2);
+                    textWithoutTotal += `(شراء عملة)
+أضيف إلى حسابكم ${transfered_ammount} ${to_currency}
+مقابل خصم ${ammount} ${from_currency} من حسابكم
+من سعر ${traData.PRICE} للريال الواحد
+رقم التحويل: ${traData.TRANSFER_NO}
+التاريخ: ${traData.TRA_DATE}`
                 }
                 note = '';
                 if (traData.NOTE) {
@@ -151,29 +170,80 @@ function openShareModal(traNo) {
 function getTextOfTotalAmmounts(traData) {
     textTotal = `
 `;
+    if (traData.TYPE != 'تحويل') {
 
-    if (traData.CURRENCY == 'new') {
-        if (traData.sum_ammount_new > 0) {
-            textTotal += `الرصيد لكم `;
-        } else {
-            textTotal += `الرصيد عليكم `;
-        }
-        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_new), 2)} ري قعيطي`;
+        if (traData.CURRENCY == 'new') {
+            if (traData.sum_ammount_new > 0) {
+                textTotal += `الرصيد لكم `;
+            } else {
+                textTotal += `الرصيد عليكم `;
+            }
+            textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_new), 2)} ري قعيطي`;
 
-    } else if (traData.CURRENCY == 'old') {
-        if (traData.sum_ammount_old > 0) {
-            textTotal += `الرصيد لكم `;
+        } else if (traData.CURRENCY == 'old') {
+            if (traData.sum_ammount_old > 0) {
+                textTotal += `الرصيد لكم `;
+            } else {
+                textTotal += `الرصيد عليكم `;
+            }
+            textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_old), 2)} ري قديم`;
         } else {
-            textTotal += `الرصيد عليكم `;
+            if (traData.sum_ammount_sa > 0) {
+                textTotal += `الرصيد لكم `;
+            } else {
+                textTotal += `الرصيد عليكم `;
+            }
+            textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_sa), 2)} ريال سعودي`;
         }
-        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_old), 2)} ري قديم`;
     } else {
-        if (traData.sum_ammount_sa > 0) {
-            textTotal += `الرصيد لكم `;
+        if (traData.FROM_CURRENCY == 'new') {
+            if (traData.sum_ammount_new > 0) {
+                textTotal += `الرصيد لكم `;
+            } else {
+                textTotal += `الرصيد عليكم `;
+            }
+            textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_new), 2)} ري قعيطي`;
+
+        } else if (traData.FROM_CURRENCY == 'old') {
+            if (traData.sum_ammount_old > 0) {
+                textTotal += `الرصيد لكم `;
+            } else {
+                textTotal += `الرصيد عليكم `;
+            }
+            textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_old), 2)} ري قديم`;
         } else {
-            textTotal += `الرصيد عليكم `;
+            if (traData.sum_ammount_sa > 0) {
+                textTotal += `الرصيد لكم `;
+            } else {
+                textTotal += `الرصيد عليكم `;
+            }
+            textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_sa), 2)} ريال سعودي`;
         }
-        textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_sa), 2)} ريال سعودي`;
+        textTotal += `
+`;
+        if (traData.TO_CURRENCY == 'new') {
+            if (traData.sum_ammount_new > 0) {
+                textTotal += `الرصيد لكم `;
+            } else {
+                textTotal += `الرصيد عليكم `;
+            }
+            textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_new), 2)} ري قعيطي`;
+
+        } else if (traData.TO_CURRENCY == 'old') {
+            if (traData.sum_ammount_old > 0) {
+                textTotal += `الرصيد لكم `;
+            } else {
+                textTotal += `الرصيد عليكم `;
+            }
+            textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_old), 2)} ري قديم`;
+        } else {
+            if (traData.sum_ammount_sa > 0) {
+                textTotal += `الرصيد لكم `;
+            } else {
+                textTotal += `الرصيد عليكم `;
+            }
+            textTotal += ` ${numberFormat(Math.abs(traData.sum_ammount_sa), 2)} ريال سعودي`;
+        }
     }
     return textTotal;
 }
@@ -235,7 +305,7 @@ function openEditModal(traData, data) {
 
     document.getElementById("reciver").value = traData.RECEIVER_NAME;
 
-//    const editTransferInputGroup = document.getElementById('edit-transfer-no-input-group')
+    //    const editTransferInputGroup = document.getElementById('edit-transfer-no-input-group')
     const editStatusIn = document.getElementById('edit-status');
     const transfer_no = document.getElementById("edit-transfer-no");
     transfer_no.value = traData.TRANSFER_NO;
@@ -270,8 +340,11 @@ function openEditModal(traData, data) {
     const editExchangeModal = document.getElementById("editExchangeModal");
     editExchangeModal.classList.remove("hidden");
 
-
-      if (editOperSelectTypeInput.value == "حوالة") {
+//    const transferOption=document.getElementById('transfer-option');
+    if (editOperSelectTypeInput.value == "حوالة") {
+        editOperSelectTypeInput.options[3].disabled = true;
+        editOperSelectTypeInput.options[2].disabled = false;
+        editOperSelectTypeInput.options[1].disabled = false;
         editSenderInputGroup.classList.remove('hidden');
         editReceiverInputGroup.classList.remove('hidden');
         editCurrency.classList.remove('hidden');
@@ -281,16 +354,20 @@ function openEditModal(traData, data) {
             e.classList.add('hidden');
         });
         editFeesInp.classList.remove('hidden');
-        labelEditSender.textContent='اسم المرسل';
+        labelEditSender.textContent = 'اسم المرسل';
         editSenderNameInput.placeholder = 'اسم المرسل';
-        labelEditTransferNO.textContent='رقم الحوالة';
+        labelEditTransferNO.textContent = 'رقم الحوالة';
         editTransferNoInput.placeholder = 'رقم الحوالة';
         editSenderNameInput.required = true;
         editReceiverInput.required = true;
         editSelectFrom.required = false;
         editSelectTo.required = false;
         editPrice.required = false;
+        editAmmount.readOnly = false;
     } else if (editOperSelectTypeInput.value == "إيداع") {
+        editOperSelectTypeInput.options[3].disabled = true;
+        editOperSelectTypeInput.options[2].disabled = false;
+        editOperSelectTypeInput.options[1].disabled = false;
         editSenderInputGroup.classList.remove('hidden');
         editReceiverInputGroup.classList.remove('hidden');
         editCurrency.classList.remove('hidden');
@@ -300,18 +377,24 @@ function openEditModal(traData, data) {
             e.classList.add('hidden');
         });
         editFeesInp.classList.add('hidden');
-        labelEditSender.textContent='اسم المودع';
+        labelEditSender.textContent = 'اسم المودع';
         editSenderNameInput.placeholder = 'اسم المودع';
         editTransferNoInput.placeholder = 'رقم السند';
-        labelEditTransferNO.textContent='رقم السند';
+        labelEditTransferNO.textContent = 'رقم السند';
         editSenderNameInput.required = true;
         editReceiverInput.required = true;
         editSelectFrom.required = false;
         editSelectTo.required = false;
         editPrice.required = false;
+        editAmmount.readOnly = false;
+
     } else {
+        
+        editOperSelectTypeInput.options[3].disabled = false;
+        editOperSelectTypeInput.options[2].disabled = true;
+        editOperSelectTypeInput.options[1].disabled = true;
         editTransferNoInput.placeholder = 'رقم التحويل';
-        labelEditTransferNO.textContent='رقم التحويل';
+        labelEditTransferNO.textContent = 'رقم التحويل';
         editSenderInputGroup.classList.add('hidden');
         editReceiverInputGroup.classList.add('hidden');
         Array.from(editTransferOperDiv).forEach(e => {
@@ -324,7 +407,9 @@ function openEditModal(traData, data) {
         editSenderNameInput.required = false;
         editReceiverInput.required = false;
         editSelectFrom.required = true;
+
         editSelectTo.required = true;
+        editAmmount.readOnly = true;
         editPrice.required = true;
     }
 
@@ -395,14 +480,27 @@ fetch("get_exchanges_list.php", {
                                     </div>
                                     <div class="exchanges-data" data-id="exchange-data-${row.TRA_ID}">`;
                     exchangeDataContent += `<h3>${row.SENDER_NAME}</h3><h3>${row.RECEIVER_NAME}</h3><h3>${row.TYPE}</h3><h3>${row.TRANSFER_NO}</h3>`;
-                    if (row.CURRENCY === "new") {
-                        exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قعيطي</h3>`;
-                    } else if (row.CURRENCY === "old") {
-                        exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قديم</h3>`;
+                    if (row.TYPE != 'تحويل') {
+
+                        if (row.CURRENCY === "new") {
+                            exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قعيطي</h3>`;
+                        } else if (row.CURRENCY === "old") {
+                            exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قديم</h3>`;
+
+                        } else {
+                            exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ريال سعودي</h3>`;
+                        }
 
                     } else {
-                        exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} سعودي</h3>`;
+                        console.log(row.FROM_CURRENCY);
+                        if (row.FROM_CURRENCY === "new") {
+                            exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قعيطي</h3>`;
+                        } else if (row.FROM_CURRENCY === "old") {
+                            exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قديم</h3>`;
 
+                        } else {
+                            exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ريال سعودي</h3>`;
+                        }
                     }
                     exchangeDataContent += `<h3>${row.FOR_OR_ON}</h3><h3 class="date">${row.TRA_DATE}</h3><h3>${row.ATM}</h3><h3>${numberFormat(row.TRA_FEES)}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><textarea class="note">${row.NOTE}</textarea><h3>${row.STATUS}</h3></div>`
 

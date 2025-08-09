@@ -1,8 +1,9 @@
 <?php
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
- */
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
 ?>
 <html lang="ar">
 
@@ -181,7 +182,7 @@
                     <div class="edit-exchange-form-body">
                         <div class="input-group" >
                             <label for="edit-type">اختر نوع العملية</label>
-                            <select name="type"  id="edit-type" >
+                            <select name="type"  id="edit-type"  >
                                 <option value="" disabled selected>اختر نوع العملية</option>
                                 <option value="حوالة">حوالة</option>
                                 <option value="إيداع">إيداع</option>
@@ -207,7 +208,7 @@
                         </div>
                         <div class="input-group" id="edit-ammount-input-group">
                             <label for="edit-ammount">المبلغ</label>
-                            <input  type="number" name="ammount" id="edit-ammount" placeholder="المبلغ"  readonly />
+                            <input  type="number" name="ammount" id="edit-ammount" placeholder="المبلغ"  />
                         </div>
 
 
@@ -258,7 +259,7 @@
 
                         <div class="input-group"  id="edit-transfer-no-input-group">
                             <label for="edit-transfer-no" id="label-edit-transfer-no">رقم الحوالة </label>
-                            <input type="text" id="edit-transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
+                            <input type="text" id="edit-transfer-no" name="transfer-no" placeholder="رقم الحوالة " readonly/>
                         </div>
                         <div class="input-group">
                             <label for="edit-date">التاربخ</label>
