@@ -4,7 +4,6 @@
 
 include 'dbconn.php';
 include 'debt_update_sum_ammounts.php';
-$error_file = fopen("er_file.txt", "w");
 header("Content-Type: application/json");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -27,10 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $conn->prepare("SELECT * FROM debt WHERE DEBT_ID = ?");
     $stmt->bind_param("i", $id);
     if ($stmt->execute()) {
-        fwrite($error_file, ' تم استخراج الببيانات القديمة' . "\r\n");
 //        echo json_encode(["success" => "تم التعديل بنجاح"]);
     } else {
-        fwrite($error_file, ' لم يتم استخراج الببيانات القديمة' . "\r\n");
     }
     $result = $stmt->get_result();
     $oldData = $result->fetch_assoc();
@@ -45,54 +42,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($for_or_on == $newForOrOn) {
                 $ammount_differ = $oldAmmount - $newAmmount;
-                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
-                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
-                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
-                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id);
             } else {
                 $ammount_differ = $oldAmmount + $newAmmount;
-                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
-                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
-                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
-                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id);
             }
         } else {
             if ($for_or_on == $newForOrOn) {
                 $ammount_differ = $oldAmmount;
-                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
-                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
-                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
-                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id);
                 $ammount_differ = $newAmmount;
-                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
-                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
-                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
                 if ($for_or_on == 'له') {
 
-                    update_sum_ammount($newCurrency, 'عليه', $exchangesListData, $ammount_differ, $id, $error_file);
+                    update_sum_ammount($newCurrency, 'عليه', $exchangesListData, $ammount_differ, $id);
                 } else {
-                    update_sum_ammount($newCurrency, 'له', $exchangesListData, $ammount_differ, $id, $error_file);
+                    update_sum_ammount($newCurrency, 'له', $exchangesListData, $ammount_differ, $id);
                 }
             } else {
                 $ammount_differ = $oldAmmount;
-                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
-                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
-                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
-                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id);
 
                 $ammount_differ = $newAmmount;
-                fwrite($error_file, "old ammount=" . $oldAmmount . "\r\n");
-                fwrite($error_file, "new ammount=" . $newAmmount . "\r\n");
-                fwrite($error_file, "differ ammount=" . $ammount_differ . "\r\n");
-                update_sum_ammount($newCurrency, $for_or_on, $exchangesListData, $ammount_differ, $id, $error_file);
+                update_sum_ammount($newCurrency, $for_or_on, $exchangesListData, $ammount_differ, $id);
             }
         }
     }
-
-
-
-    fwrite($error_file, "done with update sums");
-
     
            $sql = "UPDATE debt SET 
                 DESCRIPTION = ?, 
@@ -104,23 +78,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             WHERE DEBT_ID = ?";
 
     $stmt = $conn->prepare($sql);
-//    fwrite($error_file, "type:" . $type ."  receiver : ".$receiver."  transfer number : ".$transfer_no. "  currency: " . $newCurrency . "new ammount : " . $newAmmount . "\r\n");
     $stmt->bind_param("sssdssi", $description, $newCurrency, $newForOrOn, $newAmmount, $date, $note, $id);
-
-    
-    
  
     if ($stmt->execute()) {
-//        echo json_encode(["success" => "تم التعديل بنجاح"]);
+        echo json_encode(["success" => "تم التعديل بنجاح"]);
 
         echo 'تم التعديل';
     } else {
-//        echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
+        echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
         echo 'حدث خطا';
     }
 
-//    $stmt->close();
-//    $conn->close();
-//    exit();
+    $stmt->close();
+    $conn->close();
+    exit();
 }
 ?>

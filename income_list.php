@@ -1,8 +1,9 @@
 <?php
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
- */
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
 ?>
 <html lang="ar">
 
@@ -25,7 +26,7 @@
         <!-- تنسيقات الوضع الليلي -->
         <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
         <!-- تنسيقات خاصة بالصفحة الرئيسية -->
-        <link rel="stylesheet" href="CSS/indexxStyle.css" />
+        <link rel="stylesheet" href="CSS/indexxStyle.css?v=<?=filemtime('CSS/indexxStyle.css')?>">
 
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -49,10 +50,10 @@
                         <li><a href="debt.php">قسم الديون</a></li>
                         <li><a  class="active" href="income_list.php">قسم الدخل</a></li>
 
-                        <!-- زر تسجيل الدخول -->
-                        <li id="login-li">
-                            <a href="login.html" data-lang="login-btn" class="login-buttn" id="login-link">تسجيل الدخول</a>
+                        <!-- زر تسجيل الدخول -->   <li id="login-li">
+                            <a href="logout.php" class="login-buttn">تسجيل الخروج</a>
                         </li>
+
                     </ul>
 
                     <h1>بن عبود للصرافة والتحويلات</h1>
@@ -249,7 +250,6 @@
             </div>
         </div>
         <!--End Delete Modal-->
-        <script src="JS/loginLogoutBtn.js"></script>
         <script src="JS/navbar.js"></script>
         <script src="JS/income_list_modal.js"></script>
         <script src="JS/add_income.js"></script>

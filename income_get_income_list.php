@@ -5,8 +5,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
  */
 header("Content-Type:application/json");
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["user_id"])) {
-    $user_id = intval($_POST["user_id"]);
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    session_start();
+
+    // $user_id = intval($_POST["user_id"]);
+    $user_id=$_SESSION['user_id'];
     include 'dbconn.php';
     if ($conn->connect_error) {
         echo json_encode(["error" => "فشل الاتصال بقاعدة البيانات"]);

@@ -1,18 +1,5 @@
 <?php
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
- */
-
-// insert_transaction.php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-$error_file = fopen("er_file.txt", "w");
 header("Content-Type: application/json");
-//header("Content-Type: application/json");
-
 include 'dbconn.php';
 include 'debt_total_ammounts_calc.php';
 // التحقق من أن الطلب هو POST وأن جميع البيانات موجودة
@@ -71,7 +58,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             echo json_encode(["success" => "تمت إضافة المعاملة بنجاح"]);
         } else {
             echo json_encode(["error" => "فشل في إدخال المعاملة: " . $stmt->error]);
-            fwrite($error_file, "فشل في إدخال المعاملة: " . $stmt->error . "\r\n");
         }
    
 

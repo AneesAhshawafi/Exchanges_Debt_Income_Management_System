@@ -6,16 +6,6 @@ if (!isset($_SESSION['user_id'])) {
 }
 include 'dbconn.php';
 include 'total_ammounts_calc.php';
-session_start();
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $user_id=$_SESSION['user_id'];
-    //add client
-    $client_name = $_POST["client_name"];
-    $sql_add_client = "INSERT INTO client (CLIENT_NAME, DEPT_NO, USER_ID) VALUES ('$client_name', 2, ".$user_id.")";
-    mysqli_query($conn, $sql_add_client);
-    header("Location: debt.php");
-    exit;
-}
 ?>
 <!DOCTYPE html>
 <html lang="ar">
@@ -39,8 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <!-- تنسيقات الوضع الليلي -->
         <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
         <!-- تنسيقات خاصة بالصفحة الرئيسية -->
-        <link rel="stylesheet" href="CSS/indexxStyle.css" />
-
+ <link rel="stylesheet" href="CSS/indexxStyle.css?v=<?=filemtime('CSS/indexxStyle.css')?>">
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -62,10 +51,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         <li><a class="active" href="debt.php">قسم الديون</a></li>
                         <li><a href="income_list.php">قسم الدخل</a></li>
 
-                        <!-- زر تسجيل الدخول -->
-                        <li id="login-li">
-                            <a href="login.html" data-lang="login-btn" class="login-buttn" id="login-link">تسجيل الدخول</a>
+                        <!-- زر تسجيل الدخول -->   <li id="login-li">
+                            <a href="logout.php" class="login-buttn">تسجيل الخروج</a>
                         </li>
+
                     </ul>
                     
                     <h1>بن عبود للصرافة والتحويلات</h1>
@@ -115,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 <div class="add-client-overlay hidden" id="add-client-overlay">
                     <div class="add-client">
-                        <form action="" method="POST" class="add-client-form">
+                        <form action="" method="POST" class="add-client-form" id="debt-add-client-form">
                             <span class="close-modal close-modal-form" id="closeAddClientBtn">&rarr;</span>
                             <div class="add-client-form-title">
                                 <h3>اضافة عميل</h3>
@@ -193,13 +182,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <script src="JS/navbar.js"></script>
         <!-- تحكم في فتح/إغلاق القائمة -->
         <!--<script src="JS/language.js"></script>-->
-        <script src="JS/loginLogoutBtn.js"></script>
+        <!--<script src="JS/loginLogoutBtn.js"></script>-->
         <!-- زر تسجيل لدخول / تسجيل الخروج -->
         <!--            <script src="JS/variables.js"></script>-->
         <script src="JS/add_client_modal.js"></script>
+        
         <script src="JS/debt_set_current_client.js"></script>
         <script src="JS/operations_on_client.js"></script>
         <script src="JS/debt_lazy_loading_clients.js"></script>
+        <script src="JS/debt_add_client_handeler.js"></script>
         <script>
                             const searchInput = document.getElementById("searchInput");
                             const clientsListDiv = document.getElementById("clients-list");

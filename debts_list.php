@@ -26,7 +26,7 @@ if (!isset($_SESSION['user_id'])) {
         <!-- تنسيقات الوضع الليلي -->
         <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
         <!-- تنسيقات خاصة بالصفحة الرئيسية -->
-        <link rel="stylesheet" href="CSS/indexxStyle.css" />
+<link rel="stylesheet" href="CSS/indexxStyle.css?v=<?=filemtime('CSS/indexxStyle.css')?>">
 
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -55,9 +55,9 @@ if (!isset($_SESSION['user_id'])) {
                         <h3>المبلغ</h3>
                         <h3 >له/عليه</h3>
                         <h3>التاريخ</h3>
-                        <h3>الاجمالي قعيطي له</h3>
-                        <h3>الاجمالي قديم له</h3>
-                        <h3>الإجمالي سعودي له</h3>
+                        <h3>الاجمالي قعيطي عليه</h3>
+                        <h3>الاجمالي قديم عليه</h3>
+                        <h3>الإجمالي سعودي عليه</h3>
                         <h3>ملاحظة</h3>
                     </div>
                     <div class="exchanges-list-body" id="exchanges-list-body">

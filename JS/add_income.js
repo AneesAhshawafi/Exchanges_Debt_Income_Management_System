@@ -1,8 +1,3 @@
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
- */
-
 currentClientId = localStorage.getItem("currentClientId");
 const addExchangeFormOverlay=document.getElementById("addExchangeForm");
 const addExchangeForm=document.getElementById("add-exchange-form");
@@ -21,7 +16,7 @@ closeAddExchangeBtn.addEventListener("click",()=>{
 addExchangeForm.addEventListener("submit", function (e) {
     e.preventDefault();
     const formData = new FormData(this);
-    formData.append("user_id", 1);
+    
     
     fetch("income_insert_income.php", {
         method: "POST",

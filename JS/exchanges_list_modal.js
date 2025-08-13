@@ -139,10 +139,11 @@ function openShareModal(traNo) {
                         to_currency = 'ريال سعودي';
                     }
                     transfered_ammount = numberFormat(traData.TRANSFERED_AMMOUNT, 2);
+                    priceTransfer=numberFormat(traData.PRICE,2);
                     textWithoutTotal += `(شراء عملة)
 أضيف إلى حسابكم ${transfered_ammount} ${to_currency}
 مقابل خصم ${ammount} ${from_currency} من حسابكم
-من سعر ${traData.PRICE} للريال الواحد
+من سعر ${priceTransfer} للريال الواحد
 رقم التحويل: ${traData.TRANSFER_NO}
 التاريخ: ${traData.TRA_DATE}`
                 }
@@ -492,7 +493,6 @@ fetch("get_exchanges_list.php", {
                         }
 
                     } else {
-                        console.log(row.FROM_CURRENCY);
                         if (row.FROM_CURRENCY === "new") {
                             exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قعيطي</h3>`;
                         } else if (row.FROM_CURRENCY === "old") {

@@ -1,10 +1,4 @@
 <?php
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/EmptyPHP.php to edit this template
- */
-
 // insert_transaction.php
 header("Content-Type: application/json");
 //header("Content-Type: application/json");
@@ -22,7 +16,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $tra_date_raw = $_POST["date"];
     $tra_date = $tra_date_raw ? date("Y-m-d", strtotime($tra_date_raw)) : date("Y-m-d");
     $note = trim($_POST["note"]);
-    $user_id = intval($_POST["user_id"]);
+    session_start();
+    
+    $user_id = $_SESSION['user_id'];
     
 
     // تضمين الاتصال بقاعدة البيانات

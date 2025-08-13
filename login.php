@@ -36,8 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <meta charset="UTF-8">
         <title>تسجيل الدخول</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <link rel="stylesheet" href="CSS/login.css" />
-    
+        <link rel="stylesheet" href="CSS/login.css" />
+        <link rel="manifest" href="manifest.json" />
+
+
     </head>
     <body>
         <div class="login-container">
@@ -55,5 +57,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit">دخول</button>
             </form>
         </div>
+        <script>
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('pwabuilder-sw.js')
+                        .then(function (registration) {
+                            console.log('Service Worker registered successfully');
+                        })
+                        .catch(function (error) {
+                            console.log('Service Worker registration failed:', error);
+                        });
+            }
+        </script>
+
     </body>
 </html>

@@ -6,15 +6,15 @@ if (!isset($_SESSION['user_id'])) {
 }
 include 'dbconn.php';
 include 'total_ammounts_calc.php';
-$user_id=$_SESSION['user_id'];
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    //add client
-    $client_name = $_POST["client_name"];
-    $sql_add_client = "INSERT INTO client (CLIENT_NAME, DEPT_NO, USER_ID) VALUES ('$client_name', 1," .$user_id . ")";
-    mysqli_query($conn, $sql_add_client);
-    header("Location: index.php");
-    exit;
-}
+// $user_id=$_SESSION['user_id'];
+// if ($_SERVER["REQUEST_METHOD"] === "POST") {
+//     //add client
+//     $client_name = $_POST["client_name"];
+//     $sql_add_client = "INSERT INTO client (CLIENT_NAME, DEPT_NO, USER_ID) VALUES ('$client_name', 1," .$user_id . ")";
+//     mysqli_query($conn, $sql_add_client);
+//     header("Location: index.php");
+//     exit;
+// }
 ?>
 <!DOCTYPE html>
 <html lang="ar">
@@ -29,17 +29,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <!-- جعل التصميم متجاوباً مع مختلف الشاشات -->
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="manifest" href="manifest.json" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="shortcut icon" href="/favicon.ico">
+
 
         <!-- استيراد التنسيقات العامة للموقع -->
         <link rel="stylesheet" href="CSS/GlobalRulesStyle.css" />
         <!-- تنسيقات الوضع الليلي -->
         <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
-        <!-- تنسيقات خاصة بالصفحة الرئيسية -->
-        <link rel="stylesheet" href="CSS/indexxStyle.css" />
+
         <!-- إعادة ضبط تنسيقات المتصفح الافتراضية -->
         <link rel="stylesheet" type="text/css" media="screen" href="CSS/normalize.css" />
         <!-- مكتبة أيقونات Font Awesome -->
         <link rel="stylesheet" href="CSS/all.min.css" />
+                <!-- تنسيقات خاصة بالصفحة الرئيسية -->
+    <link rel="stylesheet" href="CSS/indexxStyle.css?v=<?=filemtime('CSS/indexxStyle.css')?>">
 
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -67,12 +74,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             <a href="logout.php" class="login-buttn">تسجيل الخروج</a>
                         </li>
                     </ul>
-                 
+
                     <h1>بن عبود للصرافة والتحويلات</h1>
-                <!-- شعار الموقع -->
-                <a href="#" class="logo">
-                     <img src="images/logo2.jpg" alt="logo" />
-                </a>
+                    <!-- شعار الموقع -->
+                    <a href="#" class="logo">
+                        <img src="images/logo2.jpg" alt="logo" />
+                    </a>
                 </nav>
             </section>
         </header>
@@ -91,17 +98,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     </div>
                     <input type="text" id="searchInput" placeholder="🔍 ابحث عن اسم عميل..." class="search-input" />
                     <div class="clients-list-container" >
-                        
-                    <div class="clients-list-header">
-                        <h3 class="name" id="name">الاسم</h3>
-                        <h3 class="no-exchanges">الرصيد قعيطي</h3>
-                        <h3 class="total-for">الرصيد قديم</h3>
-                        <h3 class="total-on">الرصيد سعودي له</h3>
-                    </div>
 
-                    <div id="clients-list"></div> <!-- سنملأ هذا بواسطة JavaScript -->
+                        <div class="clients-list-header">
+                            <h3 class="name" id="name">الاسم</h3>
+                            <h3 class="no-exchanges">الرصيد قعيطي</h3>
+                            <h3 class="total-for">الرصيد قديم</h3>
+                            <h3 class="total-on">الرصيد سعودي له</h3>
+                        </div>
 
-                    <p id="loading-message" style="display:none;">جارٍ التحميل...</p>
+                        <div id="clients-list"></div> <!-- سنملأ هذا بواسطة JavaScript -->
+
+                        <p id="loading-message" style="display:none;">جارٍ التحميل...</p>
                     </div>
 
                     <button class="plus-icon open-modal-btn" id="addClientBtn">
@@ -115,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 <div class="add-client-overlay hidden" id="add-client-overlay">
                     <div class="add-client">
-                        <form action="" method="POST" class="add-client-form">
+                        <form action="" method="POST" class="add-client-form" id="add-client-form" >
                             <span class="close-modal close-modal-form" id="closeAddClientBtn">&rarr;</span>
                             <div class="add-client-form-title">
                                 <h3>اضافة عميل</h3>
@@ -200,6 +207,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <script src="JS/set_current_client_id.js"></script>
         <script src="JS/operations_on_client.js"></script>
         <script src="JS/lazy_loading_clients.js"></script>
+        <script src="JS/add_client_handeler.js"></script>
         <script>
                             const searchInput = document.getElementById("searchInput");
                             const clientsListDiv = document.getElementById("clients-list");
@@ -237,18 +245,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         </script>
         <script>
-        if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('pwabuilder-sw.js')
-      .then(registration => {
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      })
-      .catch(err => {
-        console.log('ServiceWorker registration failed: ', err);
-      });
-  });
-}
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('pwabuilder-sw.js')
+                        .then(function (registration) {
+                            console.log('Service Worker registered successfully');
+                        })
+                        .catch(function (error) {
+                            console.log('Service Worker registration failed:', error);
+                        });
+            }
         </script>
+
+
     </body>
 
 </html>

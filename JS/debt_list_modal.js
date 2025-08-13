@@ -84,7 +84,7 @@ function openShareModal(traNo) {
                     currency = 'ريال سعودي';
                 }
                 ammount = numberFormat(traData.AMMOUNT, 2);
-                textWithoutTotal = `بقالة بن عيود 
+                textWithoutTotal = `*{بقالة بن عبود}*
 `;
 if(traData.FOR_OR_ON=='عليه'){
     textWithoutTotal += `
@@ -95,7 +95,7 @@ if(traData.FOR_OR_ON=='عليه'){
 لكم ${ammount} ${currency} `;
 }
                 textWithoutTotal += `
- مقابل ${traData.DESCRIPTION}
+مقابل ${traData.DESCRIPTION}
 المبلغ: ${ammount} ${currency}
 التاريخ: ${traData.DEBT_DATE}`;
                 if (traData.NOTE) {
@@ -120,7 +120,7 @@ ${traData.NOTE}`;
 }
 function getTextOfTotalAmmounts(traData) {
     textTotal = `
- الإجمالي `;
+الإجمالي `;
 
     if (traData.CURRENCY == 'new') {
         if (traData.sum_ammount_new > 0) {

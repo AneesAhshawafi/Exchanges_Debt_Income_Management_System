@@ -23,11 +23,8 @@ if (!isset($_SESSION['user_id'])) {
         <link rel="stylesheet" href="CSS/all.min.css" />
         <!-- استيراد التنسيقات العامة للموقع -->
         <link rel="stylesheet" href="CSS/GlobalRulesStyle.css" />
-        <!-- تنسيقات الوضع الليلي -->
+        <!-- تنسيقات الوضع الليلي --><link rel="stylesheet" href="CSS/indexxStyle.css?v=<?=filemtime('CSS/indexxStyle.css')?>">
         <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
-        <!-- تنسيقات خاصة بالصفحة الرئيسية -->
-        <link rel="stylesheet" href="CSS/indexxStyle.css" />
-
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
