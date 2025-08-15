@@ -26,7 +26,7 @@ if (!isset($_SESSION['user_id'])) {
         <!-- تنسيقات الوضع الليلي -->
         <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
         <!-- تنسيقات خاصة بالصفحة الرئيسية -->
-        <link rel="stylesheet" href="CSS/indexxStyle.css?v=<?=filemtime('CSS/indexxStyle.css')?>">
+        <link rel="stylesheet" href="CSS/indexxStyle.css?v=<?= filemtime('CSS/indexxStyle.css') ?>">
 
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -72,6 +72,9 @@ if (!isset($_SESSION['user_id'])) {
                 <a href="index.php" ><span class="close-modal" id="closeExchangeListBtn">&rarr;</span></a> 
                 <div class="exchanges-list-title">
                     <h2>قسم الدخل </h2>
+                </div>
+                <div class="clear-income" id="clear-income"> 
+                    <button class="clear-income-btn btn" onclick="openModal('clear-income-modal')">سحب كل الرصيد</button>
                 </div>
                 <input type="text" id="exchangeSearchInput" placeholder="🔍 ابحث بإسم الغرض..." class="search-input" />
 
@@ -225,22 +228,6 @@ if (!isset($_SESSION['user_id'])) {
 
         <!--End Edit Exchange Form-->
 
-
-
-
-        <!--Start Share Modal-->
-        <!--        <div id="shareModal" class="modal hidden">
-                    <div class="modal-content">
-                        <textarea id="shareText" ></textarea>
-                        <div class="shareModalBtns">     
-                            <button id="shareBtn" >مشاركة بدون الإجمالي</button>
-                            <button id="shareWithTotalBtn" >مشاركة مع الإجمالي</button>
-                            <button onclick="closeModal('shareModal')">إغلاق</button>
-                        </div>
-                    </div>
-                </div>-->
-        <!--End Share Modal-->
-
         <!--Start Delete Modal-->
         <div id="deleteModal" class="modal hidden">
             <div class="modal-content">
@@ -250,19 +237,51 @@ if (!isset($_SESSION['user_id'])) {
             </div>
         </div>
         <!--End Delete Modal-->
+
+
+        <!--Start Delete Modal-->
+        <div id="clear-income-modal" class="modal hidden">
+            <div class="modal-content">
+                <p>هل أنت متأكد من سحب كل الرصيد؟</p>
+                <button id="confirmClearIncomeBtn">نعم</button>
+                <button onclick="closeModal('clear-income-modal')">إلغاء</button>
+            </div>
+        </div>
+        <!--End Delete Modal-->
+
         <script src="JS/navbar.js"></script>
         <script src="JS/income_list_modal.js"></script>
         <script src="JS/add_income.js"></script>
         <script>
-                    document.getElementById("exchangeSearchInput").addEventListener("input", function () {
-                        const searchText = this.value.toLowerCase();
-                        const exchangeItems = document.querySelectorAll(".exchanges-data-container");
+            function openModal(id){
+                document.getElementById(id).classList.remove('hidden');
+            }
+            document.getElementById('confirmClearIncomeBtn').addEventListener('click',function (){
+                fetch('incoome_clear_income.php')
+                        .then(res=>res.json())
+                        .then(response => {
+                            if(response.messege){
+                                alert(response.messege);
+                                closeModal("clear-income-modal");
+                                location.reload();
+                            }else{
+                                alert(response.error);
+                            }
+                }).catch(er=>{
+                    alert(er);
+                })
+            })
+        </script>
+        <script>
+            document.getElementById("exchangeSearchInput").addEventListener("input", function () {
+                const searchText = this.value.toLowerCase();
+                const exchangeItems = document.querySelectorAll(".exchanges-data-container");
 
-                        exchangeItems.forEach(item => {
-                            const textContent = item.innerText.toLowerCase();
-                            item.style.display = textContent.includes(searchText) ? "block" : "none";
-                        });
-                    });
+                exchangeItems.forEach(item => {
+                    const textContent = item.innerText.toLowerCase();
+                    item.style.display = textContent.includes(searchText) ? "block" : "none";
+                });
+            });
 
         </script>
 

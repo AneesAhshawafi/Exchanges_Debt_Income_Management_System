@@ -4,10 +4,13 @@ include 'total_ammounts_calc.php';
 $offset = isset($_GET['offset']) ? intval($_GET['offset']) : 0;
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 10;
 session_start();
-$user_id=$_SESSION['user_id'];
+$user_id = $_SESSION['user_id'];
 // استعلام العملاء بالحد والبدء
-$sql = "SELECT CLIENT_ID, CLIENT_NAME FROM client WHERE DEPT_NO = 1 AND USER_ID = $user_id ORDER BY CLIENT_ID DESC LIMIT $limit OFFSET $offset";
-$result = $conn->query($sql);
+$sql = "SELECT CLIENT_ID, CLIENT_NAME FROM client WHERE DEPT_NO = 1 AND USER_ID = ? ORDER BY CLIENT_ID DESC LIMIT ? OFFSET ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("iii", $user_id, $limit, $offset);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
@@ -34,5 +37,6 @@ if ($result && $result->num_rows > 0) {
         <?php
     }
 }
+$stmt->close();
 $conn->close();
 ?>

@@ -1,10 +1,3 @@
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
- */
-
-
-
 let offset = 0;
 const limit = 10;
 let isLoading = false;
@@ -40,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("scroll", () => {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight ) {
         loadClients();
     }
 });

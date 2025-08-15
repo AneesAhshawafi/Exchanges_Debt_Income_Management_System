@@ -1,6 +1,6 @@
 let currentClientId = localStorage.getItem("currentClientId");
 
-let currentExchangesListData = null;
+
 
 let deleteTraNo = null;
 
@@ -22,18 +22,13 @@ function numberFormat(value, decimals = 2) {
 }
 
 
-function openDeleteModal(traNo, exchangesList) {
-    const postData = {
-        TRA_ID: traNo,
-        exchanges_List: exchangesList
-    };
-
+function openDeleteModal(traNo) {
     document.getElementById("deleteModal").classList.remove("hidden");
 
     document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
         const formData = new FormData();
-        formData.append("TRA_ID", postData.TRA_ID);
-        formData.append("exchanges_List", JSON.stringify(postData.exchanges_List));
+        formData.append("TRA_ID", traNo);
+        formData.append("client_id", currentClientId);
 
         fetch("delete_exchange.php", {
             method: "POST",
@@ -42,7 +37,7 @@ function openDeleteModal(traNo, exchangesList) {
                 .then(res => res.json())
                 .then(response => {
                     if (response.success) {
-                        // alert(response.success);
+                        alert(response.success);
                         closeModal("deleteModal");
                         location.reload();
                     } else {
@@ -139,7 +134,7 @@ function openShareModal(traNo) {
                         to_currency = 'ريال سعودي';
                     }
                     transfered_ammount = numberFormat(traData.TRANSFERED_AMMOUNT, 2);
-                    priceTransfer=numberFormat(traData.PRICE,2);
+                    priceTransfer = numberFormat(traData.PRICE, 2);
                     textWithoutTotal += `(شراء عملة)
 أضيف إلى حسابكم ${transfered_ammount} ${to_currency}
 مقابل خصم ${ammount} ${from_currency} من حسابكم
@@ -276,7 +271,7 @@ function shareExchange(text) {
 
 
 
-function openEditModal(traData, data) {
+function openEditModal(traData) {
 
 
     if (!traData) {
@@ -390,7 +385,7 @@ function openEditModal(traData, data) {
         editAmmount.readOnly = false;
 
     } else {
-        
+
         editOperSelectTypeInput.options[3].disabled = false;
         editOperSelectTypeInput.options[2].disabled = true;
         editOperSelectTypeInput.options[1].disabled = true;
@@ -424,14 +419,25 @@ function openEditModal(traData, data) {
     editExchangeForm.addEventListener("submit", (event) => {
         event.preventDefault();
         const formData = new FormData(editExchangeForm);
-        formData.append("exchanges_list", JSON.stringify(data));
+        formData.append("client_id", currentClientId);
         fetch("update_exchange.php", {
             method: "POST",
             body: formData
+        }).then(res => res.json())
+                .then(response => {
+                    if (response.success) {
+                        alert(response.success);
+                        editExchangeForm.reset();
+                        location.reload();
+                    } else {
+                        alert(response.error);
+                    }
+                }).catch(er => {
+            alert(er);
         })
 
-        editExchangeForm.reset();
-        location.reload();
+
+
     });
 
     closeEditExchangeBtn.addEventListener("click", () => {
@@ -448,99 +454,34 @@ function closeModal(id) {
 }
 
 
-const exchangesListBody = document.getElementById("exchanges-list-body");
-fetch("get_exchanges_list.php", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-    },
-    body: "client_id=" + encodeURIComponent(currentClientId)
-})
-        .then(res => res.json())
-        .then(data => {
-            if (data.error) {
-                exchangesListBody.innerHTML = `<p>${data.erro}</p>`;
-                //                exchange.classList.remove("hidden");
-                return;
-            }
-            if (data.length === 0) {
-                exchangesListBody.innerHTML = "<p>لا توجد حوالات لهذا العميل.</p>";
 
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains("operation")) {
+        const id = e.target.dataset.id;
+        const operaion = id.slice(0, 4);
+        const traNo = Number(id.replace(/\D/g, ""));
 
-            } else {
+        if (operaion == "tras") {
 
-                data.forEach(row => {
-                    const exchangesDataContainer = document.createElement("div");
-                    //                            exchangesData.id = "exchangesData" + row.TRA_ID;
-                    exchangesDataContainer.classList.add("exchanges-data-container");
-                    exchangeDataContent = `
-                                    <div class="oper">
-                                        <i  class="fas fa-trash-alt  operation" data-id="trash${row.TRA_ID}"></i>
-                                        <i class="fas fa-edit  operation" data-id="edit${row.TRA_ID}"> </i>
-                                        <i class="fas fa-share-alt  operation" data-id="share${row.TRA_ID}"></i>
-                                    </div>
-                                    <div class="exchanges-data" data-id="exchange-data-${row.TRA_ID}">`;
-                    exchangeDataContent += `<h3>${row.SENDER_NAME}</h3><h3>${row.RECEIVER_NAME}</h3><h3>${row.TYPE}</h3><h3>${row.TRANSFER_NO}</h3>`;
-                    if (row.TYPE != 'تحويل') {
+            openDeleteModal(traNo);
+        } else if (operaion == "edit") {
+            traData = null;
+            exchangesListData.forEach(row => {
+                if (row.TRA_ID == traNo) {
 
-                        if (row.CURRENCY === "new") {
-                            exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قعيطي</h3>`;
-                        } else if (row.CURRENCY === "old") {
-                            exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قديم</h3>`;
+                    traData = row;
+                }
+            });
+            openEditModal(traData);
+        } else {
 
-                        } else {
-                            exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ريال سعودي</h3>`;
-                        }
+            openShareModal(traNo);
+        }
 
-                    } else {
-                        if (row.FROM_CURRENCY === "new") {
-                            exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قعيطي</h3>`;
-                        } else if (row.FROM_CURRENCY === "old") {
-                            exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ري قديم</h3>`;
-
-                        } else {
-                            exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ريال سعودي</h3>`;
-                        }
-                    }
-                    exchangeDataContent += `<h3>${row.FOR_OR_ON}</h3><h3 class="date">${row.TRA_DATE}</h3><h3>${row.ATM}</h3><h3>${numberFormat(row.TRA_FEES)}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><textarea class="note">${row.NOTE}</textarea><h3>${row.STATUS}</h3></div>`
-
-                    exchangesDataContainer.innerHTML = exchangeDataContent;
-                    exchangesListBody.insertBefore(exchangesDataContainer, exchangesListBody.firstChild);
-                });
-
-
-
-                //    ===============================================================================================================                    
-                // إضافة أحداث بعد تحميل العناصر الديناميكية
-                document.querySelectorAll(".operation").forEach(icon => {
-                    icon.addEventListener("click", function () {
-                        const id = this.dataset.id;
-                        const operaion = id.slice(0, 4);
-                        const traNo = Number(id.replace(/\D/g, ""));
-
-                        if (operaion == "tras") {
-
-                            openDeleteModal(traNo, data);
-                        } else if (operaion == "edit") {
-                            traData = null;
-                            data.forEach(row => {
-                                if (row.TRA_ID == traNo) {
-
-                                    traData = row;
-                                }
-                            });
-                            openEditModal(traData, data);
-                        } else {
-
-                            openShareModal(traNo);
-                        }
-
-                    });
-                });
-            }
-
-
-
-        }).catch(err => {
-    exchangesListBody.innerHTML = `<p>حدث خطأأثناء تحميل البيانات          ${err}</p>`;
+    }
 });
+//document.querySelectorAll(".operation").forEach(icon => {
+//    icon.addEventListener("click", function () {
+//       
+//    });
+//});

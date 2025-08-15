@@ -6,7 +6,14 @@ include 'update_sum_ammounts.php';
 include 'calc_result_of_transfer_btwn_accounts.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['TRA_ID'])) {
     $tra_id = intval($_POST['TRA_ID']);
-    $exchangesListData = json_decode($_POST['exchanges_List'], true);
+    $client_id= intval($_POST['client_id']);
+    $sql="SELECT TRA_ID , sum_ammount_new, sum_ammount_old,sum_ammount_sa FROM transaction WHERE CLIENT_ID = ? ";
+    $stmt=$conn->prepare($sql);
+    $stmt->bind_param("i",$client_id);
+    $stmt->execute();
+    $exchangesListData = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+//    $exchangesListData=$stmt->get_result();
+//    $exchangesListData = json_decode($_POST['exchanges_List'], true);
 
     //start get old transaction data
     $stmt = $conn->prepare("SELECT * FROM transaction WHERE TRA_ID = ?");

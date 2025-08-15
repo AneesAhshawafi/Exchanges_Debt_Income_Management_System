@@ -417,7 +417,7 @@ select:focus {
     padding: 0;
     position: fixed;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    top: 20vh;
+    top: 13vh;
     left: 3rem;
     color: var(--text-white);
     cursor: pointer;

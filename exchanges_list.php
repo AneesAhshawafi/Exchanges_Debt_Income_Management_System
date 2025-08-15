@@ -48,9 +48,9 @@ if (!isset($_SESSION['user_id'])) {
                 <div class="exchanges-list-container" >
 
                     <div class="exchanges-list-header">
+                        <h3>نوع العملية</h3>
                         <h3 >اسم المرسل/المودع</h3>
                         <h3>المستلم</h3>
-                        <h3>نوع العملية</h3>
                         <h3 class="no-exchanges">رقم الحوالة</h3>
                         <h3>المبلغ</h3>
                         <h3 >له/عليه</h3>
@@ -64,8 +64,8 @@ if (!isset($_SESSION['user_id'])) {
                         <h3>حالة الحوالة</h3>
                     </div>
                     <div class="exchanges-list-body" id="exchanges-list-body">
-
                     </div>
+                        <p id="loading-message" style="display:none;">جارٍ التحميل...</p>
                 </div>
             </div>
             <button class="plus-icon open-modal-btn" id="addExchangeBtn">
@@ -314,9 +314,12 @@ if (!isset($_SESSION['user_id'])) {
         </div>
         <!--End Delete Modal-->
 
-
+        <script>
+            let exchangesListData = new Array();
+        </script>
         <script src="JS/switch_withdraw_exchange.js"></script>
         <script src="JS/exchanges_list_modal.js"></script>
+        <script src="JS/lazy_loading_exchanges.js"></script>
         <script src="JS/add_exchange.js"></script>
         <script>
                     document.getElementById("exchangeSearchInput").addEventListener("input", function () {
