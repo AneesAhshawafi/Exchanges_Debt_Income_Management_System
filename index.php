@@ -45,8 +45,8 @@ include 'total_ammounts_calc.php';
         <link rel="stylesheet" type="text/css" media="screen" href="CSS/normalize.css" />
         <!-- مكتبة أيقونات Font Awesome -->
         <link rel="stylesheet" href="CSS/all.min.css" />
-                <!-- تنسيقات خاصة بالصفحة الرئيسية -->
-    <link rel="stylesheet" href="CSS/indexxStyle.css?v=<?=filemtime('CSS/indexxStyle.css')?>">
+        <!-- تنسيقات خاصة بالصفحة الرئيسية -->
+        <link rel="stylesheet" href="CSS/indexxStyle.css?v=<?= filemtime('CSS/indexxStyle.css') ?>">
 
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -196,18 +196,13 @@ include 'total_ammounts_calc.php';
         </div>
 
         <!-- ربط ملفات JavaScript -->
+        <script src="JS/navbar.js?v=<?= filemtime('JS/navbar.js') ?>"></script>
+        <script src="JS/add_client_modal.js?v=<?= filemtime('JS/add_client_modal.js') ?>"></script>
+        <script src="JS/set_current_client_id.js?v=<?= filemtime('JS/set_current_client_id.js') ?>"></script>
+        <script src="JS/operations_on_client.js?v=<?= filemtime('JS/operations_on_client.js') ?>"></script>
+        <script src="JS/lazy_loading_clients.js?v=<?= filemtime('JS/lazy_loading_clients.js') ?>"></script>
+        <script src="JS/add_client_handeler.js?v=<?= filemtime('JS/add_client_handeler.js') ?>"></script>
 
-        <script src="JS/navbar.js"></script>
-        <!-- تحكم في فتح/إغلاق القائمة -->
-        <!--<script src="JS/language.js"></script>-->
-        <!--<script src="JS/loginLogoutBtn.js"></script>-->
-        <!-- زر تسجيل لدخول / تسجيل الخروج -->
-        <!--            <script src="JS/variables.js"></script>-->
-        <script src="JS/add_client_modal.js"></script>
-        <script src="JS/set_current_client_id.js"></script>
-        <script src="JS/operations_on_client.js"></script>
-        <script src="JS/lazy_loading_clients.js"></script>
-        <script src="JS/add_client_handeler.js"></script>
         <script>
                             const searchInput = document.getElementById("searchInput");
                             const clientsListDiv = document.getElementById("clients-list");

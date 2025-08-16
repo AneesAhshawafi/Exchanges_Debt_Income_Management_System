@@ -1,7 +1,4 @@
-
-
 <?php
-
 include 'dbconn.php';
 include 'income_update_sum_ammounts.php';
 header("Content-Type: application/json");
@@ -16,7 +13,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $newAmmount = trim($_POST['ammount']);
     $tra_date_raw = $_POST["date"];
     $note = trim($_POST["note"]);
-    $exchangesListData = json_decode($_POST['income_list'], true);
+
+    // جلب بيانات العمليات الخاصة بالعميل
+    session_start();
+    $user_id = $_SESSION['user_id'];
+    $sql = "SELECT * FROM income WHERE USER_ID = ?";
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        echo json_encode(["error" => "خطأ في تحضير الاستعلام: " . $conn->error]);
+        exit();
+    }
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $exchangesListData = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+//    $exchangesListData = json_decode($_POST['income_list'], true);
     if (!$exchangesListData) {
         echo json_encode(["error" => "بيانات العمليات غير صالحة"]);
         echo 'بيانات العمليات غير صالح';
@@ -58,15 +69,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     update_sum_ammount($newCurrency, 'عليه', $exchangesListData, $ammount_differ, $id);
                 }
             } else {
-                if($for_or_on=='له'){
-                    
-                $ammount_differ = $oldAmmount;
-                update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id);
+                if ($for_or_on == 'له') {
+
+                    $ammount_differ = $oldAmmount;
+                    update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ, $id);
                 }
-                if($newForOrOn=='له'){
-                    
-                $ammount_differ = $newAmmount;
-                update_sum_ammount($newCurrency, 'عليه', $exchangesListData, $ammount_differ, $id);
+                if ($newForOrOn == 'له') {
+
+                    $ammount_differ = $newAmmount;
+                    update_sum_ammount($newCurrency, 'عليه', $exchangesListData, $ammount_differ, $id);
                 }
             }
         }
@@ -88,13 +99,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sssdssi", $source, $newCurrency, $newForOrOn, $newAmmount, $date, $note, $id);
 
     if ($stmt->execute()) {
-       echo json_encode(["success" => "تم التعديل بنجاح"]);
+        echo json_encode(["success" => "تم التعديل بنجاح"]);
     } else {
-       echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
+        echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
     }
 
-   $stmt->close();
-   $conn->close();
-   exit();
+    $stmt->close();
+    $conn->close();
+    exit();
 }
 ?>

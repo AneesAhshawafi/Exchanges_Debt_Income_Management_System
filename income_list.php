@@ -93,6 +93,7 @@ if (!isset($_SESSION['user_id'])) {
                     <div class="exchanges-list-body" id="exchanges-list-body">
 
                     </div>
+                    <p id="loading-message" style="display:none;">جارٍ التحميل...</p>
                 </div>
             </div>
             <button class="plus-icon open-modal-btn" id="addExchangeBtn">
@@ -248,35 +249,19 @@ if (!isset($_SESSION['user_id'])) {
             </div>
         </div>
         <!--End Delete Modal-->
-
-        <script src="JS/navbar.js"></script>
-        <script src="JS/income_list_modal.js"></script>
-        <script src="JS/add_income.js"></script>
         <script>
-            function openModal(id){
-                document.getElementById(id).classList.remove('hidden');
-            }
-            document.getElementById('confirmClearIncomeBtn').addEventListener('click',function (){
-                fetch('incoome_clear_income.php')
-                        .then(res=>res.json())
-                        .then(response => {
-                            if(response.messege){
-                                alert(response.messege);
-                                closeModal("clear-income-modal");
-                                location.reload();
-                            }else{
-                                alert(response.error);
-                            }
-                }).catch(er=>{
-                    alert(er);
-                })
-            })
+            let exchangesListData = new Array();
         </script>
+        <script src="JS/navbar.js?v=<?= filemtime('JS/navbar.js') ?>"></script>
+        <script src="JS/operations_on_incomes.js?v=<?= filemtime('JS/operations_on_incomes.js') ?>"></script>
+        <script src="JS/lazy_loading_incomes.js?v=<?= filemtime('JS/lazy_loading_incomes.js') ?>"></script>
+        <script src="JS/add_income.js?v=<?= filemtime('JS/add_income.js') ?>"></script>
+        <script src="JS/income_clear_income.js?v=<?= filemtime('JS/income_clear_income.js') ?>"></script>
+
         <script>
             document.getElementById("exchangeSearchInput").addEventListener("input", function () {
                 const searchText = this.value.toLowerCase();
                 const exchangeItems = document.querySelectorAll(".exchanges-data-container");
-
                 exchangeItems.forEach(item => {
                     const textContent = item.innerText.toLowerCase();
                     item.style.display = textContent.includes(searchText) ? "block" : "none";

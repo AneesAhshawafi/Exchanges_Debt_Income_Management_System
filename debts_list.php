@@ -26,7 +26,7 @@ if (!isset($_SESSION['user_id'])) {
         <!-- تنسيقات الوضع الليلي -->
         <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
         <!-- تنسيقات خاصة بالصفحة الرئيسية -->
-<link rel="stylesheet" href="CSS/indexxStyle.css?v=<?=filemtime('CSS/indexxStyle.css')?>">
+        <link rel="stylesheet" href="CSS/indexxStyle.css?v=<?= filemtime('CSS/indexxStyle.css') ?>">
 
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -63,6 +63,7 @@ if (!isset($_SESSION['user_id'])) {
                     <div class="exchanges-list-body" id="exchanges-list-body">
 
                     </div>
+                    <p id="loading-message" style="display:none;">جارٍ التحميل...</p>
                 </div>
             </div>
             <button class="plus-icon open-modal-btn" id="addExchangeBtn">
@@ -162,7 +163,7 @@ if (!isset($_SESSION['user_id'])) {
 
                     </select>
                     <div class="input-group"  >
-                       <input type="text" id="edit-description" name="description" placeholder="الغرض">
+                        <input type="text" id="edit-description" name="description" placeholder="الغرض">
                     </div>
                     <div class="input-group">
 
@@ -227,18 +228,23 @@ if (!isset($_SESSION['user_id'])) {
         <!--End Delete Modal-->
 
 
-        <script src="JS/debt_list_modal.js"></script>
-        <script src="JS/add_debt.js"></script>
         <script>
-                    document.getElementById("exchangeSearchInput").addEventListener("input", function () {
-                        const searchText = this.value.toLowerCase();
-                        const exchangeItems = document.querySelectorAll(".exchanges-data-container");
+            let exchangesListData = new Array();
+        </script>
+        <script src="JS/operations_on_debts.js?v=<?= filemtime('JS/operations_on_debts.js') ?>"></script>
+        <script src="JS/lazy_loading_debts.js?v=<?= filemtime('JS/lazy_loading_debts.js') ?>"></script>
+        <script src="JS/add_debt.js?v=<?= filemtime('JS/add_debt.js') ?>"></script>
 
-                        exchangeItems.forEach(item => {
-                            const textContent = item.innerText.toLowerCase();
-                            item.style.display = textContent.includes(searchText) ? "block" : "none";
-                        });
-                    });
+        <script>
+            document.getElementById("exchangeSearchInput").addEventListener("input", function () {
+                const searchText = this.value.toLowerCase();
+                const exchangeItems = document.querySelectorAll(".exchanges-data-container");
+
+                exchangeItems.forEach(item => {
+                    const textContent = item.innerText.toLowerCase();
+                    item.style.display = textContent.includes(searchText) ? "block" : "none";
+                });
+            });
 
         </script>
 

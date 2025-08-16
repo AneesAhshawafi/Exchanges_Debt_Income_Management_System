@@ -23,7 +23,7 @@ if (!isset($_SESSION['user_id'])) {
         <link rel="stylesheet" href="CSS/all.min.css" />
         <!-- استيراد التنسيقات العامة للموقع -->
         <link rel="stylesheet" href="CSS/GlobalRulesStyle.css" />
-        <!-- تنسيقات الوضع الليلي --><link rel="stylesheet" href="CSS/indexxStyle.css?v=<?=filemtime('CSS/indexxStyle.css')?>">
+        <!-- تنسيقات الوضع الليلي --><link rel="stylesheet" href="CSS/indexxStyle.css?v=<?= filemtime('CSS/indexxStyle.css') ?>">
         <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -65,7 +65,7 @@ if (!isset($_SESSION['user_id'])) {
                     </div>
                     <div class="exchanges-list-body" id="exchanges-list-body">
                     </div>
-                        <p id="loading-message" style="display:none;">جارٍ التحميل...</p>
+                    <p id="loading-message" style="display:none;">جارٍ التحميل...</p>
                 </div>
             </div>
             <button class="plus-icon open-modal-btn" id="addExchangeBtn">
@@ -121,7 +121,7 @@ if (!isset($_SESSION['user_id'])) {
                             <option value="sa">السعودي</option>
                         </select>
                         <div class="input-group" id="price-input-group">
-                            <input class="input-add-exchange" id="price" name="price" placeholder="السعر" >
+                            <input type="number" step="0.00001" class="input-add-exchange" id="price" name="price" placeholder="السعر" >
                         </div>
                         <select class="input-add-exchange" name="select-to" id="select-to">
                             <option value="" disabled selected >إلى العملة</option>
@@ -232,7 +232,7 @@ if (!isset($_SESSION['user_id'])) {
                         </div>
                         <div class="input-group edit-transfer-input-group hidden" id="edit-price-input-group">
                             <label for="price">السعر</label>
-                            <input id="edit-price" name="price" placeholder="السعر" readonly >
+                            <input type="number" step="0.00001" id="edit-price" name="price" placeholder="السعر" readonly >
                         </div>
 
                         <div class="input-group edit-transfer-input-group hidden" >
@@ -317,20 +317,21 @@ if (!isset($_SESSION['user_id'])) {
         <script>
             let exchangesListData = new Array();
         </script>
-        <script src="JS/switch_withdraw_exchange.js"></script>
-        <script src="JS/exchanges_list_modal.js"></script>
-        <script src="JS/lazy_loading_exchanges.js"></script>
-        <script src="JS/add_exchange.js"></script>
-        <script>
-                    document.getElementById("exchangeSearchInput").addEventListener("input", function () {
-                        const searchText = this.value.toLowerCase();
-                        const exchangeItems = document.querySelectorAll(".exchanges-data-container");
+        <script src="JS/switch_withdraw_exchange.js?v=<?= filemtime('JS/switch_withdraw_exchange.js') ?>"></script>
+        <script src="JS/operations_on_exchanges.js?v=<?= filemtime('JS/operations_on_exchanges.js') ?>"></script>
+        <script src="JS/lazy_loading_exchanges.js?v=<?= filemtime('JS/lazy_loading_exchanges.js') ?>"></script>
+        <script src="JS/add_exchange.js?v=<?= filemtime('JS/add_exchange.js') ?>"></script>
 
-                        exchangeItems.forEach(item => {
-                            const textContent = item.innerText.toLowerCase();
-                            item.style.display = textContent.includes(searchText) ? "block" : "none";
-                        });
-                    });
+        <script>
+            document.getElementById("exchangeSearchInput").addEventListener("input", function () {
+                const searchText = this.value.toLowerCase();
+                const exchangeItems = document.querySelectorAll(".exchanges-data-container");
+
+                exchangeItems.forEach(item => {
+                    const textContent = item.innerText.toLowerCase();
+                    item.style.display = textContent.includes(searchText) ? "block" : "none";
+                });
+            });
 
         </script>
 

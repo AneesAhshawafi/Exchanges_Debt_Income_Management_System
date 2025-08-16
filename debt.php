@@ -29,7 +29,7 @@ include 'total_ammounts_calc.php';
         <!-- تنسيقات الوضع الليلي -->
         <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
         <!-- تنسيقات خاصة بالصفحة الرئيسية -->
- <link rel="stylesheet" href="CSS/indexxStyle.css?v=<?=filemtime('CSS/indexxStyle.css')?>">
+        <link rel="stylesheet" href="CSS/indexxStyle.css?v=<?= filemtime('CSS/indexxStyle.css') ?>">
         <!-- إعدادات خطوط Google -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -56,12 +56,12 @@ include 'total_ammounts_calc.php';
                         </li>
 
                     </ul>
-                    
+
                     <h1>بن عبود للصرافة والتحويلات</h1>
-                <!-- شعار الموقع -->
-                <a href="#" class="logo">
-                    <img src="images/logo2.jpg" alt="logo" />
-                </a>
+                    <!-- شعار الموقع -->
+                    <a href="#" class="logo">
+                        <img src="images/logo2.jpg" alt="logo" />
+                    </a>
                 </nav>
             </section>
         </header>
@@ -80,17 +80,17 @@ include 'total_ammounts_calc.php';
                     </div>
                     <input type="text" id="searchInput" placeholder="🔍 ابحث عن اسم عميل..." class="search-input" />
                     <div class="clients-list-container" >
-                        
-                    <div class="clients-list-header">
-                        <h3 class="name" id="name">الاسم</h3>
-                        <h3 class="no-exchanges">الإجمالي قعيطي</h3>
-                        <h3 class="total-for">الإجمالي قديم</h3>
-                        <h3 class="total-on">الإجمالي سعودي</h3>
-                    </div>
 
-                    <div id="clients-list"></div> <!-- سنملأ هذا بواسطة JavaScript -->
+                        <div class="clients-list-header">
+                            <h3 class="name" id="name">الاسم</h3>
+                            <h3 class="no-exchanges">الإجمالي قعيطي</h3>
+                            <h3 class="total-for">الإجمالي قديم</h3>
+                            <h3 class="total-on">الإجمالي سعودي</h3>
+                        </div>
 
-                    <p id="loading-message" style="display:none;">جارٍ التحميل...</p>
+                        <div id="clients-list"></div> <!-- سنملأ هذا بواسطة JavaScript -->
+
+                        <p id="loading-message" style="display:none;">جارٍ التحميل...</p>
                     </div>
 
                     <button class="plus-icon open-modal-btn" id="addClientBtn">
@@ -179,18 +179,13 @@ include 'total_ammounts_calc.php';
 
         <!-- ربط ملفات JavaScript -->
 
-        <script src="JS/navbar.js"></script>
-        <!-- تحكم في فتح/إغلاق القائمة -->
-        <!--<script src="JS/language.js"></script>-->
-        <!--<script src="JS/loginLogoutBtn.js"></script>-->
-        <!-- زر تسجيل لدخول / تسجيل الخروج -->
-        <!--            <script src="JS/variables.js"></script>-->
-        <script src="JS/add_client_modal.js"></script>
-        
-        <script src="JS/debt_set_current_client.js"></script>
-        <script src="JS/operations_on_client.js"></script>
-        <script src="JS/debt_lazy_loading_clients.js"></script>
-        <script src="JS/debt_add_client_handeler.js"></script>
+        <script src="JS/navbar.js?v=<?= filemtime('JS/navbar.js') ?>"></script>
+        <script src="JS/add_client_modal.js?v=<?= filemtime('JS/add_client_modal.js') ?>"></script>
+        <script src="JS/debt_set_current_client.js?v=<?= filemtime('JS/debt_set_current_client.js') ?>"></script>
+        <script src="JS/operations_on_client.js?v=<?= filemtime('JS/operations_on_client.js') ?>"></script>
+        <script src="JS/debt_lazy_loading_clients.js?v=<?= filemtime('JS/debt_lazy_loading_clients.js') ?>"></script>
+        <script src="JS/debt_add_client_handeler.js?v=<?= filemtime('JS/debt_add_client_handeler.js') ?>"></script>
+
         <script>
                             const searchInput = document.getElementById("searchInput");
                             const clientsListDiv = document.getElementById("clients-list");

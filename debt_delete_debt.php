@@ -4,7 +4,18 @@ include 'dbconn.php';
 include 'debt_update_sum_ammounts.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['DEBT_ID'])) {
     $tra_id = intval($_POST['DEBT_ID']);
-    $exchangesListData = json_decode($_POST['debts_list'], true);
+        // جلب بيانات العمليات الخاصة بالعميل
+    $sql = "SELECT * FROM debt WHERE CLIENT_ID = ?";
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        echo json_encode(["error" => "خطأ في تحضير الاستعلام: " . $conn->error]);
+        exit();
+    }
+    $stmt->bind_param("i", $client_id);
+    $stmt->execute();
+    $exchangesListData = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+//    $exchangesListData = json_decode($_POST['debts_list'], true);
 
     //start get old transaction data
     $stmt = $conn->prepare("SELECT * FROM debt WHERE DEBT_ID = ?");

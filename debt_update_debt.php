@@ -1,5 +1,3 @@
-
-
 <?php
 
 include 'dbconn.php';
@@ -16,10 +14,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $newAmmount = trim($_POST['ammount']);
     $tra_date_raw = $_POST["date"];
     $note = trim($_POST["note"]);
-    $exchangesListData = json_decode($_POST['debts_list'], true);
+    $client_id=$_POST['client_id'];
+        // جلب بيانات العمليات الخاصة بالعميل
+    $sql = "SELECT * FROM debt WHERE CLIENT_ID = ?";
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        echo json_encode(["error" => "خطأ في تحضير الاستعلام: " . $conn->error]);
+        exit();
+    }
+    $stmt->bind_param("i", $client_id);
+    $stmt->execute();
+    $exchangesListData = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    
+//    $exchangesListData = json_decode($_POST['debts_list'], true);
     if (!$exchangesListData) {
         echo json_encode(["error" => "بيانات العمليات غير صالحة"]);
-        echo 'بيانات العمليات غير صالح';
         exit();
     }
 
@@ -83,10 +92,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($stmt->execute()) {
         echo json_encode(["success" => "تم التعديل بنجاح"]);
 
-        echo 'تم التعديل';
+//        echo 'تم التعديل';
     } else {
         echo json_encode(["error" => "حدث خطأ اثناء تعديل الاجمالي"]);
-        echo 'حدث خطا';
+//        echo 'حدث خطا';
     }
 
     $stmt->close();

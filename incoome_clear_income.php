@@ -4,7 +4,7 @@ if ($_SERVER['REQUEST_METHOD']==='GET') {
     include 'dbconn.php';
     session_start();
     $user_id=$_SESSION['user_id'];
-    $sql="UPDATE income SET sum_ammount_new = 0, sum_ammount_old = 0, sum_ammount_sa = 0 WHERE USER_ID = ?";
+    $sql="UPDATE income SET sum_ammount_new = 0, sum_ammount_old = 0, sum_ammount_sa = 0,FOR_OR_ON='عليه' WHERE USER_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i",$user_id);
     if($stmt->execute()){

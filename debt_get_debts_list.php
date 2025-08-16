@@ -7,15 +7,17 @@
 header("Content-Type:application/json");
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["client_id"])) {
     $client_id = intval($_POST["client_id"]);
+    $limit = isset($_POST['limit']) ? $_POST['limit'] : 10;
+    $offset= isset($_POST['offset']) ? $_POST['offset'] : 0;
     include 'dbconn.php';
     if ($conn->connect_error) {
         echo json_encode(["error" => "فشل الاتصال بقاعدة البيانات"]);
         exit;
     }
 
-    $sql = "SELECT * FROM debt WHERE CLIENT_ID = ?";
+    $sql = "SELECT * FROM debt WHERE CLIENT_ID = ? ORDER BY DEBT_ID DESC LIMIT ? OFFSET ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $client_id);
+    $stmt->bind_param("iii", $client_id,$limit,$offset);
     $stmt->execute();
     $result = $stmt->get_result();
 

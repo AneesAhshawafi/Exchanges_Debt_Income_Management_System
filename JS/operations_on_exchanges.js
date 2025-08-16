@@ -134,7 +134,7 @@ function openShareModal(traNo) {
                         to_currency = 'ريال سعودي';
                     }
                     transfered_ammount = numberFormat(traData.TRANSFERED_AMMOUNT, 2);
-                    priceTransfer = numberFormat(traData.PRICE, 2);
+                    priceTransfer = numberFormat(traData.PRICE, 5);
                     textWithoutTotal += `(شراء عملة)
 أضيف إلى حسابكم ${transfered_ammount} ${to_currency}
 مقابل خصم ${ammount} ${from_currency} من حسابكم
@@ -472,6 +472,7 @@ document.addEventListener('click', function (e) {
                     traData = row;
                 }
             });
+            
             openEditModal(traData);
         } else {
 
