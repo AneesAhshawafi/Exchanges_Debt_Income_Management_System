@@ -1,6 +1,6 @@
 <?php
 
-function calc_total_ammounts($user_id) {
+function calc_total_ammounts_income($user_id) {
     include 'dbconn.php';
 
     $resualt_sum_ammounts = $conn->query("SELECT sum_ammount_new,sum_ammount_old,sum_ammount_sa FROM income WHERE USER_ID = " . $user_id . " ORDER BY INCM_ID DESC LIMIT 1");

@@ -25,8 +25,8 @@ addExchangeForm.addEventListener("submit", function (e) {
     .then(res => res.json())
     .then(response => {
 //                console.log("first then");
-        if (response.success) {
-            alert(response.success + " ✅");
+        if (response.messege) {
+            alert(response.messege + " ✅");
             this.reset();
             location.reload();
         } else {
