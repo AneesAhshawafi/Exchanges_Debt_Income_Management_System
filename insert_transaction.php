@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $transfer_no = trim($_POST["transfer-no"]);
     $ammount = floatval($_POST["ammount"]);
     $fees = isset($_POST['fees']) ? floatval($_POST["fees"]) : 0;
+    $fees_income = isset($_POST['fees-income']) ? floatval($_POST["fees-income"]) : 0;
 //    $tra_date = trim($_POST["tra-date"]);
     $tra_date_raw = $_POST["tra-date"];
     $tra_date = $tra_date_raw ? date("Y-m-d", strtotime($tra_date_raw)) : date("Y-m-d");
@@ -145,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stmt->execute();
             $client_name = $stmt->get_result()->fetch_assoc()['CLIENT_NAME'];
             $source = "حوالة على: $client_name ، رقم الحوالة: <br>$transfer_no";
-            $done = insert_income($source, $currency, 'له', $fees, $tra_date, '', $conn);
+            $done = insert_income($source, $currency, 'له', $fees_income, $tra_date, '', $conn);
         }
         echo json_encode(["success" => "تمت إضافة المعاملة بنجاح"]);
     } else {

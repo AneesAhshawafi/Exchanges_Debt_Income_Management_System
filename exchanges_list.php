@@ -143,9 +143,13 @@ if (!isset($_SESSION['user_id'])) {
                     </div>
 
 
-                    <div class="input-group ">
-                        <input type="text" class="input-add-exchange " id="fees" name="fees" placeholder="الرسوم" >
+                    <div class="input-group fees-inpt-grp">
+                        <input type="number" step="0.00001" class="input-add-exchange " id="fees" name="fees" placeholder="الرسوم" >
                     </div>
+                    <div class="input-group fees-inpt-grp" id="fees-income-input-grp">
+                        <input type="number"  step="0.00001" class="input-add-exchange" name="fees-income" id="fees-income" placeholder="الرسوم لك"  >
+                    </div>
+
                     <div class="input-group">
                         <label for="date">التاربخ</label>
                         <input type="date" class="input-add-exchange " id="date" name="tra-date" placeholder="التاريخ والوقت" />
@@ -262,10 +266,15 @@ if (!isset($_SESSION['user_id'])) {
                             <label for="edit-date">التاربخ</label>
                             <input class="date" type="date" name="date" id="edit-date" placeholder="التاريخ والوقت" />
                         </div>
-                        <div class="input-group" id="edit-fees-input-grp">
+                        <div class="input-group edit-fees-inpt-grp" id="edit-fees-input-grp">
                             <label for="edit-fees">الرسوم</label>
-                            <input type="number" name="fees" id="edit-fees" placeholder="الرسوم" readonly >
+                            <input type="number" step="0.00001" name="fees" id="edit-fees" placeholder="الرسوم" readonly >
                         </div>
+                        <div class="input-group edit-fees-inpt-grp" id="edit-fees-income-input-grp">
+                            <label for="edit-fees-income">الرسوم لك</label>
+                            <input type="number"  step="0.00001" name="fees-income" id="edit-fees-income" placeholder="الرسوم لك" readonly >
+                        </div>
+
                         <div class="input-group">
                             <label for="edit-atm">الصراف</label>
                             <input type="text" name="atm" id="edit-atm" placeholder="الصراف" required />

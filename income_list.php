@@ -153,7 +153,7 @@ if (!isset($_SESSION['user_id'])) {
 
                 <form class="edit-exchange-form" id="edit-exchange-form" action="update_exchange.php" method="POST">
 
-                    <span class="close-modal" id="closeEditExchangeListBtn">&rarr;</span>
+                    <span class="close-modal" onclick="closeModal('editExchangeModal')" id="closeEditExchangeListBtn">&rarr;</span>
 
                     <div class="edit-exchange-title">
 

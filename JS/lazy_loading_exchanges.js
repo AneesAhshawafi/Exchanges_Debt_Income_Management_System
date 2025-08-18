@@ -35,15 +35,8 @@ function loadExchanges() {
                     }
 
                 } else {
-                    console.log("exchangesData=",exchangesListData);
-                    console.log("Data=",data);
-//                    Object.assign(exchangesListData, data);
                     exchangesListData.push(...data);
-                    console.log("exchangesData=",exchangesListData);
                     data.forEach(row => {
-//                        const exchangesDataContainer = document.createElement("div");
-                        //                            exchangesData.id = "exchangesData" + row.TRA_ID;
-//                        exchangesDataContainer.classList.add("exchanges-data-container");
                         exchangeDataContent = `
                         <div class="exchanges-data-container">
                                     <div class="oper">
@@ -74,25 +67,14 @@ function loadExchanges() {
                                 exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ريال سعودي</h3>`;
                             }
                         }
-                        exchangeDataContent += `<h3>${row.FOR_OR_ON}</h3><h3 class="date">${row.TRA_DATE}</h3><h3>${row.ATM}</h3><h3>${numberFormat(row.TRA_FEES)}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><textarea class="note">${row.NOTE}</textarea><h3>${row.STATUS}</h3></div></div>`
-
-//                        exchangesDataContainer.innerHTML = exchangeDataContent;
-//                        exchangesListBody.insertBefore(exchangesDataContainer, exchangesListBody.firstChild);
-                        exchangesListBody.innerHTML+=exchangeDataContent;
+                        exchangeDataContent += `<h3>${row.FOR_OR_ON}</h3><h3 class="date">${row.TRA_DATE}</h3><h3>${row.ATM}</h3><h3>${numberFormat(row.TRA_FEES)}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><textarea class="note">${row.NOTE}</textarea><h3>${row.STATUS}</h3></div></div>`;
+                        exchangesListBody.innerHTML += exchangeDataContent;
                     });
 
                     offsetExchanges += limitExchanges;
                     document.getElementById("loading-message").style.display = "none";
                     isLoadingExchanges = false;
-
-
-                    //    ===============================================================================================================                    
-                    // إضافة أحداث بعد تحميل العناصر الديناميكية
-
                 }
-
-
-
             }).catch(err => {
         exchangesListBody.innerHTML = `<p>حدث خطأأثناء تحميل البيانات          ${err}</p>`;
     });
@@ -105,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("scroll", () => {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight-50) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
         loadExchanges();
     }
 });

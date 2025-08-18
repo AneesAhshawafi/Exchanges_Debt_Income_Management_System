@@ -3,23 +3,25 @@ let currentClientId = localStorage.getItem("currentClientId");
 
 
 let deleteTraNo = null;
-
-function numberFormat(value, decimals = 2) {
-
+function numberFormat(value, maxDecimals = 2) {
     let num = Number(value);
-
     if (isNaN(num))
         return value;
 
-    return num.toLocaleString('en-US', {
+    // قص الأرقام بدل التقريب
+    let factor = Math.pow(10, maxDecimals);
+    let truncated = Math.trunc(num * factor) / factor;
 
-        minimumFractionDigits: decimals,
+    // نفصل العدد إلى جزء صحيح وجزء عشري
+    let parts = truncated.toString().split(".");
 
-        maximumFractionDigits: decimals
+    // تنسيق الجزء الصحيح مع فواصل الآلاف
+    parts[0] = Number(parts[0]).toLocaleString('en-US');
 
-    });
-
+    // إذا فيه كسور، نرجع نضيفها بدون أصفار وهمية
+    return parts.length > 1 ? parts[0] + "." + parts[1] : parts[0];
 }
+
 
 
 function openDeleteModal(traNo) {
@@ -90,9 +92,10 @@ function openShareModal(traNo) {
 التاريخ: ${traData.TRA_DATE}`;
 
                     } else {
+                        traFees = numberFormat(traData.TRA_FEES, 2);
                         textWithoutTotal += `(ارسال حوالة)
 عليكم ${ammount} ${currency}
-وخدمة تحويل : ${traData.TRA_FEES} ${currency}
+وخدمة تحويل : ${traFees} ${currency}
 مقابل حوالة صادرة عن طريق ${traData.ATM}
 المرسل: ${traData.SENDER_NAME}
 المستلم: ${traData.RECEIVER_NAME}
@@ -344,12 +347,22 @@ function openEditModal(traData) {
         editSenderInputGroup.classList.remove('hidden');
         editReceiverInputGroup.classList.remove('hidden');
         editCurrency.classList.remove('hidden');
-        editForOrOn.classList.remove('hidden');
+        editForOrOnInptGrp.classList.remove('hidden');
         editStatus.classList.remove('hidden');
         Array.from(editTransferOperDiv).forEach(e => {
             e.classList.add('hidden');
         });
-        editFeesInp.classList.remove('hidden');
+        if (editForOrOn.value == 'عليه') {
+            Array.from(editFeesInp).forEach(e => {
+                e.classList.remove('hidden');
+                e.required = true;
+            });
+        } else {
+            Array.from(editFeesInp).forEach(e => {
+                e.classList.add('hidden');
+                e.required = false;
+            });
+        }
         labelEditSender.textContent = 'اسم المرسل';
         editSenderNameInput.placeholder = 'اسم المرسل';
         labelEditTransferNO.textContent = 'رقم الحوالة';
@@ -367,12 +380,15 @@ function openEditModal(traData) {
         editSenderInputGroup.classList.remove('hidden');
         editReceiverInputGroup.classList.remove('hidden');
         editCurrency.classList.remove('hidden');
-        editForOrOn.classList.remove('hidden');
+        editForOrOnInptGrp.classList.remove('hidden');
         editStatus.classList.add('hidden');
         Array.from(editTransferOperDiv).forEach(e => {
             e.classList.add('hidden');
         });
-        editFeesInp.classList.add('hidden');
+        Array.from(editFeesInp).forEach(e => {
+            e.classList.add('hidden');
+            e.required = false;
+        });
         labelEditSender.textContent = 'اسم المودع';
         editSenderNameInput.placeholder = 'اسم المودع';
         editTransferNoInput.placeholder = 'رقم السند';
@@ -398,8 +414,11 @@ function openEditModal(traData) {
         });
         editStatus.classList.add('hidden');
         editCurrency.classList.add('hidden');
-        editForOrOn.classList.add('hidden');
-        editFeesInp.classList.add('hidden');
+        editForOrOnInptGrp.classList.add('hidden');
+        Array.from(editFeesInp).forEach(e => {
+            e.classList.add('hidden');
+            e.required = false;
+        });
         editSenderNameInput.required = false;
         editReceiverInput.required = false;
         editSelectFrom.required = true;
@@ -472,7 +491,7 @@ document.addEventListener('click', function (e) {
                     traData = row;
                 }
             });
-            
+
             openEditModal(traData);
         } else {
 
