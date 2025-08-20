@@ -210,3 +210,20 @@ editOperSelectTypeInput.addEventListener("change", () => {
 //        editAmmount.readonly = true;
     }
 });
+
+editForOrOn.addEventListener("change", () => {
+    if (editForOrOn.value == 'عليه') {
+        if (editOperSelectTypeInput.value == "حوالة") {
+
+            Array.from(editFeesInp).forEach(e => {
+                e.classList.remove('hidden');
+                e.required = true;
+            });
+        }
+    } else {
+        Array.from(editFeesInp).forEach(e => {
+            e.classList.add('hidden');
+            e.required = false;
+        });
+    }
+});
