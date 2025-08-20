@@ -5,6 +5,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 ?>
+<!DOCTYPE html>
 <html lang="ar">
 
     <head>
@@ -174,7 +175,7 @@ if (!isset($_SESSION['user_id'])) {
         <!--Start Edit Exchange Form-->
         <div id="editExchangeModal" class="modal-overlay    hidden">
             <div class="edit-exchangef">
-                <form class="edit-exchange-form" id="edit-exchange-form" action="update_exchange.php" method="POST">
+                <form class="edit-exchange-form" id="edit-exchange-form" action="" method="POST">
                     <span class="close-modal close-modal-form" id="closeEditExchangeListBtn">&rarr;</span>
                     <div class="edit-exchange-title">
                         <h3>تعديل بيانات العملية</h3>
@@ -227,7 +228,7 @@ if (!isset($_SESSION['user_id'])) {
 
                         <div class="input-group edit-transfer-input-group hidden" >
                             <label for="edit-select-from">التحويل من العملة</label>
-                            <select class="" id="edit-select-from" readonly>
+                            <select class="" name="select-from" id="edit-select-from" >
                                 <option value="" disabled selected>التحويل من العملة</option>
                                 <option value="new">القعيطي</option>
                                 <option value="old">القديم</option>
@@ -236,12 +237,12 @@ if (!isset($_SESSION['user_id'])) {
                         </div>
                         <div class="input-group edit-transfer-input-group hidden" id="edit-price-input-group">
                             <label for="price">السعر</label>
-                            <input type="number" step="0.00001" id="edit-price" name="price" placeholder="السعر" readonly >
+                            <input type="number" step="0.00001" id="edit-price" name="price" placeholder="السعر"  >
                         </div>
 
                         <div class="input-group edit-transfer-input-group hidden" >
                             <label for="edit-select-to">الى العملة</label>
-                            <select class="" name="select-to" id="edit-select-to" readonly>
+                            <select class="" name="select-to" id="edit-select-to" >
                                 <option value="" disabled selected>الى العملة</option>
                                 <option value="new">القعيطي</option>
                                 <option value="old">القديم</option>
@@ -260,7 +261,7 @@ if (!isset($_SESSION['user_id'])) {
 
                         <div class="input-group"  id="edit-transfer-no-input-group">
                             <label for="edit-transfer-no" id="label-edit-transfer-no">رقم الحوالة </label>
-                            <input type="text" id="edit-transfer-no" name="transfer-no" placeholder="رقم الحوالة " readonly/>
+                            <input type="text" id="edit-transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
                         </div>
                         <div class="input-group">
                             <label for="edit-date">التاربخ</label>
@@ -268,11 +269,11 @@ if (!isset($_SESSION['user_id'])) {
                         </div>
                         <div class="input-group edit-fees-inpt-grp" id="edit-fees-input-grp">
                             <label for="edit-fees">الرسوم</label>
-                            <input type="number" step="0.00001" name="fees" id="edit-fees" placeholder="الرسوم" readonly >
+                            <input type="number" step="0.00001" name="fees" id="edit-fees" placeholder="الرسوم"  >
                         </div>
                         <div class="input-group edit-fees-inpt-grp" id="edit-fees-income-input-grp">
                             <label for="edit-fees-income">الرسوم لك</label>
-                            <input type="number"  step="0.00001" name="fees-income" id="edit-fees-income" placeholder="الرسوم لك" readonly >
+                            <input type="number"  step="0.00001" name="fees-income" id="edit-fees-income" placeholder="الرسوم لك"  >
                         </div>
 
                         <div class="input-group">

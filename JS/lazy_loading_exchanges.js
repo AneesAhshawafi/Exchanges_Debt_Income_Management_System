@@ -1,3 +1,22 @@
+function numberFormat(value, maxDecimals = 2) {
+    let num = Number(value);
+    if (isNaN(num))
+        return value;
+
+    // قص الأرقام بدل التقريب
+    let factor = Math.pow(10, maxDecimals);
+    let truncated = Math.trunc(num * factor) / factor;
+
+    // نفصل العدد إلى جزء صحيح وجزء عشري
+    let parts = truncated.toString().split(".");
+
+    // تنسيق الجزء الصحيح مع فواصل الآلاف
+    parts[0] = Number(parts[0]).toLocaleString('en-US');
+
+    // إذا فيه كسور، نرجع نضيفها بدون أصفار وهمية
+    return parts.length > 1 ? parts[0] + "." + parts[1] : parts[0];
+}
+
 let offsetExchanges = 0;
 const limitExchanges = 10;
 isLoadingExchanges = false;
@@ -67,7 +86,7 @@ function loadExchanges() {
                                 exchangeDataContent += `<h3>${numberFormat(row.AMMOUNT)} ريال سعودي</h3>`;
                             }
                         }
-                        exchangeDataContent += `<h3>${row.FOR_OR_ON}</h3><h3 class="date">${row.TRA_DATE}</h3><h3>${row.ATM}</h3><h3>${numberFormat(row.TRA_FEES)}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><textarea class="note">${row.NOTE}</textarea><h3>${row.STATUS}</h3></div></div>`;
+                        exchangeDataContent += `<h3>${row.FOR_OR_ON}</h3><h3 class="date">${row.TRA_DATE}</h3><h3>${row.ATM}</h3><h3>${numberFormat(row.TRA_FEES)}</h3><h3>${numberFormat(row.sum_ammount_new)}</h3><h3>${numberFormat(row.sum_ammount_old)}</h3><h3>${numberFormat(row.sum_ammount_sa)}</h3><textarea name="tENote" class="note">${row.NOTE}</textarea><h3>${row.STATUS}</h3></div></div>`;
                         exchangesListBody.innerHTML += exchangeDataContent;
                     });
 

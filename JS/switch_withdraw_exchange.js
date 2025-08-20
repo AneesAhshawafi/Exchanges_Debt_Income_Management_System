@@ -163,7 +163,7 @@ editOperSelectTypeInput.addEventListener("change", () => {
         editSelectFrom.required = false;
         editSelectTo.required = false;
         editPrice.required = false;
-        editAmmount.readonly = false;
+//        editAmmount.readonly = false;
     } else if (editOperSelectTypeInput.value == "إيداع") {
         editSenderInputGroup.classList.remove('hidden');
         editReceiverInputGroup.classList.remove('hidden');
@@ -186,7 +186,7 @@ editOperSelectTypeInput.addEventListener("change", () => {
         editSelectFrom.required = false;
         editSelectTo.required = false;
         editPrice.required = false;
-        editAmmount.readonly = false;
+//        editAmmount.readonly = false;
     } else {
         editTransferNoInput.placeholder = 'رقم التحويل';
         labelEditTransferNO.textContent = 'رقم التحويل';
@@ -207,6 +207,6 @@ editOperSelectTypeInput.addEventListener("change", () => {
         editSelectFrom.required = true;
         editSelectTo.required = true;
         editPrice.required = true;
-        editAmmount.readonly = true;
+//        editAmmount.readonly = true;
     }
 });

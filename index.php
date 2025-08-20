@@ -128,7 +128,7 @@ include 'total_ammounts_calc.php';
                                 <h3>اضافة عميل</h3>
                             </div>
                             <div class="input-group">
-                                <label for="client-name-e">اسم العميل</label>
+                                <label for="client-name">اسم العميل</label>
                                 <input type="text" id="client-name" name="client_name" placeholder=" اسم العميل" required />
                             </div>
 
@@ -170,7 +170,7 @@ include 'total_ammounts_calc.php';
                             </div>
                             <input type="hidden" name="client-id" id="client-id" />
                             <div class="input-group">
-                                <label for="client">اسم العميل</label>
+                                <label for="client-name-e">اسم العميل</label>
                                 <input type="text" id="client-name-e" name="client-name" placeholder=" اسم العميل" required />
                             </div>
 

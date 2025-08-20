@@ -14,7 +14,7 @@ $result = $stmt->get_result();
 
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $sum_ammounts = calc_total_ammounts($row['CLIENT_ID']);
+        $sum_ammounts = calc_total_ammounts($row['CLIENT_ID'],$conn);
         $sum_ammount_new = $sum_ammounts[0];
         $sum_ammount_old = $sum_ammounts[1];
         $sum_ammount_sa = $sum_ammounts[2];

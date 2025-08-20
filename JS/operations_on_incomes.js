@@ -7,23 +7,25 @@
 currentExchangesListData = null;
 
 let deleteTraNo = null;
-
-function numberFormat(value, decimals = 2) {
-
+function numberFormat(value, maxDecimals = 2) {
     let num = Number(value);
-
     if (isNaN(num))
         return value;
 
-    return num.toLocaleString('en-US', {
+    // قص الأرقام بدل التقريب
+    let factor = Math.pow(10, maxDecimals);
+    let truncated = Math.trunc(num * factor) / factor;
 
-        minimumFractionDigits: decimals,
+    // نفصل العدد إلى جزء صحيح وجزء عشري
+    let parts = truncated.toString().split(".");
 
-        maximumFractionDigits: decimals
+    // تنسيق الجزء الصحيح مع فواصل الآلاف
+    parts[0] = Number(parts[0]).toLocaleString('en-US');
 
-    });
-
+    // إذا فيه كسور، نرجع نضيفها بدون أصفار وهمية
+    return parts.length > 1 ? parts[0] + "." + parts[1] : parts[0];
 }
+
 
 function openDeleteModal(traNo) {
 

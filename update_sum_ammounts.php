@@ -1,7 +1,7 @@
 <?php
 
-function update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ,$id) {
-    include 'dbconn.php';
+function update_sum_ammount($currency, $for_or_on, $exchangesListData, $ammount_differ,$id,$conn) {
+//    include 'dbconn.php';
     
 
     if ($currency == "new") {

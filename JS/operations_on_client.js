@@ -1,33 +1,3 @@
-
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
- */
-//function openDeleteClientModal(client_id) {
-//    document.getElementById("deleteModal").classList.remove("hidden");
-//
-//
-//    document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
-//        fetch("delete_client.php", {
-//            method: "POST",
-//            headers: {"Content-Type": "application/x-www-form-urlencoded"},
-//            body: "client_id=" + encodeURIComponent(client_id)
-//        }).then(res => res.json())
-//                .then(response => {
-//                    if (response.success) {
-//
-//                        alert(response.success);
-//                        closeModal("deleteModal");
-//                        location.reload();
-//                    } else {
-//                        alert(response.error);
-//                    }
-//                })
-//            .catch(err => {
-//            console.log(err);
-//        });
-//    });
-//}
 function openDeleteClientModal(client_id) {
     document.getElementById("deleteModal").classList.remove("hidden");
 

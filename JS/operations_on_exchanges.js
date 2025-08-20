@@ -341,9 +341,6 @@ function openEditModal(traData) {
 
 //    const transferOption=document.getElementById('transfer-option');
     if (editOperSelectTypeInput.value == "حوالة") {
-        editOperSelectTypeInput.options[3].disabled = true;
-        editOperSelectTypeInput.options[2].disabled = false;
-        editOperSelectTypeInput.options[1].disabled = false;
         editSenderInputGroup.classList.remove('hidden');
         editReceiverInputGroup.classList.remove('hidden');
         editCurrency.classList.remove('hidden');
@@ -372,11 +369,8 @@ function openEditModal(traData) {
         editSelectFrom.required = false;
         editSelectTo.required = false;
         editPrice.required = false;
-        editAmmount.readOnly = false;
+//        editAmmount.readOnly = false;
     } else if (editOperSelectTypeInput.value == "إيداع") {
-        editOperSelectTypeInput.options[3].disabled = true;
-        editOperSelectTypeInput.options[2].disabled = false;
-        editOperSelectTypeInput.options[1].disabled = false;
         editSenderInputGroup.classList.remove('hidden');
         editReceiverInputGroup.classList.remove('hidden');
         editCurrency.classList.remove('hidden');
@@ -398,13 +392,9 @@ function openEditModal(traData) {
         editSelectFrom.required = false;
         editSelectTo.required = false;
         editPrice.required = false;
-        editAmmount.readOnly = false;
+//        editAmmount.readOnly = false;
 
     } else {
-
-        editOperSelectTypeInput.options[3].disabled = false;
-        editOperSelectTypeInput.options[2].disabled = true;
-        editOperSelectTypeInput.options[1].disabled = true;
         editTransferNoInput.placeholder = 'رقم التحويل';
         labelEditTransferNO.textContent = 'رقم التحويل';
         editSenderInputGroup.classList.add('hidden');
@@ -424,7 +414,7 @@ function openEditModal(traData) {
         editSelectFrom.required = true;
 
         editSelectTo.required = true;
-        editAmmount.readOnly = true;
+//        editAmmount.readOnly = true;
         editPrice.required = true;
     }
 
