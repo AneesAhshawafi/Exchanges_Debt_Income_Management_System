@@ -53,9 +53,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // تضمين الاتصال بقاعدة البيانات
     $conn->begin_transaction();
     $done = insert_tranaction(null, $type, $currency, $for_or_on, $sender_name, $receiver_name, $transfer_no, $ammount, $fees, $fees_income, $tra_date, $atm, $note, $client_id, $status, $selectFrom, $selectTo, $price, $conn);
-    if ($done === "الرصيد غير كافي") {
+    if ($done === "توجد عملية سابقة بهذا الرقم بالفعل!") {
         $conn->rollback();
-        echo json_encode(["success" => "الرصيد غير كافي"]);
+        echo json_encode(["error" => "توجد عملية سابقة بهذا الرقم بالفعل!"]);
+    } elseif ($done === "الرصيد غير كافي") {
+        $conn->rollback();
+        echo json_encode(["error" => "الرصيد غير كافي"]);
     } elseif ($done === 'حدث خطأ أثناء إضافة الدخل') {
         $conn->rollback();
         echo json_encode(["error" => "حدث خطأ أثناء إضافة الدخل"]);

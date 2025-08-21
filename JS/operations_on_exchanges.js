@@ -331,7 +331,7 @@ function openEditModal(traData) {
     document.getElementById("edit-fees").value = traData.TRA_FEES;
 
 
-    document.getElementById("edit-date").value = traData.TRA_DATE.replace(' ', 'T').slice(0, 16);
+//    document.getElementById("edit-date").value = traData.TRA_DATE.replace(' ', 'T').slice(0, 16);
 
 
     document.getElementById("edit-atm").value = traData.ATM;

@@ -193,7 +193,7 @@ include 'total_ammounts_calc.php';
                             searchInput.addEventListener("input", function () {
                                 const searchValue = this.value.trim();
 
-                                fetch("get_clients_search.php?search=" + encodeURIComponent(searchValue))
+                                fetch("debt_get_clients_search.php?search=" + encodeURIComponent(searchValue))
                                         .then(res => res.text())
                                         .then(data => {
                                             clientsListDiv.innerHTML = data;

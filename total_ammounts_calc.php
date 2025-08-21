@@ -3,7 +3,10 @@
 function calc_total_ammounts($client_id,$conn) {
 //    include 'dbconn.php';
 
-    $resualt_sum_ammounts = $conn->query("SELECT sum_ammount_new,sum_ammount_old,sum_ammount_sa FROM transaction WHERE CLIENT_ID = " . $client_id . " ORDER BY TRA_ID DESC LIMIT 1");
+    $stmt = $conn->prepare("SELECT sum_ammount_new,sum_ammount_old,sum_ammount_sa FROM transaction WHERE CLIENT_ID = ? ORDER BY TRA_ID DESC LIMIT 1");
+    $stmt->bind_param("i",$client_id );
+    $stmt->execute();
+    $resualt_sum_ammounts=$stmt->get_result();
     if (mysqli_num_rows($resualt_sum_ammounts) > 0) {
         
     $row_sum_ammounts = $resualt_sum_ammounts->fetch_assoc();

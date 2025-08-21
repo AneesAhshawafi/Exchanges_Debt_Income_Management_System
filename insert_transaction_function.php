@@ -1,6 +1,14 @@
 <?php
 
 function insert_tranaction($isUpdate, $type, $currency, $for_or_on, $sender_name, $receiver_name, $transfer_no, $ammount, $fees, $fees_income, $tra_date, $atm, $note, $client_id, $status, $selectFrom, $selectTo, $price, $conn) {
+    $stmt=$conn->prepare('SELECT TRA_ID FROM transaction WHERE TRANSFER_NO = ?');
+    $stmt->bind_param("s",$transfer_no);
+    $stmt->execute();
+    $result_transfer_no=$stmt->get_result();
+    if (mysqli_num_rows($result_transfer_no) > 0) {
+        $done="توجد عملية سابقة بهذا الرقم بالفعل!";
+        return $done;
+    }
     include 'total_ammounts_calc.php';
     if (!$isUpdate) {
         include 'calc_result_of_transfer_btwn_accounts.php';
