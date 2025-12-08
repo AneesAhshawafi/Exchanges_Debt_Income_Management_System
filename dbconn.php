@@ -8,6 +8,8 @@ $servername = "localhost";
 $username = "root";
 $password = ""; // ← غيّره إلى كلمة مرورك الحقيقية
 $dbname = "exchange_management";
+
+
 //$conn=mysqli_connect();
 // if(!$conn){
 //     echo 'Connection error: '. mysqli_connect_error();
@@ -22,4 +24,17 @@ try {
     error_log("Database Connection Error: " . $e->getMessage());
     die("فشل الاتصال بقاعدة البيانات.");
 }
+
+// try{
+
+//     $connString ="mysql:host=localhost;dbname=exchange_management";
+//     $username="root";
+//     $password="";
+//     $conn=new PDO($connString,$username,$password);
+//     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// } catch(PDOException $e){
+//     die($e->getMessage());
+// }
+
+
 ?>

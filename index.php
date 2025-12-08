@@ -96,7 +96,15 @@ include 'total_ammounts_calc.php';
                     <div class="clients-list-title">
                         <h2 class="clients-list-title">قائمة العملاء</h2>
                     </div>
-                    <input type="text" id="searchInput" placeholder="🔍 ابحث عن اسم عميل..." class="search-input" />
+                    <!-- محرك البحث -->
+                    <div class="search-engine">
+                        <select name="search-type" id="search-type">
+                            <option value="client" selected>عميل</option>
+                            <option value="exchange">حوالة</option>
+                        </select>
+                        <input type="text" id="searchInput" placeholder="🔍 ابحث عن اسم عميل..." class="search-input" />
+                    </div>
+
                     <div class="clients-list-container" >
 
                         <div class="clients-list-header">
