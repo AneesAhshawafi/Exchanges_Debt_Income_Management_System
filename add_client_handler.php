@@ -14,12 +14,13 @@ $user_id = $_SESSION['user_id'];
 
 // Check if it's a POST request and the client_name is set
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["client_name"])) {
-    $client_name = $_POST["client_name"];
+    $client_name =trim($_POST["client_name"]) ;
+    $phone=trim($_POST['phone']);
 
 // Use prepared statements to prevent SQL injection
-    $sql_add_client = "INSERT INTO client (CLIENT_NAME, DEPT_NO, USER_ID) VALUES (?, 1, ?)";
+    $sql_add_client = "INSERT INTO client (CLIENT_NAME,PHONE, DEPT_NO, USER_ID) VALUES (?,?, 1, ?)";
     $stmt = mysqli_prepare($conn, $sql_add_client);
-    mysqli_stmt_bind_param($stmt, "si", $client_name, $user_id);
+    mysqli_stmt_bind_param($stmt, "ssi", $client_name, $phone,$user_id);
 
     if (mysqli_stmt_execute($stmt)) {
 // Send a success response back to the JavaScript

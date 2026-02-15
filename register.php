@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $error = "اسم المستخدم مستخدم بالفعل.";
+            $error = "اسم المستخدم موجود بالفعل.";
         } else {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             $insert = $conn->prepare("INSERT INTO users (USER_NAME, PASSWORD) VALUES (?, ?)");

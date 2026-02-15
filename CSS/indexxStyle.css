@@ -129,7 +129,7 @@ body {
 .clients-data,
 .clients-list-header {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 1rem;
 
     padding: 1rem;
@@ -782,7 +782,7 @@ span {
     }
     .clients-list-header,
     .clients-data{
-        grid-template-columns: repeat(4, 150px);
+        grid-template-columns: repeat(5, 150px);
     }
 
     .exchanges-data,
