@@ -6,15 +6,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 include 'dbconn.php';
 include 'total_ammounts_calc.php';
-// $user_id=$_SESSION['user_id'];
-// if ($_SERVER["REQUEST_METHOD"] === "POST") {
-//     //add client
-//     $client_name = $_POST["client_name"];
-//     $sql_add_client = "INSERT INTO client (CLIENT_NAME, DEPT_NO, USER_ID) VALUES ('$client_name', 1," .$user_id . ")";
-//     mysqli_query($conn, $sql_add_client);
-//     header("Location: index.php");
-//     exit;
-// }
+include 'csrf_token.php';
 ?>
 <!DOCTYPE html>
 <html lang="ar">
@@ -128,6 +120,8 @@ include 'total_ammounts_calc.php';
                         <div class="add-client-form-title">
                             <h3>اضافة عميل</h3>
                         </div>
+                        <!-- إضافة حقل CSRF Token -->
+                         <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                         <div class="input-group">
                             <label for="client-name">اسم العميل</label>
                             <input type="text" id="client-name" name="client_name" placeholder=" اسم العميل" required />
@@ -141,7 +135,6 @@ include 'total_ammounts_calc.php';
                                 id="phone"
                                 name="phone"
                                 placeholder="رقم الجوال"
-                                
                                 required />
 
                             <small id="phoneError" style="color:red; display:none;">
@@ -182,8 +175,9 @@ include 'total_ammounts_calc.php';
                     <form action="update_client.php" method="POST" class="edit-client-form">
                         <span class="close-modal close-modal-form" id="closeEditClientBtn">&rarr;</span>
                         <div class="edit-client-form-title">
-                            <h3>تعديل اسم العميل</h3>
+                            <h3>تعديل بيانات العميل</h3>
                         </div>
+                        <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                         <input type="hidden" name="client-id" id="client-id" />
                         <div class="input-group">
                             <label for="client-name-e">اسم العميل</label>

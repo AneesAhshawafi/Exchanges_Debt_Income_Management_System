@@ -10,6 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_once 'dbconn.php';
     include 'insert_transaction_function.php';
     include 'delete_exchange_function.php';
+    session_start();
+    include 'csrf_token.php';
+    if (!verify_csrf_token($_POST['csrf_token'])) {
+        die('CSRF token validation failed');
+    }
+
 
     $id = isset($_POST['exchange_id']) ? intval($_POST['exchange_id']) : 0;
     $client_id = isset($_POST['client_id']) ? intval($_POST['client_id']) : 0;
@@ -27,14 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ammount = floatval($_POST["ammount"]);
     $fees = isset($_POST['fees']) ? floatval($_POST["fees"]) : 0;
     $fees_income = isset($_POST['fees-income']) ? floatval($_POST["fees-income"]) : 0;
-//    $tra_date = trim($_POST["tra-date"]);
+    //    $tra_date = trim($_POST["tra-date"]);
     $tra_date_raw = $_POST["date"];
     $tra_date = $tra_date_raw ? date("Y-m-d", strtotime($tra_date_raw)) : date("Y-m-d");
 
     $atm = trim($_POST["atm"]);
     $note = trim($_POST["note"]);
     $client_id = intval($_POST["client_id"]);
-//    $status = isset($_POST['status']) ? trim($_POST['status']) : '';
+    //    $status = isset($_POST['status']) ? trim($_POST['status']) : '';
     $status = isset($_POST['status']) ? trim($_POST['status']) : "";
     $selectFrom = isset($_POST['select-from']) ? $_POST['select-from'] : '';
     $selectTo = isset($_POST['select-to']) ? $_POST['select-to'] : '';
@@ -83,4 +89,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conn->close();
     exit();
 }
-?>
