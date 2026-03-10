@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <title>تسجيل الدخول</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/all.min.css" />
     <link rel="stylesheet" href="CSS/login.css" />
     <link rel="manifest" href="manifest.json" />
 
@@ -58,7 +59,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" name="username" id="username" required>
 
             <label for="password">كلمة المرور:</label>
-            <input type="password" name="password" id="password" required>
+            <div style="position: relative;">
+                <input type="password" name="password" id="password" required style="padding-left: 40px;">
+                <span id="togglePassword"
+                    style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #64748b; display: flex; align-items: center; justify-content: center; z-index: 10;">
+                    <i id="eyeIcon" class="fas fa-eye"></i>
+                </span>
+            </div>
             <a href="change_password.php">تغيير كلمةالمرور</a>
             <button type="submit">دخول</button>
         </form>
@@ -73,6 +80,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     console.log('Service Worker registration failed:', error);
                 });
         }
+
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+        const eyeIcon = document.querySelector('#eyeIcon');
+
+        togglePassword.addEventListener('click', function () {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            if (type === 'text') {
+                eyeIcon.className = 'fas fa-eye-slash';
+            } else {
+                eyeIcon.className = 'fas fa-eye';
+            }
+        });
     </script>
 
 </body>
