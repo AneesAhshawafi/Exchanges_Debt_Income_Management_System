@@ -2,10 +2,10 @@
   --main-color: #C5BAFF;
   --secondary-color: #9400FF;
   --section-background: #E4F1FF;
-  --element-background:#AED2FF;
-  --specila-headind-color:#AED2FF;
-  --specila-headind-p-color:#00B0a0;
-  --ul-li-color:#AED2FF;
+  --element-background: #AED2FF;
+  --specila-headind-color: #AED2FF;
+  --specila-headind-p-color: #00B0a0;
+  --ul-li-color: #AED2FF;
   --paragraph-color: #27005D;
   --section-padding: 60px;
   --section-margin-top: 80px;
@@ -48,7 +48,7 @@ body {
   margin-bottom: 15px;
   display: flex;
   flex-direction: row;
-  
+
 }
 
 .input-group label {

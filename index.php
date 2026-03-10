@@ -121,7 +121,7 @@ include 'csrf_token.php';
                             <h3>اضافة عميل</h3>
                         </div>
                         <!-- إضافة حقل CSRF Token -->
-                         <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                         <div class="input-group">
                             <label for="client-name">اسم العميل</label>
                             <input type="text" id="client-name" name="client_name" placeholder=" اسم العميل" required />
@@ -130,12 +130,7 @@ include 'csrf_token.php';
                         </div>
                         <div class="input-goup">
                             <label for="phone">رقم الجوال</label>
-                            <input
-                                type="text"
-                                id="phone"
-                                name="phone"
-                                placeholder="رقم الجوال"
-                                required />
+                            <input type="text" id="phone" name="phone" placeholder="رقم الجوال" required />
 
                             <small id="phoneError" style="color:red; display:none;">
                                 رقم الجوال غير صحيح، يجب أن يبدأ بـ 70 أو 71 أو 73 أو 77 ويتكون من 9 أرقام
@@ -181,17 +176,12 @@ include 'csrf_token.php';
                         <input type="hidden" name="client-id" id="client-id" />
                         <div class="input-group">
                             <label for="client-name-e">اسم العميل</label>
-                            <input type="text" id="client-name-e" name="client-name" placeholder=" اسم العميل" required />
+                            <input type="text" id="client-name-e" name="client-name" placeholder=" اسم العميل"
+                                required />
                         </div>
                         <div class="input-group">
                             <label for="phone-e">رقم الجوال</label>
-                            <input
-                                type="text"
-                                id="phone-e"
-                                name="phone"
-                                placeholder="رقم الجوال"
-                                
-                                required />
+                            <input type="text" id="phone-e" name="phone" placeholder="رقم الجوال" required />
                         </div>
                         <button class="btn" type="submit" name="submit-edit-client">حفظ</button>
                     </form>
@@ -226,7 +216,7 @@ include 'csrf_token.php';
         const searchInput = document.getElementById("searchInput");
         const clientsListDiv = document.getElementById("clients-list");
 
-        searchInput.addEventListener("input", function() {
+        searchInput.addEventListener("input", function () {
             const searchValue = this.value.trim();
 
             fetch("get_clients_search.php?search=" + encodeURIComponent(searchValue))
@@ -249,7 +239,7 @@ include 'csrf_token.php';
             const newBtn = confirmBtn.cloneNode(true);
             confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
 
-            newBtn.addEventListener("click", function() {
+            newBtn.addEventListener("click", function () {
                 window.open("generate_client_pdf.php?client_id=" + encodeURIComponent(clientId), "_blank");
                 closeModal("confirmShareModal");
             });
@@ -258,10 +248,10 @@ include 'csrf_token.php';
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('pwabuilder-sw.js')
-                .then(function(registration) {
+                .then(function (registration) {
                     console.log('Service Worker registered successfully');
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.log('Service Worker registration failed:', error);
                 });
         }

@@ -1,4 +1,4 @@
-<?php    
+<?php
 require_once 'dbconn.php';
 session_start();
 include 'csrf_token.php';
