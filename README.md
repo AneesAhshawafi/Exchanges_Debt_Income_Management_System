@@ -1,2 +1,76 @@
-# Exchanges_Debt_Income_Management_System
- It is a lightweight web-based application built with PHP, MySQL, HTML, CSS, and JavaScript. It helps users manage financial exchange operations with support for multiple currencies, along with plans to include full debt tracking and income management features. The system allows for adding, editing, deleting, and sharing transaction records .
+💰 المنظومة المالية الشاملة | Financial Management System (FMS)
+
+المنظومة المالية الشاملة هو تطبيق ويب متطور وخفيف الوزن مصمم خصيصاً لإدارة العمليات المالية المعقدة (الصرافة، الديون، والدخل). تم بناء النظام باستخدام PHP Native لصقل المنطق البرمجي (Back-end Logic) وهيكلة قواعد البيانات من الصفر، مما يضمن أداءً عالياً ومرونة كاملة.
+
+🎯 الهدف من المشروع
+توفير أداة محاسبية مبسطة ومتكاملة تخدم أصحاب محلات الصرافة أو الأفراد لتنظيم الحوالات، تتبع الديون لدى الغير، وإدارة مصادر الدخل بدقة مع دعم العملات المتعددة ومشاركة التقارير.
+
+⚙️ المميزات الرئيسية
+1. إدارة الحوالات والصرافة (Exchanges)
+عرض وإدارة قائمة الحوالات بدقة (إضافة، تعديل، حذف).
+
+حساب نتائج التحويل بين الحسابات آلياً.
+
+إمكانية مشاركة تفاصيل الحوالات بسهولة.
+
+2. تتبع الديون (Debt Management)
+نظام متكامل لإدارة حسابات العملاء.
+
+تتبع الديون المسجلة وتحديث الإجماليات تلقائياً.
+
+توليد تقارير PDF احترافية للعملاء لمراجعة أرصدتهم.
+
+3. إدارة الدخل (Income Management)
+تسجيل وتصنيف مصادر الدخل والمصاريف.
+
+لوحة إحصائيات لحساب الإجماليات (Total Amounts) لكل قسم.
+
+4. تجربة مستخدم متطورة (PWA & Mobile)
+PWA Support: يدعم التثبيت على الهواتف والعمل (جزئياً) بدون اتصال بالإنترنت.
+
+واجهة مستخدم متجاوبة (Responsive UI) تدعم مختلف أحجام الشاشات.
+
+🛠️ التقنيات المستخدمة (Tech Stack)
+Logic: PHP (Native)
+
+Database: MySQL
+
+Frontend: HTML5, CSS3, JavaScript
+
+Dependencies: Composer
+
+Deployment: Docker (Dockerfile included)
+
+Features: PWA (Service Workers, Manifest), PDF Generation.
+
+📁 هيكلة المشروع البرمجية
+يعتمد المشروع على تنظيم دقيق للملفات لضمان سهولة الصيانة:
+
+dbconn.php: ملف الاتصال بقاعدة البيانات.
+
+/database: يحتوي على ملفات الـ Schema والبيانات.
+
+/CSS & /JS: ملفات التنسيق والعمليات التفاعلية.
+
+sw.js: المسؤول عن تشغيل تقنية PWA.
+
+🚀 كيفية التشغيل
+باستخدام السيرفر المحلي (XAMPP/Wamp):
+قم بنقل مجلد المشروع إلى htdocs.
+
+استورد قاعدة البيانات من مجلد database.
+
+قم بضبط إعدادات الاتصال في ملف dbconn.php.
+
+باستخدام Docker:
+Bash
+docker build -t financial-system .
+docker run -p 8080:80 financial-system
+🛠️ المهارات المكتسبة
+من خلال بناء هذا المشروع، تم التركيز على:
+
+بناء المنطق المحاسبي (Accounting Logic) بدون استخدام إطارات عمل.
+
+تصميم قواعد بيانات معقدة تضمن سلامة البيانات (Data Integrity).
+
+التعامل مع العمليات الحسابية الدقيقة وتوليد الملفات (PDF).
