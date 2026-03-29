@@ -1,19 +1,25 @@
 const operSelectTypeInput = document.getElementById("oper-type-input");
+
+const senderInputGroup = document.getElementById('sender-input-group');
+const receiverInputGroup = document.getElementById('receiver-input-group');
 const senderNameInput = document.getElementById("sender");
 const receiverInput = document.getElementById('reciver-input');
+
+const senderPhoneInputGroup = document.getElementById('sender-phone-input-group');
+const receiverPhoneInputGroup = document.getElementById('receiver-phone-input-group');
+const senderPhoneInput = document.getElementById('sender-phone');
+const receiverPhoneInput = document.getElementById('receiver-phone');
+
 const transferNoInput = document.getElementById("transfer-no");
 const status = document.getElementById('status');
 const transferOperDiv = document.getElementById('transfer-input-group');
-const senderInputGroup = document.getElementById('sender-input-group');
-const receiverInputGroup = document.getElementById('receiver-input-group');
 const currencyIn = document.getElementById('currency');
 const forOrOn = document.getElementById('for-or-on');
 const selectFrom = document.getElementById('select-from');
 const selectTo = document.getElementById('select-to');
 const price = document.getElementById('price');
 const feesInp = document.getElementsByClassName('fees-inpt-grp');
-
-operSelectTypeInput.addEventListener("change", () => {
+function checkState() {
     if (operSelectTypeInput.value == "حوالة") {
         senderInputGroup.classList.remove('hidden');
         receiverInputGroup.classList.remove('hidden');
@@ -21,7 +27,6 @@ operSelectTypeInput.addEventListener("change", () => {
         forOrOn.classList.remove('hidden');
         status.classList.remove('hidden');
         transferOperDiv.classList.add('hidden');
-//        feesInp.classList.remove('hidden');
         if (forOrOn.value == 'عليه') {
             Array.from(feesInp).forEach(e => {
                 e.classList.remove('hidden');
@@ -57,8 +62,8 @@ operSelectTypeInput.addEventListener("change", () => {
         price.required = false;
         transferNoInput.placeholder = 'رقم الحوالة';
     } else if (operSelectTypeInput.value == 'إيداع') {
-        senderInputGroup.classList.remove('hidden');
-        receiverInputGroup.classList.remove('hidden');
+
+
         currencyIn.classList.remove('hidden');
         forOrOn.classList.remove('hidden');
         status.classList.add('hidden');
@@ -77,6 +82,21 @@ operSelectTypeInput.addEventListener("change", () => {
         selectFrom.required = false;
         selectTo.required = false;
         price.required = false;
+        if (forOrOn.value == 'عليه') {
+            senderInputGroup.classList.add('hidden');
+            receiverInputGroup.classList.remove('hidden');
+            senderPhoneInputGroup.classList.add('hidden');
+            receiverPhoneInputGroup.classList.remove('hidden');
+            senderPhoneInput.required = false;
+            receiverPhoneInput.required = true;
+        } else {
+            senderInputGroup.classList.remove('hidden');
+            receiverInputGroup.classList.add('hidden');
+            senderPhoneInputGroup.classList.remove('hidden');
+            receiverPhoneInputGroup.classList.add('hidden');
+            senderPhoneInput.required = true;
+            receiverPhoneInput.required = false;
+        }
     } else {
         transferNoInput.placeholder = 'رقم التحويل';
         senderInputGroup.classList.add('hidden');
@@ -98,18 +118,32 @@ operSelectTypeInput.addEventListener("change", () => {
         selectTo.required = true;
         price.required = true;
     }
+}
+
+operSelectTypeInput.addEventListener("change", () => {
+    checkState();
+});
+forOrOn.addEventListener('change', () => {
+    checkState();
 });
 
 const editOperSelectTypeInput = document.getElementById("edit-type");
+
 const editSenderNameInput = document.getElementById("edit-sender");
 const labelEditSender = document.getElementById('label-edit-sender');
+const editSenderInputGroup = document.getElementById('edit-sender-input-group');
+const editReceiverInputGroup = document.getElementById('edit-receiver-input-group');
 const editReceiverInput = document.getElementById('reciver');
+
+const editSenderPhoneInputGroup = document.getElementById('edit-sender-phone-input-group');
+const editReceiverPhoneInputGroup = document.getElementById('edit-receiver-phone-input-group');
+const editSenderPhoneInput = document.getElementById('edit-sender-phone');
+const editReceiverPhoneInput = document.getElementById('edit-receiver-phone');
+
 const editTransferNoInput = document.getElementById("edit-transfer-no");
 const labelEditTransferNO = document.getElementById('label-edit-transfer-no');
 const editStatus = document.getElementById('edit-status-input-grp');
 const editTransferOperDiv = document.getElementsByClassName('edit-transfer-input-group');
-const editSenderInputGroup = document.getElementById('edit-sender-input-group');
-const editReceiverInputGroup = document.getElementById('edit-receiver-input-group');
 const editCurrency = document.getElementById('edit-currency-input-grp');
 const editForOrOnInptGrp = document.getElementById('edit-for-or-on-input-grp');
 const editForOrOn = document.getElementById('edit-for-or-on');
@@ -119,8 +153,7 @@ const editPrice = document.getElementById('edit-price');
 const editFeesInp = document.getElementsByClassName('edit-fees-inpt-grp');
 const editAmmount = document.getElementById('edit-ammount');
 
-
-editOperSelectTypeInput.addEventListener("change", () => {
+function editCheckState() {
     if (editOperSelectTypeInput.value == "حوالة") {
         editSenderInputGroup.classList.remove('hidden');
         editReceiverInputGroup.classList.remove('hidden');
@@ -163,7 +196,7 @@ editOperSelectTypeInput.addEventListener("change", () => {
         editSelectFrom.required = false;
         editSelectTo.required = false;
         editPrice.required = false;
-//        editAmmount.readonly = false;
+        //        editAmmount.readonly = false;
     } else if (editOperSelectTypeInput.value == "إيداع") {
         editSenderInputGroup.classList.remove('hidden');
         editReceiverInputGroup.classList.remove('hidden');
@@ -186,7 +219,21 @@ editOperSelectTypeInput.addEventListener("change", () => {
         editSelectFrom.required = false;
         editSelectTo.required = false;
         editPrice.required = false;
-//        editAmmount.readonly = false;
+        if (editForOrOn.value == 'عليه') {
+            editSenderInputGroup.classList.add('hidden');
+            editReceiverInputGroup.classList.remove('hidden');
+            editSenderPhoneInputGroup.classList.add('hidden');
+            editReceiverPhoneInputGroup.classList.remove('hidden');
+            editSenderPhoneInput.required = false;
+            editReceiverPhoneInput.required = true;
+        } else {
+            editSenderInputGroup.classList.remove('hidden');
+            editReceiverInputGroup.classList.add('hidden');
+            editSenderPhoneInputGroup.classList.remove('hidden');
+            editReceiverPhoneInputGroup.classList.add('hidden');
+            editSenderPhoneInput.required = true;
+            editReceiverPhoneInput.required = false;
+        }
     } else {
         editTransferNoInput.placeholder = 'رقم التحويل';
         labelEditTransferNO.textContent = 'رقم التحويل';
@@ -207,13 +254,16 @@ editOperSelectTypeInput.addEventListener("change", () => {
         editSelectFrom.required = true;
         editSelectTo.required = true;
         editPrice.required = true;
-//        editAmmount.readonly = true;
     }
+}
+editOperSelectTypeInput.addEventListener("change", () => {
+    editCheckState();
 });
 
 editForOrOn.addEventListener("change", () => {
-    if (editForOrOn.value == 'عليه') {
-        if (editOperSelectTypeInput.value == "حوالة") {
+    editCheckState();
+    if (editForOrOn.value === 'عليه') {
+        if (editOperSelectTypeInput.value === "حوالة") {
 
             Array.from(editFeesInp).forEach(e => {
                 e.classList.remove('hidden');

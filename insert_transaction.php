@@ -35,8 +35,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $currency = isset($_POST["currency"]) ? $_POST["currency"] : '';
     $for_or_on = isset($_POST["for-or-on"]) ? $_POST["for-or-on"] : '';
 
-    $sender_name = isset($_POST["sender-name"]) ? $_POST["sender-name"] : '';
+    // $sender_name = isset($_POST["sender-name"]) ? $_POST["sender-name"] : '';
+    $sender_name = isset($_POST["client_name"]) ? $_POST["client_name"] : '';
+    $sender_phone = isset($_POST["client_phone"]) ? $_POST["client_phone"] : '';
     $receiver_name = isset($_POST["receiver-name"]) ? $_POST["receiver-name"] : '';
+    $receiver_phone = isset($_POST["receiver-phone"]) ? $_POST["receiver-phone"] : '';
     $transfer_no = trim($_POST["transfer-no"]);
     $ammount = floatval($_POST["ammount"]);
     $fees = isset($_POST['fees']) ? floatval($_POST["fees"]) : 0;
@@ -58,7 +61,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $selectFrom = isset($_POST['select-from']) ? $_POST['select-from'] : '';
     $selectTo = isset($_POST['select-to']) ? $_POST['select-to'] : '';
     $price = isset($_POST['price']) ? $_POST['price'] : '';
+
+    // التحقق من وجود العميل برقم الهاتف في حالة الإيداع (له)
+    // إذا لم يوجد، يتوقف التنفيذ مع رسالة خطأ؛ وإلا يتم حفظ ID العميل في receiver_id
+    $receiver_id = 0;
+    if ($type === 'إيداع' && $for_or_on === 'عليه') {
+
+        $sql = "SELECT CLIENT_ID FROM client WHERE PHONE = ? AND USER_ID = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("si", $receiver_phone, $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $receiver_id = $row['CLIENT_ID'];
+        } else {
+            echo json_encode(["error" => "لا يمكن الإيداع، هذا العميل غير مسجل لدينا"]);
+            exit;
+        }
+
+    }
     // معالجة الحقول بناءً على نوع العملية
+
     if ($type !== 'تحويل') {
         if ($type === 'إيداع') {
             $status = 'تمت';
@@ -67,6 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $fees = 0;
             $fees_income = 0;
         }
+
         $selectFrom = '';
         $selectTo = '';
         $price = 0;
@@ -75,6 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $fees_income = 0;
         $for_or_on = '';
         $currency = '';
+
         $sender_name = '';
         $receiver_name = '';
         $status = 'تمت';
@@ -83,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     //التحقق من تكرار العملية خلال الـ 24 ساعة الماضية 
     // بناءً على الحقول الرئيسية 
-    $data_to_hash = $type . $currency . $for_or_on . $sender_name . $receiver_name . $ammount .
+    $data_to_hash = $type . $currency . $for_or_on . $sender_name . $sender_phone . $receiver_name . $receiver_phone . $ammount .
         $fees . $fees_income . $atm . $client_id . $user_id .
         $status . $selectFrom . $selectTo . $price;
 
@@ -135,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         // 2. استدعاء الدالة المالية (استخدام متغيراتك الأصلية)
-        $done = insert_tranaction(null, $type, $currency, $for_or_on, $sender_name, $receiver_name, $transfer_no, $ammount, $fees, $fees_income, $tra_date, $atm, $note, $client_id, $status, $selectFrom, $selectTo, $price, $conn);
+        $done = insert_tranaction(null, $type, $currency, $for_or_on, $sender_name, $sender_phone, $receiver_name, $receiver_phone, $transfer_no, $ammount, $fees, $fees_income, $tra_date, $atm, $note, $client_id, $status, $selectFrom, $selectTo, $price, $conn);
 
         if ($done === "توجد عملية سابقة بهذا الرقم بالفعل!") {
             $conn->rollback();
@@ -147,14 +172,43 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $conn->rollback();
             echo json_encode(["error" => "حدث خطأ أثناء إضافة الدخل"]);
         } elseif ($done === true) {
-            // تحديث حالة مفتاح الأمان قبل الـ commit
-            $conn->query("UPDATE idempotency_keys SET status = 'success' WHERE request_key = '$idempotency_key'");
-            $conn->commit();
-            echo json_encode(["success" => "تمت إضافة المعاملة بنجاح"]);
+            if ($type === 'إيداع' and $for_or_on === 'عليه') {
+                $client_id = $receiver_id;
+                $done = insert_tranaction(null, $type, $currency, 'له', $sender_name, $sender_phone, $receiver_name, $receiver_phone, $transfer_no, $ammount, $fees, $fees_income, $tra_date, $atm, $note, $client_id, $status, $selectFrom, $selectTo, $price, $conn);
+                if ($done === "توجد عملية سابقة بهذا الرقم بالفعل!") {
+                    $conn->rollback();
+                    echo json_encode(["error" => "توجد عملية سابقة بهذا الرقم بالفعل!"]);
+                } elseif ($done === "الرصيد غير كافي") {
+                    $conn->rollback();
+                    echo json_encode(["error" => "الرصيد غير كافي"]);
+                } elseif ($done === 'حدث خطأ أثناء إضافة الدخل') {
+                    $conn->rollback();
+                    echo json_encode(["error" => "حدث خطأ أثناء إضافة الدخل"]);
+                } elseif ($done === true) {
+                    // تحديث حالة مفتاح الأمان قبل الـ commit
+                    $updateStmt = $conn->prepare("UPDATE idempotency_keys SET status = 'success' WHERE request_key = ?");
+                    $updateStmt->bind_param("s", $idempotency_key);
+                    $updateStmt->execute();
+                    $conn->commit();
+                    echo json_encode(["success" => "تمت إضافة المعاملة بنجاح"]);
+                } else {
+                    $conn->rollback();
+                    echo json_encode(["error" => "فشل في إدخال المعاملة"]);
+                }
+            } else {
+                // تحديث حالة مفتاح الأمان قبل الـ commit
+                $updateStmt = $conn->prepare("UPDATE idempotency_keys SET status = 'success' WHERE request_key = ?");
+                $updateStmt->bind_param("s", $idempotency_key);
+                $updateStmt->execute();
+                $conn->commit();
+                echo json_encode(["success" => "تمت إضافة المعاملة بنجاح"]);
+            }
         } else {
             $conn->rollback();
             echo json_encode(["error" => "فشل في إدخال المعاملة"]);
         }
+        // 2. استدعاء الدالة المالية (استخدام متغيراتك الأصلية)
+
     } catch (mysqli_sql_exception $e) {
         // 3. هنا يتم اصطياد أخطاء قاعدة البيانات فور حدوثها
         $conn->rollback();

@@ -1,6 +1,6 @@
 <?php
 
-function insert_tranaction($isUpdate, $type, $currency, $for_or_on, $sender_name, $receiver_name, $transfer_no, $ammount, $fees, $fees_income, $tra_date, $atm, $note, $client_id, $status, $selectFrom, $selectTo, $price, $conn) {
+function insert_tranaction($isUpdate, $type, $currency, $for_or_on, $sender_name, $sender_phone, $receiver_name, $receiver_phone, $transfer_no, $ammount, $fees, $fees_income, $tra_date, $atm, $note, $client_id, $status, $selectFrom, $selectTo, $price, $conn) {
     $stmt=$conn->prepare('SELECT TRA_ID FROM transaction WHERE TRANSFER_NO = ?');
     $stmt->bind_param("s",$transfer_no);
     $stmt->execute();
@@ -9,9 +9,9 @@ function insert_tranaction($isUpdate, $type, $currency, $for_or_on, $sender_name
         $done="توجد عملية سابقة بهذا الرقم بالفعل!";
         return $done;
     }
-    include 'total_ammounts_calc.php';
+    require_once 'total_ammounts_calc.php';
     if (!$isUpdate) {
-        include 'calc_result_of_transfer_btwn_accounts.php';
+        require_once 'calc_result_of_transfer_btwn_accounts.php';
     }
 
     $sum_ammounts = calc_total_ammounts($client_id, $conn);
@@ -85,9 +85,9 @@ function insert_tranaction($isUpdate, $type, $currency, $for_or_on, $sender_name
     }
 
     // تجهيز الاستعلام
-    $sql = "INSERT INTO transaction (TYPE,TRANSFER_NO, CURRENCY, FOR_OR_ON, SENDER_NAME,RECEIVER_NAME, AMMOUNT, TRA_FEES, TRA_DATE, ATM, NOTE, CLIENT_ID,sum_ammount_new,sum_ammount_old,sum_ammount_sa,STATUS,FROM_CURRENCY,PRICE,TO_CURRENCY,TRANSFERED_AMMOUNT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+    $sql = "INSERT INTO transaction (TYPE,TRANSFER_NO, CURRENCY, FOR_OR_ON, SENDER_NAME,SENDER_PHONE,RECEIVER_NAME,RECEIVER_PHONE, AMMOUNT, TRA_FEES, TRA_DATE, ATM, NOTE, CLIENT_ID,sum_ammount_new,sum_ammount_old,sum_ammount_sa,STATUS,FROM_CURRENCY,PRICE,TO_CURRENCY,TRANSFERED_AMMOUNT) VALUES (?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssddsssidddssdsd", $type, $transfer_no, $currency, $for_or_on, $sender_name, $receiver_name,
+    $stmt->bind_param("ssssssssddsssidddssdsd", $type, $transfer_no, $currency, $for_or_on, $sender_name, $sender_phone, $receiver_name, $receiver_phone,
             $ammount, $fees, $tra_date, $atm, $note, $client_id, $sum_ammount_new, $sum_ammount_old, $sum_ammount_sa, $status, $selectFrom, $price, $selectTo, $transfered_ammount);
     if ($stmt->execute()) {
         $tra_id = 0;

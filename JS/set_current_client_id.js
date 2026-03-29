@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
  */
 let currentClientId = null;
+let currentClientName = null;
+let currentClientPhone = null;
 
 document.addEventListener("click", function (e) {
     const client = e.target.closest(".clients-data");
@@ -11,6 +13,10 @@ document.addEventListener("click", function (e) {
         const clientId = rawId.replace(/\D/g, "");
         currentClientId = clientId;
         localStorage.setItem("currentClientId", currentClientId);
+        currentClientName = client.dataset.clientName;
+        localStorage.setItem("currentClientName", currentClientName);
+        currentClientPhone = client.dataset.clientPhone;
+        localStorage.setItem("currentClientPhone", currentClientPhone);
         window.location.href = "exchanges_list.php";
     }
 });

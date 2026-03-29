@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
  */
 
-currentClientId = localStorage.getItem("currentClientId");
+currentClientId   = localStorage.getItem("currentClientId");
+const currentClientName  = localStorage.getItem("currentClientName");
+const currentClientPhone = localStorage.getItem("currentClientPhone");
 const addExchangeFormOverlay = document.getElementById("addExchangeForm");
 const addExchangeForm = document.getElementById("add-exchange-form");
 const addExchangeBtn = document.getElementById("addExchangeBtn");
@@ -18,73 +20,6 @@ closeAddExchangeBtn.addEventListener("click", () => {
     addExchangeFormOverlay.classList.add("hidden");
 });
 
-// addExchangeForm.addEventListener("submit", function (e) {
-//     e.preventDefault();
-//     const formData = new FormData(this);
-//     formData.append("client_id", currentClientId);
-
-//     fetch("insert_transaction.php", {
-//         method: "POST",
-//         body: formData
-//     })
-//     .then(res => res.json())
-//     .then(response => {
-//                 console.log("first then");
-//         if (response.success) {
-//             alert(response.success + " ✅");
-//             this.reset();
-//             location.reload();
-//         } else {
-//             alert("❌ " + response.error);
-//         }
-//     })
-//             .catch(err => {
-//         console.error("خطأ:", err);
-//         alert("فشل الاتصال بالسيرفر  "+err);
-//     });
-// });
-
-// addExchangeForm.addEventListener("submit", function (e) {
-//     e.preventDefault();
-
-//     // // 1. تحديد الزر والعناصر
-//     // const submitBtn = document.getElementById('submit-btn');
-//     // const btnText = document.getElementById('btn-text');
-//     // const spinner = document.getElementById('spinner');
-
-//     // // 2. منع النقر المزدوج وتعطيل الزر فوراً
-//     // if (submitBtn.disabled) return;
-
-//     // submitBtn.disabled = true;
-//     // spinner.classList.remove("hidden"); // إظهار السبينر
-//     // btnText.innerText = "جاري الحفظ...";
-
-//     // const formData = new FormData(this);
-//     // formData.append("client_id", currentClientId);
-
-//     // fetch("insert_transaction.php", {
-//     //     method: "POST",
-//     //     body: formData
-//     // })
-//     //     .then(res => res.json())
-//     //     .then(response => {
-//     //         if (response.success) {
-//     //             alert(response.success + " ✅");
-//     //             this.reset();
-//     //             location.reload(); // هنا الصفحة ستتحدث ولن نحتاج لتفعيل الزر
-//     //         } else {
-//     //             alert("❌ " + response.error);
-//     //             // 3. في حال وجود خطأ منطقي (مثلاً رصيد غير كافٍ) نعيد الزر للعمل
-//     //             resetSubmitButton(submitBtn, btnText, spinner);
-//     //         }
-//     //     })
-//     //     .catch(err => {
-//     //         console.error("خطأ:", err);
-//     //         alert("فشل الاتصال بالسيرفر " + err);
-//     //         // 4. في حال فشل الاتصال بالشبكة نعيد الزر للعمل ليحاول المستخدم مرة أخرى
-//     //         resetSubmitButton(submitBtn, btnText, spinner);
-//     //     });
-// });
 
 // 1. ضع الدالة هنا (خارج أي مستمع أحداث) ليكون من السهل استدعاؤها مرة أخرى
 function sendTransactionData(force = false) {
@@ -93,6 +28,8 @@ function sendTransactionData(force = false) {
 
     // تأكد من جلب client_id ووضعه في الـ FormData
     formData.append("client_id", currentClientId);
+    formData.append("client_name", currentClientName);
+    formData.append("client_phone", currentClientPhone);
 
     if (force) {
         formData.append("force_save", "true");

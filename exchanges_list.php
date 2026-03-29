@@ -68,6 +68,14 @@ if (!isset($_SESSION['user_id'])) {
             align-items: center;
             justify-content: center;
         }
+
+        .client-name {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 20px;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -82,15 +90,19 @@ if (!isset($_SESSION['user_id'])) {
             <a href="index.php"><span class="close-modal" id="closeExchangeListBtn">&rarr;</span></a>
             <div class="exchanges-list-title">
                 <h2>قائمة العمليات (حوالات/ايداع)</h2>
+                <h3 id="client-name" class="client-name"> </h3>
             </div>
-            <input type="text" id="exchangeSearchInput" placeholder="🔍 ابحث عن مرسل، مستلم، رقم حوالة، نوع العملية، التاريخ..." class="search-input" />
+            <input type="text" id="exchangeSearchInput"
+                placeholder="🔍 ابحث عن مرسل، مستلم، رقم حوالة، نوع العملية، التاريخ..." class="search-input" />
 
             <div class="exchanges-list-container">
 
                 <div class="exchanges-list-header">
                     <h3>نوع العملية</h3>
                     <h3>اسم المرسل/المودع</h3>
+                    <h3>رقم المرسل</h3>
                     <h3>المستلم</h3>
+                    <h3>رقم المستلم</h3>
                     <h3 class="no-exchanges">رقم الحوالة</h3>
                     <h3>المبلغ</h3>
                     <h3>له/عليه</h3>
@@ -161,7 +173,8 @@ if (!isset($_SESSION['user_id'])) {
 
                 </select>
                 <div class="input-group" id="ammount-input-group">
-                    <input class="input-add-exchange" type="number" step="0.000000001" id="ammount" name="ammount" placeholder="المبلغ" required />
+                    <input class="input-add-exchange" type="number" step="0.000000001" id="ammount" name="ammount"
+                        placeholder="المبلغ" required />
                 </div>
                 <div class="input-group transfer-input-group hidden" id="transfer-input-group">
                     <select class="input-add-exchange " name="select-from" id="select-from">
@@ -171,7 +184,8 @@ if (!isset($_SESSION['user_id'])) {
                         <option value="sa">السعودي</option>
                     </select>
                     <div class="input-group" id="price-input-group">
-                        <input type="number" step="0.00001" class="input-add-exchange" id="price" name="price" placeholder="السعر">
+                        <input type="number" step="0.00001" class="input-add-exchange" id="price" name="price"
+                            placeholder="السعر">
                     </div>
                     <select class="input-add-exchange" name="select-to" id="select-to">
                         <option value="" disabled selected>إلى العملة</option>
@@ -182,27 +196,41 @@ if (!isset($_SESSION['user_id'])) {
 
                 </div>
                 <div class="input-group hidden" id="sender-input-group">
-                    <input type="text" class="input-add-exchange " id="sender" name="sender-name" placeholder=" المودع" />
+                    <input type="text" class="input-add-exchange " id="sender" name="sender-name"
+                        placeholder=" المودع" />
                 </div>
-                <div class="input-group hiddens" id="receiver-input-group">
-                    <input type="text" class="input-add-exchange" id="reciver-input" name="receiver-name" placeholder=" المستلم " />
+                <div class="input-group " id="sender-phone-input-group">
+                    <input type="text" class="input-add-exchange " id="sender-phone" name="sender-phone"
+                        placeholder=" رقم المودع" />
+                </div>
+                <div class="input-group hidden" id="receiver-input-group">
+                    <input type="text" class="input-add-exchange" id="reciver-input" name="receiver-name"
+                        placeholder=" المستلم " />
+                </div>
+                <div class="input-group " id="receiver-phone-input-group">
+                    <input type="text" class="input-add-exchange" id="receiver-phone" name="receiver-phone"
+                        placeholder=" رقم المستلم " />
                 </div>
 
                 <div class="input-group " id="transfer-no-input-group">
-                    <input type="text" class="input-add-exchange" id="transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
+                    <input type="text" class="input-add-exchange" id="transfer-no" name="transfer-no"
+                        placeholder="رقم الحوالة " />
                 </div>
 
 
                 <div class="input-group fees-inpt-grp">
-                    <input type="number" step="0.00001" class="input-add-exchange " id="fees" name="fees" placeholder="الرسوم">
+                    <input type="number" step="0.00001" class="input-add-exchange " id="fees" name="fees"
+                        placeholder="الرسوم">
                 </div>
                 <div class="input-group fees-inpt-grp" id="fees-income-input-grp">
-                    <input type="number" step="0.00001" class="input-add-exchange" name="fees-income" id="fees-income" placeholder="الرسوم لك">
+                    <input type="number" step="0.00001" class="input-add-exchange" name="fees-income" id="fees-income"
+                        placeholder="الرسوم لك">
                 </div>
 
                 <div class="input-group">
                     <label for="date">التاربخ</label>
-                    <input type="date" class="input-add-exchange " id="date" name="tra-date" placeholder="التاريخ والوقت" />
+                    <input type="date" class="input-add-exchange " id="date" name="tra-date"
+                        placeholder="التاريخ والوقت" />
                 </div>
                 <div class="input-group">
                     <input type="text" class="input-add-exchange" id="atm" name="atm" placeholder="الصراف" required />
@@ -234,7 +262,7 @@ if (!isset($_SESSION['user_id'])) {
                 <div class="edit-exchange-title">
                     <h3>تعديل بيانات العملية</h3>
                 </div>
-               
+
                 <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 
                 <input type="hidden" name="exchange_id" id="edit-exchange-id" />
@@ -311,11 +339,18 @@ if (!isset($_SESSION['user_id'])) {
                         <label for="edit-sender" id="label-edit-sender">المودع</label>
                         <input type="text" name="sender" id="edit-sender" placeholder="المودع" />
                     </div>
+                    <div class="input-group hidden" id="edit-sender-phone-input-group">
+                        <label for="edit-sender-phone" id="label-edit-sender-phone">رقم المودع</label>
+                        <input type="text" name="sender-phone" id="edit-sender-phone" placeholder="رقم المودع" />
+                    </div>
                     <div class="input-group hidden" id="edit-receiver-input-group">
                         <label for="reciver">المستلم</label>
                         <input type="text" id="reciver" name="receiver-name" placeholder="المستلم" />
                     </div>
-
+                    <div class="input-group hidden" id="edit-receiver-phone-input-group">
+                        <label for="edit-receiver-phone" id="label-edit-receiver-phone">رقم المستلم</label>
+                        <input type="text" name="receiver-phone" id="edit-receiver-phone" placeholder="رقم المستلم" />
+                    </div>
                     <div class="input-group" id="edit-transfer-no-input-group">
                         <label for="edit-transfer-no" id="label-edit-transfer-no">رقم الحوالة </label>
                         <input type="text" id="edit-transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
@@ -330,7 +365,8 @@ if (!isset($_SESSION['user_id'])) {
                     </div>
                     <div class="input-group edit-fees-inpt-grp" id="edit-fees-income-input-grp">
                         <label for="edit-fees-income">الرسوم لك</label>
-                        <input type="number" step="0.00001" name="fees-income" id="edit-fees-income" placeholder="الرسوم لك">
+                        <input type="number" step="0.00001" name="fees-income" id="edit-fees-income"
+                            placeholder="الرسوم لك">
                     </div>
 
                     <div class="input-group">
@@ -390,7 +426,7 @@ if (!isset($_SESSION['user_id'])) {
     <script src="JS/add_exchange.js?v=<?= filemtime('JS/add_exchange.js') ?>"></script>
 
     <script>
-        document.getElementById("exchangeSearchInput").addEventListener("input", function() {
+        document.getElementById("exchangeSearchInput").addEventListener("input", function () {
             const searchText = this.value.toLowerCase();
             const exchangeItems = document.querySelectorAll(".exchanges-data-container");
 
@@ -398,6 +434,14 @@ if (!isset($_SESSION['user_id'])) {
                 const textContent = item.innerText.toLowerCase();
                 item.style.display = textContent.includes(searchText) ? "block" : "none";
             });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const clientName = localStorage.getItem("currentClientName");
+            if (clientName) {
+                document.getElementById("client-name").innerText = "اسم العميل: " + clientName;
+            }
         });
     </script>
 

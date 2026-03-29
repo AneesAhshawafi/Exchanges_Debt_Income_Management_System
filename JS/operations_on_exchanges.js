@@ -36,19 +36,19 @@ function openDeleteModal(traNo) {
             method: "POST",
             body: formData
         })
-                .then(res => res.json())
-                .then(response => {
-                    if (response.success) {
-                        alert(response.success);
-                        closeModal("deleteModal");
-                        location.reload();
-                    } else {
-                        alert(response.error);
-                    }
-                })
-                .catch(err => {
-                    console.error("خطأ أثناء الحذف:", err);
-                });
+            .then(res => res.json())
+            .then(response => {
+                if (response.success) {
+                    alert(response.success);
+                    closeModal("deleteModal");
+                    location.reload();
+                } else {
+                    alert(response.error);
+                }
+            })
+            .catch(err => {
+                console.error("خطأ أثناء الحذف:", err);
+            });
     });
 }
 
@@ -158,13 +158,13 @@ function openDeleteModal(traNo) {
 //                 document.getElementById("shareModal").classList.remove("hidden");
 //                 const phone = await getClientPhone(currentClientId);
 //                 document.getElementById("shareBtn").addEventListener("click", () => {
-                   
-                   
+
+
 //                     shareExchange(textWithoutTotal + note,phone);
 //                 });
 //                 document.getElementById('shareWithTotalBtn').addEventListener("click", () => {
 //                     shareExchange(textWithoutTotal + getTextOfTotalAmmounts(traData) + note,phone);
-                    
+
 //                 });
 //             });
 
@@ -175,7 +175,7 @@ async function openShareModal(traNo) {
     try {
         const res = await fetch("share_exchange.php", {
             method: "POST",
-            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: "tra_no=" + encodeURIComponent(traNo)
         });
 
@@ -183,15 +183,15 @@ async function openShareModal(traNo) {
 
         // التعامل مع العملة
         let currency = traData.CURRENCY === 'new' ? 'ري قعيطي' :
-                       traData.CURRENCY === 'old' ? 'ري قديم' : 'ريال سعودي';
+            traData.CURRENCY === 'old' ? 'ري قديم' : 'ريال سعودي';
 
         let ammount = numberFormat(traData.AMMOUNT, 2);
 
         let textWithoutTotal = `*|بن عبود للصرافة والتحويلات|*\n`;
 
-                 if (traData.TYPE == 'حوالة') {
-                    if (traData.FOR_OR_ON == 'له') {
-                        textWithoutTotal += `(استلام حوالة)
+        if (traData.TYPE == 'حوالة') {
+            if (traData.FOR_OR_ON == 'له') {
+                textWithoutTotal += `(استلام حوالة)
 لكم ${ammount} ${currency}
 مقابل حوالة واردة عن طريق ${traData.ATM}
 المرسل: ${traData.SENDER_NAME}
@@ -200,9 +200,9 @@ async function openShareModal(traNo) {
 المبلغ: ${ammount} ${currency}
 التاريخ: ${traData.TRA_DATE}`;
 
-                    } else {
-                        traFees = numberFormat(traData.TRA_FEES, 2);
-                        textWithoutTotal += `(ارسال حوالة)
+            } else {
+                traFees = numberFormat(traData.TRA_FEES, 2);
+                textWithoutTotal += `(ارسال حوالة)
 عليكم ${ammount} ${currency}
 وخدمة تحويل : ${traFees} ${currency}
 مقابل حوالة صادرة عن طريق ${traData.ATM}
@@ -211,11 +211,11 @@ async function openShareModal(traNo) {
 رقم الحوالة: ${traData.TRANSFER_NO}
 المبلغ: ${ammount} ${currency}
 التاريخ: ${traData.TRA_DATE}`;
-                    }
+            }
 
-                } else if (traData.TYPE == 'إيداع') {
-                    if (traData.FOR_OR_ON == 'له') {
-                        textWithoutTotal += `(عملية إيداع لحسابك)
+        } else if (traData.TYPE == 'إيداع') {
+            if (traData.FOR_OR_ON == 'له') {
+                textWithoutTotal += `(عملية إيداع لحسابك)
 أودع ${traData.SENDER_NAME} لحسابكم مبلغ ${ammount} ${currency}
 عن طريق ${traData.ATM}
 المودع: ${traData.SENDER_NAME}
@@ -223,37 +223,37 @@ async function openShareModal(traNo) {
 المبلغ: ${ammount} ${currency}
 التاريخ: ${traData.TRA_DATE}
 رقم الإيداع : ${traData.TRANSFER_NO}`;
-                    } else {
-                        textWithoutTotal += `(سند قيد بسيط)
+            } else {
+                textWithoutTotal += `(سند قيد بسيط)
 تم تحويل مبلغ ${ammount} ${currency} من حسابك إلى حساب ${traData.RECEIVER_NAME}
 عن طريق ${traData.ATM}
 التاريخ: ${traData.TRA_DATE}
 رقم السند: ${traData.TRANSFER_NO}`;
-                    }
-                } else {
-                    if (traData.FROM_CURRENCY == 'new') {
-                        from_currency = 'ريال يمني قعيطي';
-                    } else if (traData.FROM_CURRENCY == 'old') {
-                        from_currency = 'ريال يمني قديم';
-                    } else {
-                        from_currency = 'ريال سعودي';
-                    }
-                    if (traData.TO_CURRENCY == 'new') {
-                        to_currency = 'ريال يمني قعيطي';
-                    } else if (traData.TO_CURRENCY == 'old') {
-                        to_currency = 'ريال يمني قديم';
-                    } else {
-                        to_currency = 'ريال سعودي';
-                    }
-                    transfered_ammount = numberFormat(traData.TRANSFERED_AMMOUNT, 2);
-                    priceTransfer = numberFormat(traData.PRICE, 5);
-                    textWithoutTotal += `(شراء عملة)
+            }
+        } else {
+            if (traData.FROM_CURRENCY == 'new') {
+                from_currency = 'ريال يمني قعيطي';
+            } else if (traData.FROM_CURRENCY == 'old') {
+                from_currency = 'ريال يمني قديم';
+            } else {
+                from_currency = 'ريال سعودي';
+            }
+            if (traData.TO_CURRENCY == 'new') {
+                to_currency = 'ريال يمني قعيطي';
+            } else if (traData.TO_CURRENCY == 'old') {
+                to_currency = 'ريال يمني قديم';
+            } else {
+                to_currency = 'ريال سعودي';
+            }
+            transfered_ammount = numberFormat(traData.TRANSFERED_AMMOUNT, 2);
+            priceTransfer = numberFormat(traData.PRICE, 5);
+            textWithoutTotal += `(شراء عملة)
 أضيف إلى حسابكم ${transfered_ammount} ${to_currency}
 مقابل خصم ${ammount} ${from_currency} من حسابكم
 من سعر ${priceTransfer} للريال الواحد
 رقم التحويل: ${traData.TRANSFER_NO}
 التاريخ: ${traData.TRA_DATE}`
-                }
+        }
 
         let note = traData.NOTE ? `\nملاحظة: ${traData.NOTE}` : '';
 
@@ -513,6 +513,8 @@ function openEditModal(traData) {
     document.getElementById("edit-sender").value = traData.SENDER_NAME;
 
     document.getElementById("reciver").value = traData.RECEIVER_NAME;
+    document.getElementById("edit-sender-phone").value = traData.SENDER_PHONE;
+    document.getElementById("edit-receiver-phone").value = traData.RECEIVER_PHONE;
 
     //    const editTransferInputGroup = document.getElementById('edit-transfer-no-input-group')
     const editStatusIn = document.getElementById('edit-status');
@@ -541,7 +543,7 @@ function openEditModal(traData) {
     document.getElementById("edit-fees").value = traData.TRA_FEES;
 
 
-//    document.getElementById("edit-date").value = traData.TRA_DATE.replace(' ', 'T').slice(0, 16);
+    //    document.getElementById("edit-date").value = traData.TRA_DATE.replace(' ', 'T').slice(0, 16);
 
 
     document.getElementById("edit-atm").value = traData.ATM;
@@ -549,85 +551,85 @@ function openEditModal(traData) {
     const editExchangeModal = document.getElementById("editExchangeModal");
     editExchangeModal.classList.remove("hidden");
 
-//    const transferOption=document.getElementById('transfer-option');
-    if (editOperSelectTypeInput.value == "حوالة") {
-        editSenderInputGroup.classList.remove('hidden');
-        editReceiverInputGroup.classList.remove('hidden');
-        editCurrency.classList.remove('hidden');
-        editForOrOnInptGrp.classList.remove('hidden');
-        editStatus.classList.remove('hidden');
-        Array.from(editTransferOperDiv).forEach(e => {
-            e.classList.add('hidden');
-        });
-        if (editForOrOn.value == 'عليه') {
-            Array.from(editFeesInp).forEach(e => {
-                e.classList.remove('hidden');
-                e.required = true;
-            });
-        } else {
-            Array.from(editFeesInp).forEach(e => {
-                e.classList.add('hidden');
-                e.required = false;
-            });
-        }
-        labelEditSender.textContent = 'اسم المرسل';
-        editSenderNameInput.placeholder = 'اسم المرسل';
-        labelEditTransferNO.textContent = 'رقم الحوالة';
-        editTransferNoInput.placeholder = 'رقم الحوالة';
-        editSenderNameInput.required = true;
-        editReceiverInput.required = true;
-        editSelectFrom.required = false;
-        editSelectTo.required = false;
-        editPrice.required = false;
-//        editAmmount.readOnly = false;
-    } else if (editOperSelectTypeInput.value == "إيداع") {
-        editSenderInputGroup.classList.remove('hidden');
-        editReceiverInputGroup.classList.remove('hidden');
-        editCurrency.classList.remove('hidden');
-        editForOrOnInptGrp.classList.remove('hidden');
-        editStatus.classList.add('hidden');
-        Array.from(editTransferOperDiv).forEach(e => {
-            e.classList.add('hidden');
-        });
-        Array.from(editFeesInp).forEach(e => {
-            e.classList.add('hidden');
-            e.required = false;
-        });
-        labelEditSender.textContent = 'اسم المودع';
-        editSenderNameInput.placeholder = 'اسم المودع';
-        editTransferNoInput.placeholder = 'رقم السند';
-        labelEditTransferNO.textContent = 'رقم السند';
-        editSenderNameInput.required = true;
-        editReceiverInput.required = true;
-        editSelectFrom.required = false;
-        editSelectTo.required = false;
-        editPrice.required = false;
-//        editAmmount.readOnly = false;
+    //    const transferOption=document.getElementById('transfer-option');
+    // if (editOperSelectTypeInput.value == "حوالة") {
+    //     editSenderInputGroup.classList.remove('hidden');
+    //     editReceiverInputGroup.classList.remove('hidden');
+    //     editCurrency.classList.remove('hidden');
+    //     editForOrOnInptGrp.classList.remove('hidden');
+    //     editStatus.classList.remove('hidden');
+    //     Array.from(editTransferOperDiv).forEach(e => {
+    //         e.classList.add('hidden');
+    //     });
+    //     if (editForOrOn.value == 'عليه') {
+    //         Array.from(editFeesInp).forEach(e => {
+    //             e.classList.remove('hidden');
+    //             e.required = true;
+    //         });
+    //     } else {
+    //         Array.from(editFeesInp).forEach(e => {
+    //             e.classList.add('hidden');
+    //             e.required = false;
+    //         });
+    //     }
+    //     labelEditSender.textContent = 'اسم المرسل';
+    //     editSenderNameInput.placeholder = 'اسم المرسل';
+    //     labelEditTransferNO.textContent = 'رقم الحوالة';
+    //     editTransferNoInput.placeholder = 'رقم الحوالة';
+    //     editSenderNameInput.required = true;
+    //     editReceiverInput.required = true;
+    //     editSelectFrom.required = false;
+    //     editSelectTo.required = false;
+    //     editPrice.required = false;
+    //     //        editAmmount.readOnly = false;
+    // } else if (editOperSelectTypeInput.value == "إيداع") {
+    //     editSenderInputGroup.classList.remove('hidden');
+    //     editReceiverInputGroup.classList.remove('hidden');
+    //     editCurrency.classList.remove('hidden');
+    //     editForOrOnInptGrp.classList.remove('hidden');
+    //     editStatus.classList.add('hidden');
+    //     Array.from(editTransferOperDiv).forEach(e => {
+    //         e.classList.add('hidden');
+    //     });
+    //     Array.from(editFeesInp).forEach(e => {
+    //         e.classList.add('hidden');
+    //         e.required = false;
+    //     });
+    //     labelEditSender.textContent = 'اسم المودع';
+    //     editSenderNameInput.placeholder = 'اسم المودع';
+    //     editTransferNoInput.placeholder = 'رقم السند';
+    //     labelEditTransferNO.textContent = 'رقم السند';
+    //     editSenderNameInput.required = true;
+    //     editReceiverInput.required = true;
+    //     editSelectFrom.required = false;
+    //     editSelectTo.required = false;
+    //     editPrice.required = false;
+    //     //        editAmmount.readOnly = false;
 
-    } else {
-        editTransferNoInput.placeholder = 'رقم التحويل';
-        labelEditTransferNO.textContent = 'رقم التحويل';
-        editSenderInputGroup.classList.add('hidden');
-        editReceiverInputGroup.classList.add('hidden');
-        Array.from(editTransferOperDiv).forEach(e => {
-            e.classList.remove('hidden');
-        });
-        editStatus.classList.add('hidden');
-        editCurrency.classList.add('hidden');
-        editForOrOnInptGrp.classList.add('hidden');
-        Array.from(editFeesInp).forEach(e => {
-            e.classList.add('hidden');
-            e.required = false;
-        });
-        editSenderNameInput.required = false;
-        editReceiverInput.required = false;
-        editSelectFrom.required = true;
+    // } else {
+    //     editTransferNoInput.placeholder = 'رقم التحويل';
+    //     labelEditTransferNO.textContent = 'رقم التحويل';
+    //     editSenderInputGroup.classList.add('hidden');
+    //     editReceiverInputGroup.classList.add('hidden');
+    //     Array.from(editTransferOperDiv).forEach(e => {
+    //         e.classList.remove('hidden');
+    //     });
+    //     editStatus.classList.add('hidden');
+    //     editCurrency.classList.add('hidden');
+    //     editForOrOnInptGrp.classList.add('hidden');
+    //     Array.from(editFeesInp).forEach(e => {
+    //         e.classList.add('hidden');
+    //         e.required = false;
+    //     });
+    //     editSenderNameInput.required = false;
+    //     editReceiverInput.required = false;
+    //     editSelectFrom.required = true;
 
-        editSelectTo.required = true;
-//        editAmmount.readOnly = true;
-        editPrice.required = true;
-    }
-
+    //     editSelectTo.required = true;
+    //     //        editAmmount.readOnly = true;
+    //     editPrice.required = true;
+    // }
+    editCheckState();
 
 
     const closeEditExchangeBtn = document.getElementById("closeEditExchangeListBtn");
@@ -643,17 +645,17 @@ function openEditModal(traData) {
             method: "POST",
             body: formData
         }).then(res => res.json())
-                .then(response => {
-                    if (response.success) {
-                        alert(response.success);
-                        editExchangeForm.reset();
-                        location.reload();
-                    } else {
-                        alert(response.error);
-                    }
-                }).catch(er => {
-            alert(er);
-        })
+            .then(response => {
+                if (response.success) {
+                    alert(response.success);
+                    editExchangeForm.reset();
+                    location.reload();
+                } else {
+                    alert(response.error);
+                }
+            }).catch(er => {
+                alert(er);
+            })
 
 
 
@@ -702,6 +704,6 @@ document.addEventListener('click', function (e) {
 });
 //document.querySelectorAll(".operation").forEach(icon => {
 //    icon.addEventListener("click", function () {
-//       
+//
 //    });
 //});

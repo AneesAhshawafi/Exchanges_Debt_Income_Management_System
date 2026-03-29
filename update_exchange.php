@@ -1,7 +1,7 @@
 <?php
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
 //include 'dbconn.php';
 //include 'update_sum_ammounts.php';
 header("Content-Type: application/json");

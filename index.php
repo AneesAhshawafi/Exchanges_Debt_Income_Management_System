@@ -60,6 +60,7 @@ include 'csrf_token.php';
                     <li><a class="active" href="index.php"> قسم الحوالات</a></li>
                     <li><a href="debt.php">قسم الديون</a></li>
                     <li><a href="income_list.php">قسم الدخل</a></li>
+                    <li><a href="search_transfer.php">بحث حوالة</a></li>
 
                     <!-- زر تسجيل الدخول -->
                     <li id="login-li">

@@ -151,7 +151,7 @@ body {
 .exchanges-list-header {
     min-width: max-content;
     display: grid;
-    grid-template-columns: repeat(14, 170px);
+    grid-template-columns: repeat(16, 170px);
     gap: 0.5rem;
     padding: 1rem;
     border-bottom: 1px solid rgba(99, 102, 241, 0.1);
@@ -662,7 +662,7 @@ span {
 
     .exchanges-data,
     .exchanges-list-header {
-        grid-template-columns: repeat(14, 140px);
+        grid-template-columns: repeat(16, 140px);
     }
 }
 
@@ -810,7 +810,7 @@ span {
 
     .exchanges-data,
     .exchanges-list-header {
-        grid-template-columns: repeat(14, 150px);
+        grid-template-columns: repeat(16, 150px);
         font-size: 10px;
     }
 

@@ -34,7 +34,7 @@ if ($result && $result->num_rows > 0) {
                 <i class="fas fa-edit oper-client" data-id="edit-client<?= htmlspecialchars($row["CLIENT_ID"]); ?>"></i>
                 <i class="fas fa-share-alt oper-client" data-id="share-client<?= htmlspecialchars($row["CLIENT_ID"]); ?>"></i>
             </div>
-            <div class="clients-data" data-id="clients-data<?= htmlspecialchars($row["CLIENT_ID"]); ?>">
+            <div class="clients-data" data-id="clients-data<?= htmlspecialchars($row["CLIENT_ID"]); ?>" data-client-name="<?= htmlspecialchars($row["CLIENT_NAME"]); ?>" data-client-phone="<?= htmlspecialchars($row["PHONE"]); ?>">
                 <h3 class="name" id="client-name<?= htmlspecialchars($row["CLIENT_ID"]); ?>">
                     <?= htmlspecialchars($row["CLIENT_NAME"]); ?>
                 </h3>
