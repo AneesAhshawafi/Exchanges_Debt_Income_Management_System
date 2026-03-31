@@ -21,11 +21,10 @@ function openDeleteClientModal(client_id) {
         })
         .then(response => {
             if (response.success) {
-                alert(response.success);
                 closeModal("deleteModal");
-                location.reload();
+                Swal.fire({ icon: 'success', title: 'تم بنجاح', text: response.success, timer: 1500, showConfirmButton: false }).then(() => { location.reload(); });
             } else {
-                alert(response.error);
+                Swal.fire({ icon: 'error', title: 'خطأ', text: response.error });
             }
         })
         .catch(err => {

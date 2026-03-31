@@ -59,7 +59,7 @@ function loadExchanges() {
                     exchangeDataContent = `
                         <div class="exchanges-data-container">
                                     <div class="oper">
-                                        <i  class="fas fa-trash-alt  operation" data-id="trash${row.TRA_ID}"></i>
+                                        <i  class="fas fa-trash-alt  operation" data-id="trash${row.TRA_ID}" data-type="${row.TYPE}" data-for-or-on="${row.FOR_OR_ON}" data-transfer-no="${row.TRANSFER_NO}"></i>
                                         <i class="fas fa-edit  operation" data-id="edit${row.TRA_ID}"> </i>
                                         <i class="fas fa-share-alt  operation" data-id="share${row.TRA_ID}"></i>
                                     </div>

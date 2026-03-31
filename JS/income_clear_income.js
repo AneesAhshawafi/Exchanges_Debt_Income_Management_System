@@ -6,13 +6,12 @@ document.getElementById('confirmClearIncomeBtn').addEventListener('click', funct
             .then(res => res.json())
             .then(response => {
                 if (response.messege) {
-                    alert(response.messege);
                     closeModal("clear-income-modal");
-                    location.reload();
+                    Swal.fire({ icon: 'success', title: 'تم بنجاح', text: response.messege, timer: 1500, showConfirmButton: false }).then(() => { location.reload(); });
                 } else {
-                    alert(response.error);
+                    Swal.fire({ icon: 'error', title: 'خطأ', text: response.error });
                 }
             }).catch(er => {
-        alert(er);
+        Swal.fire({ icon: 'error', title: 'خطأ في الاتصال', text: String(er) });
     });
 });

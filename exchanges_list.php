@@ -337,19 +337,20 @@ if (!isset($_SESSION['user_id'])) {
                     <!--</div>-->
                     <div class="input-group hidden" id="edit-sender-input-group">
                         <label for="edit-sender" id="label-edit-sender">المودع</label>
-                        <input type="text" name="sender" id="edit-sender" placeholder="المودع" />
+                        <input type="text" name="edit-sender-name" id="edit-sender" placeholder="المودع" />
                     </div>
                     <div class="input-group hidden" id="edit-sender-phone-input-group">
                         <label for="edit-sender-phone" id="label-edit-sender-phone">رقم المودع</label>
-                        <input type="text" name="sender-phone" id="edit-sender-phone" placeholder="رقم المودع" />
+                        <input type="text" name="edit-sender-phone" id="edit-sender-phone" placeholder="رقم المودع" />
                     </div>
                     <div class="input-group hidden" id="edit-receiver-input-group">
                         <label for="reciver">المستلم</label>
-                        <input type="text" id="reciver" name="receiver-name" placeholder="المستلم" />
+                        <input type="text" id="reciver" name="edit-receiver-name" placeholder="المستلم" />
                     </div>
                     <div class="input-group hidden" id="edit-receiver-phone-input-group">
                         <label for="edit-receiver-phone" id="label-edit-receiver-phone">رقم المستلم</label>
-                        <input type="text" name="receiver-phone" id="edit-receiver-phone" placeholder="رقم المستلم" />
+                        <input type="text" name="edit-receiver-phone" id="edit-receiver-phone"
+                            placeholder="رقم المستلم" />
                     </div>
                     <div class="input-group" id="edit-transfer-no-input-group">
                         <label for="edit-transfer-no" id="label-edit-transfer-no">رقم الحوالة </label>
@@ -392,7 +393,17 @@ if (!isset($_SESSION['user_id'])) {
     <!--End Edit Exchange Form-->
 
 
-
+    <!--Start Choose Client Modal-->
+    <div id="chooseClientModal" class="modal hidden" style="z-index:10">
+        <div class="modal-content">
+            <div class="shareModalBtns">
+                <button id="senderClientBtn" class="btn">مشاركة لصاحب الحساب </button>
+                <button id="receiverClientBtn" class="btn">مشاركة للمستلم </button>
+                <button onclick="closeModal('chooseClientModal')" class="btn">إغلاق</button>
+            </div>
+        </div>
+    </div>
+    <!--End Choose Client Modal-->
 
     <!--Start Share Modal-->
     <div id="shareModal" class="modal hidden">
@@ -406,6 +417,7 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     </div>
     <!--End Share Modal-->
+
 
     <!--Start Delete Modal-->
     <div id="deleteModal" class="modal hidden">

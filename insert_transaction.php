@@ -34,12 +34,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $type = trim($_POST["type"]);
     $currency = isset($_POST["currency"]) ? $_POST["currency"] : '';
     $for_or_on = isset($_POST["for-or-on"]) ? $_POST["for-or-on"] : '';
+    if ($for_or_on == 'عليه') {
+        $sender_name = isset($_POST["client_name"]) ? $_POST["client_name"] : '';
+        $sender_phone = isset($_POST["client_phone"]) ? $_POST["client_phone"] : '';
+        $receiver_name = isset($_POST["receiver-name"]) ? $_POST["receiver-name"] : '';
+        $receiver_phone = isset($_POST["receiver-phone"]) ? $_POST["receiver-phone"] : '';
 
-    // $sender_name = isset($_POST["sender-name"]) ? $_POST["sender-name"] : '';
-    $sender_name = isset($_POST["client_name"]) ? $_POST["client_name"] : '';
-    $sender_phone = isset($_POST["client_phone"]) ? $_POST["client_phone"] : '';
-    $receiver_name = isset($_POST["receiver-name"]) ? $_POST["receiver-name"] : '';
-    $receiver_phone = isset($_POST["receiver-phone"]) ? $_POST["receiver-phone"] : '';
+    } else {
+        $sender_name = isset($_POST["sender-name"]) ? $_POST["sender-name"] : '';
+        $sender_phone = isset($_POST["sender-phone"]) ? $_POST["sender-phone"] : '';
+        $receiver_name = isset($_POST["client_name"]) ? $_POST["client_name"] : '';
+        $receiver_phone = isset($_POST["client_phone"]) ? $_POST["client_phone"] : '';
+
+    }
+
     $transfer_no = trim($_POST["transfer-no"]);
     $ammount = floatval($_POST["ammount"]);
     $fees = isset($_POST['fees']) ? floatval($_POST["fees"]) : 0;

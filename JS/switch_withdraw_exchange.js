@@ -82,21 +82,7 @@ function checkState() {
         selectFrom.required = false;
         selectTo.required = false;
         price.required = false;
-        if (forOrOn.value == 'عليه') {
-            senderInputGroup.classList.add('hidden');
-            receiverInputGroup.classList.remove('hidden');
-            senderPhoneInputGroup.classList.add('hidden');
-            receiverPhoneInputGroup.classList.remove('hidden');
-            senderPhoneInput.required = false;
-            receiverPhoneInput.required = true;
-        } else {
-            senderInputGroup.classList.remove('hidden');
-            receiverInputGroup.classList.add('hidden');
-            senderPhoneInputGroup.classList.remove('hidden');
-            receiverPhoneInputGroup.classList.add('hidden');
-            senderPhoneInput.required = true;
-            receiverPhoneInput.required = false;
-        }
+
     } else {
         transferNoInput.placeholder = 'رقم التحويل';
         senderInputGroup.classList.add('hidden');
@@ -117,6 +103,25 @@ function checkState() {
         selectFrom.required = true;
         selectTo.required = true;
         price.required = true;
+    }
+    if (forOrOn.value == 'عليه') {
+        senderInputGroup.classList.add('hidden');
+        receiverInputGroup.classList.remove('hidden');
+        senderPhoneInputGroup.classList.add('hidden');
+        receiverPhoneInputGroup.classList.remove('hidden');
+        senderPhoneInput.required = false;
+        senderNameInput.required = false;
+        receiverPhoneInput.required = true;
+        receiverInput.required = true;
+    } else {
+        senderInputGroup.classList.remove('hidden');
+        receiverInputGroup.classList.add('hidden');
+        senderPhoneInputGroup.classList.remove('hidden');
+        receiverPhoneInputGroup.classList.add('hidden');
+        senderPhoneInput.required = true;
+        senderNameInput.required = false;
+        receiverPhoneInput.required = false;
+        receiverInput.required = false;
     }
 }
 
