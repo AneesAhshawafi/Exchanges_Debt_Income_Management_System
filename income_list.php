@@ -51,6 +51,7 @@ if (!isset($_SESSION['user_id'])) {
                         <li><a href="debt.php">قسم الديون</a></li>
                         <li><a  class="active" href="income_list.php">قسم الدخل</a></li>
                         <li><a href="search_transfer.php">بحث حوالة</a></li>
+                        <li><a href="pupblic_exchage/public_exchanges_page.php">الحوالات العامة</a></li>
 
                         <!-- زر تسجيل الدخول -->   <li id="login-li">
                             <a href="logout.php" class="login-buttn">تسجيل الخروج</a>

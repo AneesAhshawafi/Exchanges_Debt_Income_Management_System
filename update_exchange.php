@@ -81,7 +81,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($type === 'إيداع') {
             $status = 'تمت';
         }
-        if ($type === 'إيداع' || $for_or_on === 'له') {
+        if ($type === 'سحب') {
+            $status = 'تمت';
+            $for_or_on = 'عليه';
+            $fees = 0;
+            $fees_income = 0;
+            $sender_name = '';
+            $receiver_name = '';
+            $sender_phone = '';
+            $receiver_phone = '';
+        }
+        if ($type === 'إيداع' || $type === 'سحب' || $for_or_on === 'له') {
             $fees = 0;
             $fees_income = 0;
         }
@@ -128,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $result = $stmt->get_result();
                 if ($row = $result->fetch_assoc()) {
                     $tra_date = $row['TRA_DATE'];
-                    if (strtotime($tra_date) >= strtotime('2026-03-31')) {
+                    if (strtotime($tra_date) >= strtotime('2026-04-06')) {
                         if (!delete_exchange($row['TRA_ID'], $client_id, $conn)) {
                             throw new Exception("حدث خطأ أثناء حذف حوالة الإيداع المرتبطة.");
                         }

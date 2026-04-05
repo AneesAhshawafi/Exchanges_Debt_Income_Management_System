@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['TRA_ID'])) {
             if ($row = $result->fetch_assoc()) {
                 $tra_date = $row['TRA_DATE'];
 
-                if (strtotime($tra_date) >= strtotime('2026-03-31')) {
+                if (strtotime($tra_date) >= strtotime('2026-04-06')) {
                     if (!delete_exchange($row['TRA_ID'], $client_id, $conn)) {
                         throw new Exception("حدث خطأ أثناء حذف حوالة الإيداع المرتبطة.");
                     }

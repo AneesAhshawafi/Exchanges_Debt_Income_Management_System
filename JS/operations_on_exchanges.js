@@ -119,6 +119,10 @@ async function openShareModal(traData) {
 التاريخ: ${traData.TRA_DATE}
 رقم السند: ${traData.TRANSFER_NO}`;
             }
+        } else if (traData.TYPE == 'سحب') {
+            textWithoutTotal += `(سند قيد)
+تم سحب مبلغ ${ammount} ${currency} من رصيدكم بتاريخ ${traData.TRA_DATE} عبر ${traData.ATM}
+رقم السند: ${traData.TRANSFER_NO}`;
         } else {
             if (traData.FROM_CURRENCY == 'new') {
                 from_currency = 'ريال يمني قعيطي';
@@ -445,12 +449,16 @@ document.addEventListener('click', async function (e) {
             traData = null;
             exchangesListData.forEach(row => {
                 if (row.TRA_ID == traNo) {
-
                     traData = row;
                 }
             });
 
-            openEditModal(traData);
+            // توجيه التعديل حسب نوع العملية
+            if (traData && traData.TYPE === 'سحب') {
+                openEditSanadModal(traData);
+            } else {
+                openEditModal(traData);
+            }
         } else {
             traData = await getTraData(traNo);
             if (traData.TYPE == 'إيداع' && traData.FOR_OR_ON == 'عليه') {

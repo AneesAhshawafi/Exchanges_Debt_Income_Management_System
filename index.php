@@ -61,6 +61,7 @@ include 'csrf_token.php';
                     <li><a href="debt.php">قسم الديون</a></li>
                     <li><a href="income_list.php">قسم الدخل</a></li>
                     <li><a href="search_transfer.php">بحث حوالة</a></li>
+                    <li><a href="pupblic_exchage/public_exchanges_page.php">الحوالات العامة</a></li>
 
                     <!-- زر تسجيل الدخول -->
                     <li id="login-li">

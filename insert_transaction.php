@@ -94,7 +94,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($type === 'إيداع') {
             $status = 'تمت';
         }
-        if ($type === 'إيداع' || $for_or_on === 'له') {
+        if ($type === 'سحب') {
+            $status = 'تمت';
+            $for_or_on = 'عليه';
+            $fees = 0;
+            $fees_income = 0;
+            $sender_name = '';
+            $receiver_name = '';
+            $sender_phone = '';
+            $receiver_phone = '';
+        }
+        if ($type === 'إيداع' || $type === 'سحب' || $for_or_on === 'له') {
             $fees = 0;
             $fees_income = 0;
         }

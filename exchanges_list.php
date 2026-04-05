@@ -123,6 +123,9 @@ if (!isset($_SESSION['user_id'])) {
         <button class="plus-icon open-modal-btn" id="addExchangeBtn">
             <i class="fas fa-plus   "></i>
         </button>
+        <button class="plus-icon open-modal-btn" id="addSanadBtn" style="top: 20vh; background: linear-gradient(135deg, #ef4444, #dc2626);" title="سند قيد (سحب)">
+            <i class="fas fa-minus"></i>
+        </button>
     </div>
 
     <!-- End exchanges List -->
@@ -419,6 +422,91 @@ if (!isset($_SESSION['user_id'])) {
     <!--End Share Modal-->
 
 
+    <!--Start Add Sanad Form-->
+    <div id="addSanadForm" class="modal-overlay hidden">
+        <div class="add-exchange">
+            <form class="add-exchange-form" id="add-sanad-form" action="" method="POST">
+                <span class="close-modal close-modal-form" id="closeAddSanadBtn">&rarr;</span>
+                <div class="add-exchange-title">
+                    <h3>إضافة سند قيد (سحب)</h3>
+                </div>
+                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
+                <?php $sanad_idempotency_token = bin2hex(random_bytes(16)); ?>
+                <input type="hidden" name="idempotency_key" value="<?php echo $sanad_idempotency_token; ?>">
+
+                <div class="input-group">
+                    <input class="input-add-exchange" type="number" step="0.000000001" id="sanad-ammount" name="ammount"
+                        placeholder="المبلغ" required />
+                </div>
+                <select class="input-add-exchange" name="currency" id="sanad-currency" required>
+                    <option value="" disabled selected>اختر العملة</option>
+                    <option value="new">قعيطي</option>
+                    <option value="old">قديم</option>
+                    <option value="sa">سعودي</option>
+                </select>
+                <div class="input-group">
+                    <label for="sanad-date">التاريخ</label>
+                    <input type="date" class="input-add-exchange" id="sanad-date" name="tra-date" />
+                </div>
+                <div class="input-group">
+                    <input type="text" class="input-add-exchange" id="sanad-atm" name="atm" placeholder="الصراف" required />
+                </div>
+                <div class="input-group">
+                    <input class="input-add-exchange" type="text" id="sanad-note" name="note" placeholder="ملاحظة" />
+                </div>
+                <button class="btn" type="submit" id="sanad-submit-btn">
+                    <span id="sanad-btn-text" style="font-size:1.3rem">حفظ</span>
+                    <span id="sanad-spinner" class="spinner hidden"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+    <!--End Add Sanad Form-->
+
+    <!--Start Edit Sanad Form-->
+    <div id="editSanadModal" class="modal-overlay hidden">
+        <div class="edit-exchangef">
+            <form class="edit-exchange-form" id="edit-sanad-form" action="" method="POST">
+                <span class="close-modal close-modal-form" id="closeEditSanadBtn">&rarr;</span>
+                <div class="edit-exchange-title">
+                    <h3>تعديل سند قيد (سحب)</h3>
+                </div>
+                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
+                <input type="hidden" name="exchange_id" id="edit-sanad-exchange-id" />
+                <input type="hidden" name="transfer-no" id="edit-sanad-transfer-no" />
+                <div class="edit-exchange-form-body">
+                    <div class="input-group">
+                        <label for="edit-sanad-ammount">المبلغ</label>
+                        <input type="number" step="0.000000001" name="ammount" id="edit-sanad-ammount" placeholder="المبلغ" required />
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-sanad-currency">العملة</label>
+                        <select name="currency" id="edit-sanad-currency" required>
+                            <option value="" disabled selected>اختر العملة</option>
+                            <option value="new">قعيطي</option>
+                            <option value="old">قديم</option>
+                            <option value="sa">سعودي</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-sanad-date">التاريخ</label>
+                        <input type="date" name="date" id="edit-sanad-date" />
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-sanad-atm">الصراف</label>
+                        <input type="text" name="atm" id="edit-sanad-atm" placeholder="الصراف" required />
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-sanad-note">ملاحظة</label>
+                        <input type="text" name="note" id="edit-sanad-note" placeholder="ملاحظة" />
+                    </div>
+                    <button class="btn" type="submit">تحديث</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--End Edit Sanad Form-->
+
     <!--Start Delete Modal-->
     <div id="deleteModal" class="modal hidden">
         <div class="modal-content">
@@ -436,6 +524,7 @@ if (!isset($_SESSION['user_id'])) {
     <script src="JS/operations_on_exchanges.js?v=<?= filemtime('JS/operations_on_exchanges.js') ?>"></script>
     <script src="JS/lazy_loading_exchanges.js?v=<?= filemtime('JS/lazy_loading_exchanges.js') ?>"></script>
     <script src="JS/add_exchange.js?v=<?= filemtime('JS/add_exchange.js') ?>"></script>
+    <script src="JS/add_sanad.js?v=<?= filemtime('JS/add_sanad.js') ?>"></script>
 
     <script>
         document.getElementById("exchangeSearchInput").addEventListener("input", function () {

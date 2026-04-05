@@ -73,6 +73,64 @@
     margin-bottom: 1.5rem;
 }
 
+/* Search Type Toggle (Radio Buttons) */
+.search-type-toggle {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    padding: 0.35rem;
+    border: 2px solid rgba(99, 102, 241, 0.1);
+}
+
+.search-type-option {
+    flex: 1;
+    cursor: pointer;
+    position: relative;
+}
+
+.search-type-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.search-type-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1rem;
+    border-radius: calc(var(--border-radius) - 2px);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: all 0.25s ease;
+    text-align: center;
+}
+
+.search-type-label i {
+    font-size: 1rem;
+    transition: all 0.25s ease;
+}
+
+.search-type-option:hover .search-type-label {
+    color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.search-type-option.active .search-type-label {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.search-type-option.active .search-type-label i {
+    color: #fff;
+}
+
 .search-form .search-input-field {
     flex: 1;
     padding: 0.875rem 1.25rem;
@@ -290,6 +348,36 @@
     opacity: 0.7;
     cursor: not-allowed;
     transform: none;
+}
+
+/* Share Receipt Button */
+.share-receipt-btn {
+    display: flex;
+    width: calc(100% - 3rem);
+    margin: 0 1.5rem 1.5rem;
+    padding: 0.875rem;
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.share-receipt-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    filter: brightness(1.1);
+}
+
+.share-receipt-btn:active {
+    transform: translateY(0);
 }
 
 /* Not Found */
