@@ -26,7 +26,6 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="CSS/GlobalRulesStyle.css" />
     <!-- تنسيقات الوضع الليلي -->
     <link rel="stylesheet" href="CSS/indexxStyle.css?v=<?= filemtime('CSS/indexxStyle.css') ?>">
-    <!--  <link rel="stylesheet" href="../CSS/darkMode.css" />-->
     <!-- إعدادات خطوط Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -54,11 +53,6 @@ if (!isset($_SESSION['user_id'])) {
                 transform: rotate(360deg);
             }
         }
-
-        /* فئة للإخفاء
-        .hidden {
-            display: none;
-        } */
 
         /* تحسين شكل الزر عند التعطيل */
         .btn:disabled {
@@ -130,270 +124,20 @@ if (!isset($_SESSION['user_id'])) {
 
     <!-- End exchanges List -->
 
-    <!-- Start Add Exchange Form -->
+    <?php
+    include 'csrf_token.php';
+    ?>
 
-    <div id="addExchangeForm" class="modal-overlay hidden">
-        <div class="add-exchange">
-            <form class="add-exchange-form" id="add-exchange-form" action="" method="POST">
-                <span class="close-modal close-modal-form" id="closeAddExchangeBtn">&rarr;</span>
-                <div class="add-exchange-title">
-                    <h3>اضافة عملية حوالة/ايداع</h3>
-                </div>
-                <!-- توليد رمز فريد لكل مرة تفتح فيها الصفحة حل مشكلة إعادة إرسال النموذج عند تحديث الصفحة أو الضغط على زر الرجوع بعد الإرسال، مما يمنع تكرار العمليات غير المقصودة. -->
-                <?php
-                include 'csrf_token.php';
-                // توليد رمز فريد لكل مرة تفتح فيها الصفحة
-                $idempotency_token = bin2hex(random_bytes(16));
-                ?>
-                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
-
-                <!-- تضمين الحقل المخفي في النموذج من اجل إرسال الرمز مع بيانات النموذج -->
-                <input type="hidden" name="idempotency_key" value="<?php echo $idempotency_token; ?>">
-
-                <select class="input-add-exchange" name="type" id="oper-type-input">
-                    <option value="" disabled selected>اختر نوع العملية</option>
-                    <option value="حوالة">حوالة</option>
-                    <option value="إيداع">إيداع</option>
-                    <option value="تحويل">تحويل بين الحسابات</option>
-                </select>
-                <select class="input-add-exchange hidden" name="currency" id="currency">
-                    <option value="" disabled selected>اختر العملة</option>
-                    <option value="new">قعيطي</option>
-                    <option value="old">قديم</option>
-                    <option value="sa">سعودي</option>
-                </select>
-                <select class="input-add-exchange hidden" name="for-or-on" id="for-or-on">
-                    <option value="" disabled selected>له / عليه</option>
-                    <option value="له">له</option>
-                    <option value="عليه">عليه</option>
-                </select>
-                <select class="input-add-exchange hidden" name="status" id="status">
-                    <option value="" disabled selected>حالة الحوالة</option>
-
-                    <option value="استلمت">استلمت</option>
-
-                    <option value="لم تستلم">لم تستلم</option>
-
-                </select>
-                <div class="input-group" id="ammount-input-group">
-                    <input class="input-add-exchange" type="number" step="0.000000001" id="ammount" name="ammount"
-                        placeholder="المبلغ" required />
-                </div>
-                <div class="input-group transfer-input-group hidden" id="transfer-input-group">
-                    <select class="input-add-exchange " name="select-from" id="select-from">
-                        <option value="" disabled selected>التحويل من العملة</option>
-                        <option value="new">القعيطي</option>
-                        <option value="old">القديم</option>
-                        <option value="sa">السعودي</option>
-                    </select>
-                    <div class="input-group" id="price-input-group">
-                        <input type="number" step="0.00001" class="input-add-exchange" id="price" name="price"
-                            placeholder="السعر">
-                    </div>
-                    <select class="input-add-exchange" name="select-to" id="select-to">
-                        <option value="" disabled selected>إلى العملة</option>
-                        <option value="new">القعيطي</option>
-                        <option value="old">القديم</option>
-                        <option value="sa">السعودي</option>
-                    </select>
-
-                </div>
-                <div class="input-group hidden" id="sender-input-group">
-                    <input type="text" class="input-add-exchange " id="sender" name="sender-name"
-                        placeholder=" المودع" />
-                </div>
-                <div class="input-group " id="sender-phone-input-group">
-                    <input type="text" class="input-add-exchange " id="sender-phone" name="sender-phone"
-                        placeholder=" رقم المودع" />
-                </div>
-                <div class="input-group hidden" id="receiver-input-group">
-                    <input type="text" class="input-add-exchange" id="reciver-input" name="receiver-name"
-                        placeholder=" المستلم " />
-                </div>
-                <div class="input-group " id="receiver-phone-input-group">
-                    <input type="text" class="input-add-exchange" id="receiver-phone" name="receiver-phone"
-                        placeholder=" رقم المستلم " />
-                </div>
-
-                <div class="input-group " id="transfer-no-input-group">
-                    <input type="text" class="input-add-exchange" id="transfer-no" name="transfer-no"
-                        placeholder="رقم الحوالة " />
-                </div>
-
-
-                <div class="input-group fees-inpt-grp">
-                    <input type="number" step="0.00001" class="input-add-exchange " id="fees" name="fees"
-                        placeholder="الرسوم">
-                </div>
-                <div class="input-group fees-inpt-grp" id="fees-income-input-grp">
-                    <input type="number" step="0.00001" class="input-add-exchange" name="fees-income" id="fees-income"
-                        placeholder="الرسوم لك">
-                </div>
-
-                <div class="input-group">
-                    <label for="date">التاربخ</label>
-                    <input type="date" class="input-add-exchange " id="date" name="tra-date"
-                        placeholder="التاريخ والوقت" />
-                </div>
-                <div class="input-group">
-                    <input type="text" class="input-add-exchange" id="atm" name="atm" placeholder="الصراف" required />
-                </div>
-
-                <div class="input-group">
-                    <input class="input-add-exchange" type="text" id="note" name="note" placeholder=" ملاحظة" />
-                </div>
-
-                <!-- <button class="btn" type="submit" id="submit-btn" name="submit-exchange">حفظ</button> -->
-                <button class="btn" type="submit" id="submit-btn" name="submit-exchange">
-                    <span id="btn-text" style="font-size:1.3rem">حفظ</span>
-                    <!-- حفظ -->
-                    <span id="spinner" class="spinner hidden"></span>
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- End Add Exchange Form -->
-
-
-
-    <!--Start Edit Exchange Form-->
-    <div id="editExchangeModal" class="modal-overlay    hidden">
-        <div class="edit-exchangef">
-            <form class="edit-exchange-form" id="edit-exchange-form" action="" method="POST">
-                <span class="close-modal close-modal-form" id="closeEditExchangeListBtn">&rarr;</span>
-                <div class="edit-exchange-title">
-                    <h3>تعديل بيانات العملية</h3>
-                </div>
-
-                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
-
-                <input type="hidden" name="exchange_id" id="edit-exchange-id" />
-                <div class="edit-exchange-form-body">
-                    <div class="input-group">
-                        <label for="edit-type">اختر نوع العملية</label>
-                        <select name="type" id="edit-type">
-                            <option value="" disabled selected>اختر نوع العملية</option>
-                            <option value="حوالة">حوالة</option>
-                            <option value="إيداع">إيداع</option>
-                            <option value="تحويل">تحويل بين الحسابات</option>
-                        </select>
-                    </div>
-                    <div class="input-group hidden" id="edit-currency-input-grp">
-                        <label for="edit-currency">اختر العملة</label>
-                        <select name="currency" id="edit-currency">
-                            <option value="" disabled selected>اختر العملة</option>
-                            <option value="new">قعيطي</option>
-                            <option value="old">قديم</option>
-                            <option value="sa">سعودي</option>
-                        </select>
-                    </div>
-                    <div class="input-group hidden" id="edit-for-or-on-input-grp">
-                        <label for="edit-for-or-on">له / عليه</label>
-                        <select name="for-or-on" id="edit-for-or-on">
-                            <option value="" disabled selected>له / عليه</option>
-                            <option value="له">له</option>
-                            <option value="عليه">عليه</option>
-                        </select>
-                    </div>
-                    <div class="input-group" id="edit-ammount-input-group">
-                        <label for="edit-ammount">المبلغ</label>
-                        <input type="number" name="ammount" id="edit-ammount" placeholder="المبلغ" />
-                    </div>
-
-
-                    <div class="input-group hidden" id="edit-status-input-grp">
-                        <label for="edit-status">حالة الحوالة</label>
-                        <select name="status" id="edit-status">
-                            <option value="" disabled selected>حالة الحوالة</option>
-                            <option value="استلمت">استلمت</option>
-                            <option value="لم تستلم">لم تستلم</option>
-                        </select>
-                    </div>
-
-
-                    <!--<div class="input-group transfer-input-group" id="edit-transfer-input-group">-->
-
-                    <div class="input-group edit-transfer-input-group hidden">
-                        <label for="edit-select-from">التحويل من العملة</label>
-                        <select class="" name="select-from" id="edit-select-from">
-                            <option value="" disabled selected>التحويل من العملة</option>
-                            <option value="new">القعيطي</option>
-                            <option value="old">القديم</option>
-                            <option value="sa">السعودي</option>
-                        </select>
-                    </div>
-                    <div class="input-group edit-transfer-input-group hidden" id="edit-price-input-group">
-                        <label for="price">السعر</label>
-                        <input type="number" step="0.00001" id="edit-price" name="price" placeholder="السعر">
-                    </div>
-
-                    <div class="input-group edit-transfer-input-group hidden">
-                        <label for="edit-select-to">الى العملة</label>
-                        <select class="" name="select-to" id="edit-select-to">
-                            <option value="" disabled selected>الى العملة</option>
-                            <option value="new">القعيطي</option>
-                            <option value="old">القديم</option>
-                            <option value="sa">السعودي</option>
-                        </select>
-                    </div>
-                    <!--</div>-->
-                    <div class="input-group hidden" id="edit-sender-input-group">
-                        <label for="edit-sender" id="label-edit-sender">المودع</label>
-                        <input type="text" name="edit-sender-name" id="edit-sender" placeholder="المودع" />
-                    </div>
-                    <div class="input-group hidden" id="edit-sender-phone-input-group">
-                        <label for="edit-sender-phone" id="label-edit-sender-phone">رقم المودع</label>
-                        <input type="text" name="edit-sender-phone" id="edit-sender-phone" placeholder="رقم المودع" />
-                    </div>
-                    <div class="input-group hidden" id="edit-receiver-input-group">
-                        <label for="reciver">المستلم</label>
-                        <input type="text" id="reciver" name="edit-receiver-name" placeholder="المستلم" />
-                    </div>
-                    <div class="input-group hidden" id="edit-receiver-phone-input-group">
-                        <label for="edit-receiver-phone" id="label-edit-receiver-phone">رقم المستلم</label>
-                        <input type="text" name="edit-receiver-phone" id="edit-receiver-phone"
-                            placeholder="رقم المستلم" />
-                    </div>
-                    <div class="input-group" id="edit-transfer-no-input-group">
-                        <label for="edit-transfer-no" id="label-edit-transfer-no">رقم الحوالة </label>
-                        <input type="text" id="edit-transfer-no" name="transfer-no" placeholder="رقم الحوالة " />
-                    </div>
-                    <div class="input-group">
-                        <label for="edit-date">التاربخ</label>
-                        <input class="date" type="date" name="date" id="edit-date" placeholder="التاريخ والوقت" />
-                    </div>
-                    <div class="input-group edit-fees-inpt-grp" id="edit-fees-input-grp">
-                        <label for="edit-fees">الرسوم</label>
-                        <input type="number" step="0.00001" name="fees" id="edit-fees" placeholder="الرسوم">
-                    </div>
-                    <div class="input-group edit-fees-inpt-grp" id="edit-fees-income-input-grp">
-                        <label for="edit-fees-income">الرسوم لك</label>
-                        <input type="number" step="0.00001" name="fees-income" id="edit-fees-income"
-                            placeholder="الرسوم لك">
-                    </div>
-
-                    <div class="input-group">
-                        <label for="edit-atm">الصراف</label>
-                        <input type="text" name="atm" id="edit-atm" placeholder="الصراف" required />
-                    </div>
-                    <div class="input-group">
-                        <label for="edit-note">ملاحظة</label>
-                        <input type="text" id="edit-note" name="note" placeholder=" ملاحظة" />
-                    </div>
-
-
-                    <button class="btn" type="submit" name="submit-edit-exchange">تحديث</button>
-                </div>
-            </form>
-
-        </div>
-
-    </div>
-
-
-
-    <!--End Edit Exchange Form-->
+    <!-- تضمين الفورمات المنفصلة -->
+    <?php include 'forms/type_selector.php'; ?>
+    <?php include 'forms/add_hawala_form.php'; ?>
+    <?php include 'forms/edit_hawala_form.php'; ?>
+    <?php include 'forms/add_deposit_form.php'; ?>
+    <?php include 'forms/edit_deposit_form.php'; ?>
+    <?php include 'forms/add_transfer_form.php'; ?>
+    <?php include 'forms/edit_transfer_form.php'; ?>
+    <?php include 'forms/add_sanad_form.php'; ?>
+    <?php include 'forms/edit_sanad_form.php'; ?>
 
 
     <!--Start Choose Client Modal-->
@@ -422,91 +166,6 @@ if (!isset($_SESSION['user_id'])) {
     <!--End Share Modal-->
 
 
-    <!--Start Add Sanad Form-->
-    <div id="addSanadForm" class="modal-overlay hidden">
-        <div class="add-exchange">
-            <form class="add-exchange-form" id="add-sanad-form" action="" method="POST">
-                <span class="close-modal close-modal-form" id="closeAddSanadBtn">&rarr;</span>
-                <div class="add-exchange-title">
-                    <h3>إضافة سند قيد (سحب)</h3>
-                </div>
-                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
-                <?php $sanad_idempotency_token = bin2hex(random_bytes(16)); ?>
-                <input type="hidden" name="idempotency_key" value="<?php echo $sanad_idempotency_token; ?>">
-
-                <div class="input-group">
-                    <input class="input-add-exchange" type="number" step="0.000000001" id="sanad-ammount" name="ammount"
-                        placeholder="المبلغ" required />
-                </div>
-                <select class="input-add-exchange" name="currency" id="sanad-currency" required>
-                    <option value="" disabled selected>اختر العملة</option>
-                    <option value="new">قعيطي</option>
-                    <option value="old">قديم</option>
-                    <option value="sa">سعودي</option>
-                </select>
-                <div class="input-group">
-                    <label for="sanad-date">التاريخ</label>
-                    <input type="date" class="input-add-exchange" id="sanad-date" name="tra-date" />
-                </div>
-                <div class="input-group">
-                    <input type="text" class="input-add-exchange" id="sanad-atm" name="atm" placeholder="الصراف" required />
-                </div>
-                <div class="input-group">
-                    <input class="input-add-exchange" type="text" id="sanad-note" name="note" placeholder="ملاحظة" />
-                </div>
-                <button class="btn" type="submit" id="sanad-submit-btn">
-                    <span id="sanad-btn-text" style="font-size:1.3rem">حفظ</span>
-                    <span id="sanad-spinner" class="spinner hidden"></span>
-                </button>
-            </form>
-        </div>
-    </div>
-    <!--End Add Sanad Form-->
-
-    <!--Start Edit Sanad Form-->
-    <div id="editSanadModal" class="modal-overlay hidden">
-        <div class="edit-exchangef">
-            <form class="edit-exchange-form" id="edit-sanad-form" action="" method="POST">
-                <span class="close-modal close-modal-form" id="closeEditSanadBtn">&rarr;</span>
-                <div class="edit-exchange-title">
-                    <h3>تعديل سند قيد (سحب)</h3>
-                </div>
-                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
-                <input type="hidden" name="exchange_id" id="edit-sanad-exchange-id" />
-                <input type="hidden" name="transfer-no" id="edit-sanad-transfer-no" />
-                <div class="edit-exchange-form-body">
-                    <div class="input-group">
-                        <label for="edit-sanad-ammount">المبلغ</label>
-                        <input type="number" step="0.000000001" name="ammount" id="edit-sanad-ammount" placeholder="المبلغ" required />
-                    </div>
-                    <div class="input-group">
-                        <label for="edit-sanad-currency">العملة</label>
-                        <select name="currency" id="edit-sanad-currency" required>
-                            <option value="" disabled selected>اختر العملة</option>
-                            <option value="new">قعيطي</option>
-                            <option value="old">قديم</option>
-                            <option value="sa">سعودي</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label for="edit-sanad-date">التاريخ</label>
-                        <input type="date" name="date" id="edit-sanad-date" />
-                    </div>
-                    <div class="input-group">
-                        <label for="edit-sanad-atm">الصراف</label>
-                        <input type="text" name="atm" id="edit-sanad-atm" placeholder="الصراف" required />
-                    </div>
-                    <div class="input-group">
-                        <label for="edit-sanad-note">ملاحظة</label>
-                        <input type="text" name="note" id="edit-sanad-note" placeholder="ملاحظة" />
-                    </div>
-                    <button class="btn" type="submit">تحديث</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!--End Edit Sanad Form-->
-
     <!--Start Delete Modal-->
     <div id="deleteModal" class="modal hidden">
         <div class="modal-content">
@@ -520,7 +179,7 @@ if (!isset($_SESSION['user_id'])) {
     <script>
         let exchangesListData = new Array();
     </script>
-    <script src="JS/switch_withdraw_exchange.js?v=<?= filemtime('JS/switch_withdraw_exchange.js') ?>"></script>
+    <script src="JS/forms_handler.js?v=<?= filemtime('JS/forms_handler.js') ?>"></script>
     <script src="JS/operations_on_exchanges.js?v=<?= filemtime('JS/operations_on_exchanges.js') ?>"></script>
     <script src="JS/lazy_loading_exchanges.js?v=<?= filemtime('JS/lazy_loading_exchanges.js') ?>"></script>
     <script src="JS/add_exchange.js?v=<?= filemtime('JS/add_exchange.js') ?>"></script>
@@ -546,29 +205,6 @@ if (!isset($_SESSION['user_id'])) {
         });
     </script>
 
-    <!-- كود جافا سكربت من اجل التحقق من زر حفظ العملية لمنع الارسال المتكرر -->
-    <!-- <script>
-        document.getElementById('add-exchange-form').addEventListener('submit', function(e) {
-            const submitBtn = document.getElementById('submit-btn');
-            const btnText = document.getElementById('btn-text');
-            const spinner = document.getElementById('spinner');
-
-            // إذا كان الزر معطلاً لا تفعل شيئاً
-            if (submitBtn.disabled) {
-                e.preventDefault();
-                return false;
-            }
-
-            // 1. تعطيل الزر لمنع النقرة الثانية
-            submitBtn.disabled = true;
-
-            // 2. إظهار الـ Spinner وتغيير النص
-            spinner.classList.remove('hidden');
-            btnText.innerText = 'جاري الحفظ...';
-
-            // 3. السماح للنموذج بالإرسال إلى PHP
-        });
-    </script> -->
-    </<body>
+    </body>
 
 </html>

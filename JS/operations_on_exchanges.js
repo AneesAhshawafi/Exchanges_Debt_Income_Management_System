@@ -107,15 +107,18 @@ async function openShareModal(traData) {
                 textWithoutTotal += `(عملية إيداع لحسابك)
 أودع ${traData.SENDER_NAME} لحسابكم مبلغ ${ammount} ${currency}
 عن طريق ${traData.ATM}
-المودع: ${traData.SENDER_NAME}
-المستلم: ${traData.RECEIVER_NAME}
-المبلغ: ${ammount} ${currency}
+المودع: ${traData.SENDER_NAME}`;
+                if (traData.SENDER_PHONE) textWithoutTotal += `\nرقم المودع: ${traData.SENDER_PHONE}`;
+                textWithoutTotal += `\nالمستلم: ${traData.RECEIVER_NAME}`;
+                if (traData.RECEIVER_PHONE) textWithoutTotal += `\nرقم المستلم: ${traData.RECEIVER_PHONE}`;
+                textWithoutTotal += `\nالمبلغ: ${ammount} ${currency}
 التاريخ: ${traData.TRA_DATE}
 رقم الإيداع : ${traData.TRANSFER_NO}`;
             } else {
                 textWithoutTotal += `(سند قيد بسيط)
-تم تحويل مبلغ ${ammount} ${currency} من حسابك إلى حساب ${traData.RECEIVER_NAME}
-عن طريق ${traData.ATM}
+تم تحويل مبلغ ${ammount} ${currency} من حسابك إلى حساب ${traData.RECEIVER_NAME}`;
+                if (traData.RECEIVER_PHONE) textWithoutTotal += `\nرقم المستلم: ${traData.RECEIVER_PHONE}`;
+                textWithoutTotal += `\nعن طريق ${traData.ATM}
 التاريخ: ${traData.TRA_DATE}
 رقم السند: ${traData.TRANSFER_NO}`;
             }
@@ -158,7 +161,6 @@ async function openShareModal(traData) {
 
         // جلب رقم العميل بشكل صحيح
         const phone = await getClientPhone(traData.CLIENT_ID);
-        // const phone = currentClientPhone;
 
         if (!phone) {
             showMessage("لا يوجد رقم هاتف للعميل");
@@ -171,7 +173,6 @@ async function openShareModal(traData) {
         };
         document.getElementById("shareWithTotalBtn").onclick = () => {
             shareExchange(textWithoutTotal + getTextOfTotalAmmounts(traData) + note, phone);
-            // return [textWithoutTotal + getTextOfTotalAmmounts(traData) + note, phone];
         };
     } catch (err) {
         console.error("خطأ أثناء جلب بيانات الحوالة:", err);
@@ -313,120 +314,160 @@ function shareExchange(text, phone) {
 }
 
 
+// ===== دالة عامة لإرسال فورم التعديل =====
+function submitEditForm(form, modalId) {
+    const formData = new FormData(form);
+    formData.append("client_id", currentClientId);
+    formData.append("client_phone", currentClientPhone);
+    formData.append("client_name", currentClientName);
 
-
-
-
-function openEditModal(traData) {
-
-
-    if (!traData) {
-
-        console.error("بيانات التعديل غير موجودة");
-
-        return;
-
-    }
-
-    document.getElementById("edit-exchange-id").value = traData.TRA_ID;
-
-
-    document.getElementById("edit-type").value = traData.TYPE;
-
-
-
-    document.getElementById("edit-currency").value = traData.CURRENCY;
-
-
-
-    document.getElementById("edit-for-or-on").value = traData.FOR_OR_ON;
-
-
-
-    document.getElementById("edit-sender").value = traData.SENDER_NAME;
-
-    document.getElementById("reciver").value = traData.RECEIVER_NAME;
-    document.getElementById("edit-sender-phone").value = traData.SENDER_PHONE;
-    document.getElementById("edit-receiver-phone").value = traData.RECEIVER_PHONE;
-
-    //    const editTransferInputGroup = document.getElementById('edit-transfer-no-input-group')
-    const editStatusIn = document.getElementById('edit-status');
-    const transfer_no = document.getElementById("edit-transfer-no");
-    transfer_no.value = traData.TRANSFER_NO;
-    editStatusIn.value = traData.STATUS;
-    if (traData.TYPE == 'حوالة') {
-        editStatus.classList.remove('hidden');
-    }
-    editSelectFrom.value = traData.FROM_CURRENCY;
-    editSelectFrom.addEventListener("mousedown", function (e) {
-        e.preventDefault();
-    });
-
-    editSelectTo.value = traData.TO_CURRENCY;
-    editSelectTo.addEventListener("mousedown", function (e) {
-        e.preventDefault();
-    });
-    document.getElementById('edit-price').value = traData.PRICE;
-
-
-    document.getElementById("edit-ammount").value = traData.AMMOUNT;
-
-
-
-    document.getElementById("edit-fees").value = traData.TRA_FEES;
-
-
-    //    document.getElementById("edit-date").value = traData.TRA_DATE.replace(' ', 'T').slice(0, 16);
-
-
-    document.getElementById("edit-atm").value = traData.ATM;
-    document.getElementById("edit-note").value = traData.NOTE;
-    const editExchangeModal = document.getElementById("editExchangeModal");
-    editExchangeModal.classList.remove("hidden");
-    editCheckState();
-    const closeEditExchangeBtn = document.getElementById("closeEditExchangeListBtn");
-    const editExchangeForm = document.getElementById("edit-exchange-form");
-    editExchangeForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const formData = new FormData(editExchangeForm);
-        formData.append("client_id", currentClientId);
-        formData.append("client_phone", currentClientPhone);
-        formData.append("client_name", currentClientName);
-        fetch("update_exchange.php", {
-            method: "POST",
-            body: formData
-        }).then(res => res.json())
-            .then(response => {
-                // إزالة الـ focus من أي عنصر داخل المودال قبل فتح SweetAlert
-                // لتفادي تحذير aria-hidden الذي يحدث عندما يكون زر داخل المودال محدداً
-                if (document.activeElement) document.activeElement.blur();
-                if (response.success) {
-                    closeModal('editExchangeModal');
-                    editExchangeForm.reset();
-                    Swal.fire({ icon: 'success', title: 'تم بنجاح', text: response.success, timer: 1500, showConfirmButton: false }).then(() => { location.reload(); });
-                } else {
-                    Swal.fire({ icon: 'error', title: 'خطأ', text: response.error });
-                }
-            }).catch(er => {
-                if (document.activeElement) document.activeElement.blur();
-                Swal.fire({ icon: 'error', title: 'خطأ في الاتصال', text: String(er) });
-            })
-
-
-
-    });
-
-    closeEditExchangeBtn.addEventListener("click", () => {
-        closeModal('editExchangeModal');
-        editExchangeForm.reset();
-    });
-
+    fetch("update_exchange.php", {
+        method: "POST",
+        body: formData
+    }).then(res => res.json())
+        .then(response => {
+            if (document.activeElement) document.activeElement.blur();
+            if (response.success) {
+                closeModal(modalId);
+                form.reset();
+                Swal.fire({ icon: 'success', title: 'تم بنجاح', text: response.success, timer: 1500, showConfirmButton: false }).then(() => { location.reload(); });
+            } else {
+                Swal.fire({ icon: 'error', title: 'خطأ', text: response.error });
+            }
+        }).catch(er => {
+            if (document.activeElement) document.activeElement.blur();
+            Swal.fire({ icon: 'error', title: 'خطأ في الاتصال', text: String(er) });
+        });
 }
 
+
+// ===== فتح فورم تعديل حوالة =====
+function openEditHawalaModal(traData) {
+    if (!traData) { console.error("بيانات التعديل غير موجودة"); return; }
+
+    // 1. استنساخ الفورم أولاً لإزالة المستمعات القديمة
+    const editForm = document.getElementById("edit-hawala-form");
+    const newForm = editForm.cloneNode(true);
+    editForm.parentNode.replaceChild(newForm, editForm);
+
+    // 2. تعبئة البيانات بعد الاستنساخ
+    document.getElementById("edit-hawala-id").value = traData.TRA_ID;
+    document.getElementById("edit-hawala-currency").value = traData.CURRENCY;
+    document.getElementById("edit-hawala-for-or-on").value = traData.FOR_OR_ON;
+    document.getElementById("edit-hawala-status").value = traData.STATUS;
+    document.getElementById("edit-hawala-transfer-no").value = traData.TRANSFER_NO;
+    document.getElementById("edit-hawala-ammount").value = traData.AMMOUNT;
+    document.getElementById("edit-hawala-date").value = traData.TRA_DATE;
+    document.getElementById("edit-hawala-atm").value = traData.ATM;
+    document.getElementById("edit-hawala-note").value = traData.NOTE;
+    document.getElementById("edit-hawala-fees").value = traData.TRA_FEES;
+
+    // تعبئة الاسم حسب for_or_on
+    if (traData.FOR_OR_ON === 'له') {
+        document.getElementById("edit-hawala-sender").value = traData.SENDER_NAME;
+        document.getElementById("edit-hawala-receiver").value = '';
+    } else {
+        document.getElementById("edit-hawala-receiver").value = traData.RECEIVER_NAME;
+        document.getElementById("edit-hawala-sender").value = '';
+    }
+
+    // 3. إعادة ربط toggle بعد الاستنساخ
+    setupHawalaToggle('edit-hawala-for-or-on', 'edit-hawala-sender-row', 'edit-hawala-receiver-row', 'edit-hawala-fees-row');
+
+    // تشغيل التبديل
+    const forOrOn = document.getElementById("edit-hawala-for-or-on");
+    if (forOrOn) forOrOn.dispatchEvent(new Event('change'));
+
+    // 4. ربط الإرسال
+    newForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitEditForm(newForm, 'editHawalaModal');
+    });
+
+    document.getElementById("editHawalaModal").classList.remove("hidden");
+}
+
+
+// ===== فتح فورم تعديل إيداع =====
+function openEditDepositModal(traData) {
+    if (!traData) { console.error("بيانات التعديل غير موجودة"); return; }
+
+    // 1. استنساخ الفورم أولاً
+    const editForm = document.getElementById("edit-deposit-form");
+    const newForm = editForm.cloneNode(true);
+    editForm.parentNode.replaceChild(newForm, editForm);
+
+    // 2. تعبئة البيانات بعد الاستنساخ
+    document.getElementById("edit-deposit-id").value = traData.TRA_ID;
+    document.getElementById("edit-deposit-currency").value = traData.CURRENCY;
+    document.getElementById("edit-deposit-for-or-on").value = traData.FOR_OR_ON;
+    document.getElementById("edit-deposit-transfer-no").value = traData.TRANSFER_NO;
+    document.getElementById("edit-deposit-ammount").value = traData.AMMOUNT;
+    document.getElementById("edit-deposit-date").value = traData.TRA_DATE;
+    document.getElementById("edit-deposit-atm").value = traData.ATM;
+    document.getElementById("edit-deposit-note").value = traData.NOTE;
+
+    // تعبئة الاسم والرقم حسب for_or_on
+    if (traData.FOR_OR_ON === 'له') {
+        document.getElementById("edit-deposit-sender").value = traData.SENDER_NAME;
+        document.getElementById("edit-deposit-sender-phone").value = traData.SENDER_PHONE;
+        document.getElementById("edit-deposit-receiver").value = '';
+        document.getElementById("edit-deposit-receiver-phone").value = '';
+    } else {
+        document.getElementById("edit-deposit-receiver").value = traData.RECEIVER_NAME;
+        document.getElementById("edit-deposit-receiver-phone").value = traData.RECEIVER_PHONE;
+        document.getElementById("edit-deposit-sender").value = '';
+        document.getElementById("edit-deposit-sender-phone").value = '';
+    }
+
+    // 3. إعادة ربط toggle بعد الاستنساخ
+    setupDepositToggle('edit-deposit-for-or-on', 'edit-deposit-sender-row', 'edit-deposit-receiver-row');
+
+    const forOrOn = document.getElementById("edit-deposit-for-or-on");
+    if (forOrOn) forOrOn.dispatchEvent(new Event('change'));
+
+    // 4. ربط الإرسال
+    newForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitEditForm(newForm, 'editDepositModal');
+    });
+
+    document.getElementById("editDepositModal").classList.remove("hidden");
+}
+
+
+// ===== فتح فورم تعديل تحويل =====
+function openEditTransferModal(traData) {
+    if (!traData) { console.error("بيانات التعديل غير موجودة"); return; }
+
+    // 1. استنساخ الفورم أولاً
+    const editForm = document.getElementById("edit-transfer-form");
+    const newForm = editForm.cloneNode(true);
+    editForm.parentNode.replaceChild(newForm, editForm);
+
+    // 2. تعبئة البيانات بعد الاستنساخ
+    document.getElementById("edit-transfer-id").value = traData.TRA_ID;
+    document.getElementById("edit-transfer-select-from").value = traData.FROM_CURRENCY;
+    document.getElementById("edit-transfer-select-to").value = traData.TO_CURRENCY;
+    document.getElementById("edit-transfer-ammount").value = traData.AMMOUNT;
+    document.getElementById("edit-transfer-price").value = traData.PRICE;
+    document.getElementById("edit-transfer-transfer-no").value = traData.TRANSFER_NO;
+    document.getElementById("edit-transfer-date").value = traData.TRA_DATE;
+    document.getElementById("edit-transfer-atm").value = traData.ATM;
+    document.getElementById("edit-transfer-note").value = traData.NOTE;
+
+    // 3. ربط الإرسال
+    newForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitEditForm(newForm, 'editTransferModal');
+    });
+
+    document.getElementById("editTransferModal").classList.remove("hidden");
+}
+
+
 function closeModal(id) {
-
     document.getElementById(id).classList.add("hidden");
-
 }
 
 
@@ -454,10 +495,16 @@ document.addEventListener('click', async function (e) {
             });
 
             // توجيه التعديل حسب نوع العملية
-            if (traData && traData.TYPE === 'سحب') {
-                openEditSanadModal(traData);
-            } else {
-                openEditModal(traData);
+            if (traData) {
+                if (traData.TYPE === 'سحب') {
+                    openEditSanadModal(traData);
+                } else if (traData.TYPE === 'حوالة') {
+                    openEditHawalaModal(traData);
+                } else if (traData.TYPE === 'إيداع') {
+                    openEditDepositModal(traData);
+                } else if (traData.TYPE === 'تحويل') {
+                    openEditTransferModal(traData);
+                }
             }
         } else {
             traData = await getTraData(traNo);
@@ -472,7 +519,6 @@ document.addEventListener('click', async function (e) {
                     await openShareModal(traData);
                 });
             } else {
-                // traData = await getTraData(traNo);
                 await openShareModal(traData);
             }
 

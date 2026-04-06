@@ -1,32 +1,16 @@
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
+/**
+ * add_exchange.js — منطق إرسال فورم الإضافة (حوالة / إيداع / تحويل)
  */
 
-currentClientId   = localStorage.getItem("currentClientId");
-const currentClientName  = localStorage.getItem("currentClientName");
+currentClientId = localStorage.getItem("currentClientId");
+const currentClientName = localStorage.getItem("currentClientName");
 const currentClientPhone = localStorage.getItem("currentClientPhone");
-const addExchangeFormOverlay = document.getElementById("addExchangeForm");
-const addExchangeForm = document.getElementById("add-exchange-form");
-const addExchangeBtn = document.getElementById("addExchangeBtn");
-const closeAddExchangeBtn = document.getElementById("closeAddExchangeBtn");
 
-
-addExchangeBtn.addEventListener("click", () => {
-    addExchangeFormOverlay.classList.remove("hidden");
-});
-
-closeAddExchangeBtn.addEventListener("click", () => {
-    addExchangeFormOverlay.classList.add("hidden");
-});
-
-
-// 1. ضع الدالة هنا (خارج أي مستمع أحداث) ليكون من السهل استدعاؤها مرة أخرى
-function sendTransactionData(force = false) {
-    const form = document.getElementById("add-exchange-form");
+// ===== دالة إرسال عامة =====
+function sendFormData(formId, overlayId, force = false) {
+    const form = document.getElementById(formId);
     const formData = new FormData(form);
 
-    // تأكد من جلب client_id ووضعه في الـ FormData
     formData.append("client_id", currentClientId);
     formData.append("client_name", currentClientName);
     formData.append("client_phone", currentClientPhone);
@@ -35,19 +19,15 @@ function sendTransactionData(force = false) {
         formData.append("force_save", "true");
     }
 
-    // const submitBtn = document.getElementById('submit-btn');
-    // submitBtn.disabled = true;
-    // // 1. تحديد الزر والعناصر
-    const submitBtn = document.getElementById('submit-btn');
-    const btnText = document.getElementById('btn-text');
-    const spinner = document.getElementById('spinner');
+    const submitBtn = form.querySelector('.form-submit-btn');
+    const btnText = submitBtn ? submitBtn.querySelector('.btn-text') : null;
+    const spinner = submitBtn ? submitBtn.querySelector('.btn-spinner') : null;
 
-    // 2. منع النقر المزدوج وتعطيل الزر فوراً
-    if (!force && submitBtn.disabled) return;
+    if (!force && submitBtn && submitBtn.disabled) return;
 
-    submitBtn.disabled = true;
-    spinner.classList.remove("hidden"); // إظهار السبينر
-    btnText.innerText = "جاري الحفظ...";
+    if (submitBtn) submitBtn.disabled = true;
+    if (spinner) spinner.classList.remove("hidden");
+    if (btnText) btnText.innerText = "جاري الحفظ...";
 
     fetch("insert_transaction.php", {
         method: "POST",
@@ -56,12 +36,11 @@ function sendTransactionData(force = false) {
         .then(res => res.json())
         .then(response => {
             if (response.is_duplicate) {
-                // استدعاء SweetAlert عند اكتشاف تكرار البيانات
                 Swal.fire({
                     title: 'عملية مكررة!',
                     text: response.message,
                     icon: 'warning',
-                    target: '#addExchangeForm', // حدد معرف الفورم الطافي هنا لكي يظهر التنبيه بداخله
+                    target: '#' + overlayId,
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -70,8 +49,7 @@ function sendTransactionData(force = false) {
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // استدعاء الدالة نفسها مرة أخرى مع تمرير true
-                        sendTransactionData(true);
+                        sendFormData(formId, overlayId, true);
                     } else {
                         location.reload();
                     }
@@ -81,7 +59,7 @@ function sendTransactionData(force = false) {
                     icon: 'success',
                     title: 'تم بنجاح',
                     text: response.success,
-                    target: '#addExchangeForm',
+                    target: '#' + overlayId,
                     timer: 500,
                     showConfirmButton: false
                 }).then(() => {
@@ -92,32 +70,44 @@ function sendTransactionData(force = false) {
                     icon: 'error',
                     title: 'خطأ',
                     text: response.error,
-                    target: '#addExchangeForm',
+                    target: '#' + overlayId,
                 });
-                resetSubmitButton(submitBtn, btnText, spinner);
+                resetFormButton(submitBtn, btnText, spinner);
             }
         })
         .catch(err => {
             console.error("Error details:", err);
-            // هنا كان الخطأ، تأكد من استخدام err وليس response
             Swal.fire({
                 icon: 'error',
                 title: 'فشل الاتصال',
                 text: 'حدث خطأ في الشبكة أو السيرفر: ' + err.message,
-                target: '#addExchangeForm',
+                target: '#' + overlayId,
             });
-            resetSubmitButton(submitBtn, btnText, spinner);
+            resetFormButton(submitBtn, btnText, spinner);
         });
 }
 
-// 2. هنا نقوم بـ "استدعاء" الدالة عند ضغط المستخدم على زر الحفظ
-addExchangeForm.addEventListener("submit", function (e) {
-    e.preventDefault(); // منع الإرسال التقليدي
-    sendTransactionData(false); // استدعاء الدالة للمرة الأولى (بدون فرض حفظ)
-});
-// وظيفة لإعادة الزر لحالته الطبيعية
-function resetSubmitButton(btn, text, spinner) {
-    btn.disabled = false;
-    spinner.classList.add("hidden");
-    text.innerText = "حفظ";
+function resetFormButton(btn, text, spinner) {
+    if (btn) btn.disabled = false;
+    if (spinner) spinner.classList.add("hidden");
+    if (text) text.innerText = "حفظ";
 }
+
+// ===== ربط الفورمات =====
+// حوالة
+document.getElementById('add-hawala-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    sendFormData('add-hawala-form', 'addHawalaForm');
+});
+
+// إيداع
+document.getElementById('add-deposit-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    sendFormData('add-deposit-form', 'addDepositForm');
+});
+
+// تحويل
+document.getElementById('add-transfer-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    sendFormData('add-transfer-form', 'addTransferForm');
+});

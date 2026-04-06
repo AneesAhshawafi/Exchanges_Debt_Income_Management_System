@@ -5,16 +5,7 @@
 // ========== فورم الإضافة ==========
 const addSanadFormOverlay = document.getElementById("addSanadForm");
 const addSanadForm = document.getElementById("add-sanad-form");
-const addSanadBtn = document.getElementById("addSanadBtn");
-const closeAddSanadBtn = document.getElementById("closeAddSanadBtn");
-
-addSanadBtn.addEventListener("click", () => {
-    addSanadFormOverlay.classList.remove("hidden");
-});
-
-closeAddSanadBtn.addEventListener("click", () => {
-    addSanadFormOverlay.classList.add("hidden");
-});
+// فتح وإغلاق المودال يتم عبر forms_handler.js
 
 // دالة إرسال بيانات سند القيد
 function sendSanadData(force = false) {
@@ -187,8 +178,5 @@ function openEditSanadModal(traData) {
             });
     });
 
-    document.getElementById("closeEditSanadBtn").addEventListener("click", () => {
-        closeModal('editSanadModal');
-        newEditForm.reset();
-    });
+    // الإغلاق يتم عبر data-close في forms_handler.js
 }
