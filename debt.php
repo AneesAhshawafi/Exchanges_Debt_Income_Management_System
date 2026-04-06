@@ -50,6 +50,8 @@ include 'total_ammounts_calc.php';
                         <li><a  href="index.php"> قسم الحوالات</a></li>
                         <li><a class="active" href="debt.php">قسم الديون</a></li>
                         <li><a href="income_list.php">قسم الدخل</a></li>
+                        <li><a href="search_transfer.php">بحث حوالة</a></li>
+                        <li><a href="pupblic_exchage/public_exchanges_page.php">الحوالات العامة</a></li>
 
                         <!-- زر تسجيل الدخول -->   <li id="login-li">
                             <a href="logout.php" class="login-buttn">تسجيل الخروج</a>

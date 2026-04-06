@@ -34,19 +34,18 @@ function openDeleteModal(traNo) {
             method: "POST",
             body: formData
         })
-                .then(res => res.json())
-                .then(response => {
-                    if (response.success) {
-                        alert(response.success);
-                        closeModal("deleteModal");
-                        location.reload();
-                    } else {
-                        alert(response.error);
-                    }
-                })
-                .catch(err => {
-                    console.error("خطأ أثناء الحذف:", err);
-                });
+            .then(res => res.json())
+            .then(response => {
+                if (response.success) {
+                    closeModal("deleteModal");
+                    Swal.fire({ icon: 'success', title: 'تم بنجاح', text: response.success, timer: 1500, showConfirmButton: false }).then(() => { location.reload(); });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'خطأ', text: response.error });
+                }
+            })
+            .catch(err => {
+                console.error("خطأ أثناء الحذف:", err);
+            });
     });
 }
 
@@ -57,57 +56,57 @@ function openShareModal(traNo) {
 
         method: "POST",
 
-        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
 
         body: "debt_id=" + encodeURIComponent(traNo)
 
     })
 
-            .then(res => res.json())
+        .then(res => res.json())
 
-            .then(data => {
-                traData = data;
+        .then(data => {
+            traData = data;
 
-                if (traData.CURRENCY == 'new') {
-                    currency = ' ريال قعيطي ';
-                } else if (traData.CURRENCY == 'old') {
-                    currency = 'ريال قديم';
-                } else {
-                    currency = 'ريال سعودي';
-                }
-                ammount = numberFormat(traData.AMMOUNT, 2);
-                textWithoutTotal = `*{بقالة بن عبود}*
+            if (traData.CURRENCY == 'new') {
+                currency = ' ريال قعيطي ';
+            } else if (traData.CURRENCY == 'old') {
+                currency = 'ريال قديم';
+            } else {
+                currency = 'ريال سعودي';
+            }
+            ammount = numberFormat(traData.AMMOUNT, 2);
+            textWithoutTotal = `*{بقالة بن عبود}*
 `;
-                if (traData.FOR_OR_ON == 'عليه') {
-                    textWithoutTotal += `
+            if (traData.FOR_OR_ON == 'عليه') {
+                textWithoutTotal += `
 عليكم ${ammount} ${currency} `;
 
-                } else {
-                    textWithoutTotal += `
-لكم ${ammount} ${currency} `;
-                }
+            } else {
                 textWithoutTotal += `
+لكم ${ammount} ${currency} `;
+            }
+            textWithoutTotal += `
 مقابل ${traData.DESCRIPTION}
 المبلغ: ${ammount} ${currency}
 التاريخ: ${traData.DEBT_DATE}`;
-                if (traData.NOTE) {
-                    textWithoutTotal += `
+            if (traData.NOTE) {
+                textWithoutTotal += `
 ملاحظة:
 ${traData.NOTE}`;
-                }
+            }
 
-                const shareText = document.getElementById("shareText");
-                shareText.value = textWithoutTotal + getTextOfTotalAmmounts(traData);
-                shareText.style.direction = 'rtl';
+            const shareText = document.getElementById("shareText");
+            shareText.value = textWithoutTotal + getTextOfTotalAmmounts(traData);
+            shareText.style.direction = 'rtl';
 
-                document.getElementById("shareModal").classList.remove("hidden");
-                document.getElementById("shareBtn").addEventListener("click", () => {
-                    shareExchange(textWithoutTotal);
-                });
-                document.getElementById('shareWithTotalBtn').addEventListener("click", () => {
-                    shareExchange(textWithoutTotal + getTextOfTotalAmmounts(traData));
-                });
+            document.getElementById("shareModal").classList.remove("hidden");
+            document.getElementById("shareBtn").addEventListener("click", () => {
+                shareExchange(textWithoutTotal);
             });
+            document.getElementById('shareWithTotalBtn').addEventListener("click", () => {
+                shareExchange(textWithoutTotal + getTextOfTotalAmmounts(traData));
+            });
+        });
 
 }
 function getTextOfTotalAmmounts(traData) {
@@ -154,7 +153,7 @@ function shareExchange(text) {
     }
     // نسخ النص للحافظة
     navigator.clipboard.writeText(text).then(() => {
-//        alert("تم نسخ بيانات الحوالة! يمكنك الآن لصقها في أي تطبيق.");
+        //        alert("تم نسخ بيانات الحوالة! يمكنك الآن لصقها في أي تطبيق.");
     }).catch(err => {
         console.error("خطأ في النسخ:", err);
     });
@@ -213,7 +212,7 @@ function openEditModal(traData) {
 
     const closeEditExchangeBtn = document.getElementById("closeEditExchangeListBtn");
 
-//    const editExchangeForm = document.getElementById("edit-exchange-form");
+    //    const editExchangeForm = document.getElementById("edit-exchange-form");
 
     const editExchangeForm = document.getElementById("edit-exchange-form");
     editExchangeForm.addEventListener("submit", (event) => {
@@ -225,17 +224,15 @@ function openEditModal(traData) {
             method: "POST",
             body: formData
         }).then(res => res.json())
-                .then(response => {
-                    if (response.success) {
-                        alert(response.success);
-                        editExchangeForm.reset();
-                        location.reload();
-                    } else {
-                        alert(response.error);
-                    }
-                }).catch(er => {
-            alert(er);
-        })
+            .then(response => {
+                if (response.success) {
+                    Swal.fire({ icon: 'success', title: 'تم بنجاح', text: response.success, timer: 1500, showConfirmButton: false }).then(() => { editExchangeForm.reset(); location.reload(); });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'خطأ', text: response.error });
+                }
+            }).catch(er => {
+                Swal.fire({ icon: 'error', title: 'خطأ في الاتصال', text: String(er) });
+            })
 
 
 
@@ -273,7 +270,7 @@ document.addEventListener('click', function (e) {
                     traData = row;
                 }
             });
-//            console.log("traData",traData);
+            //            console.log("traData",traData);
             openEditModal(traData);
         } else {
 

@@ -23,19 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         addClientForm.reset(); // Clear the form input
                         alert(data.message);
                         location.href = location.pathname + '?reload=' + Date.now();
-                        // // If successful, close the modal
-                        // overlay.classList.add('hidden');
-                        // addClientForm.reset(); // Clear the form input
-
-                        // // Now, refresh the client list by re-fetching it
-                        // // I'm assuming your search script can also fetch all clients with an empty search
-                        // fetch("get_clients_search.php?search=")
-                        //         .then(res => res.text())
-                        //         .then(html => {
-                        //             clientsListDiv.innerHTML = html;
-                        //         })
-                        //         .catch(err => console.error("Failed to refresh client list:", err));
-
+                      
                     } else {
                         // Handle errors, e.g., show an alert
                         alert('Error: ' + data.message);

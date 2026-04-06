@@ -40,6 +40,7 @@
 
   transition: all 0.3s ease;
 }
+
 .debt-data,
 .debt-list-header {
   position: relative;
@@ -162,7 +163,8 @@
 .debt .add-client .add-client-title,
 .debt-list .debt-list-title,
 .clients-list-title,
-.add-client-form-title ,.add-debt-form-title {
+.add-client-form-title,
+.add-debt-form-title {
   text-align: center;
 }
 
@@ -207,6 +209,7 @@
   cursor: pointer;
   color: var(--paragraph-color);
 }
+
 span {
   font-size: 40px;
   font-weight: 800;

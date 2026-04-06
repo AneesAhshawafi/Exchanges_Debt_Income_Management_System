@@ -21,11 +21,10 @@ function openDeleteClientModal(client_id) {
         })
         .then(response => {
             if (response.success) {
-                alert(response.success);
                 closeModal("deleteModal");
-                location.reload();
+                Swal.fire({ icon: 'success', title: 'تم بنجاح', text: response.success, timer: 1500, showConfirmButton: false }).then(() => { location.reload(); });
             } else {
-                alert(response.error);
+                Swal.fire({ icon: 'error', title: 'خطأ', text: response.error });
             }
         })
         .catch(err => {
@@ -43,6 +42,7 @@ function openEditClientModal(clientData) {
     if (clientData) {
         document.getElementById("client-name-e").value = clientData.client_name;
         document.getElementById("client-id").value=clientData.client_id;
+        document.getElementById("phone-e").value=clientData.phone;
 
         document.getElementById("edit-client-overlay").classList.remove("hidden");
         const closeEditExchangeBtn = document.getElementById("closeEditClientBtn");
@@ -67,7 +67,10 @@ document.addEventListener("click", function (e) {
         } else if (operation === "edit") {
             const client_name_id = "client-name" + client_id;
             const client_name = document.getElementById(client_name_id).textContent.trim();
-            const clientData = { client_id: client_id, client_name: client_name };
+            const phone_id="phone" + client_id;
+            const phone=document.getElementById(phone_id).textContent.trim();
+
+            const clientData = { client_id: client_id,phone:phone, client_name: client_name };
             openEditClientModal(clientData);
         }else{
             openShareClientModal(client_id);
