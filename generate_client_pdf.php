@@ -63,17 +63,18 @@ $html = "
     body { font-family: 'kfgqpcuthmantahanaskh', sans-serif; }
     h1 { color: #333; text-align: center; }
     table {
-        width: 100%; border-collapse: collapse; font-size: 10px;
+        width: 100%; border-collapse: collapse; font-size: 9px;
         table-layout: fixed; word-wrap: break-word;
     }
     th, td { border: 1px solid #999; padding: 5px; text-align: center; }
     thead th { background-color: #e0e0e0; font-weight: bold; }
     tbody tr:nth-child(even) { background-color: #f2f2f2; }
-    .col-sender{width:10%} .col-receiver{width:10%} .col-type{width:5%}
-    .col-transferno{width:8%} .col-amount{width:8%} .col-foron{width:5%}
-    .col-date{width:7%} .col-atm{width:7%} .col-fees{width:5%}
-    .col-balance1{width:7%} .col-balance2{width:7%} .col-balance3{width:7%}
-    .col-note{width:9%} .col-status{width:5%}
+    .col-sender{width:6%} .col-sphone{width:5%} .col-receiver{width:6%} .col-rphone{width:5%}
+    .col-type{width:4%} .col-transferno{width:6%} .col-amount{width:7%} .col-foron{width:3%}
+    .col-date{width:5%} .col-atm{width:5%} .col-fees{width:3%}
+    .col-fromcur{width:4%} .col-price{width:4%} .col-tocur{width:4%} .col-transamount{width:5%}
+    .col-balance1{width:6%} .col-balance2{width:6%} .col-balance3{width:6%}
+    .col-note{width:6%} .col-status{width:4%}
 </style>
 <h1>كشف حساب للعميل: " . htmlspecialchars($client_name) . "</h1>
 <h2>رقم التلفون: ". htmlspecialchars($phone)."</h2>
@@ -81,36 +82,64 @@ $html = "
 <table>
     <thead>
         <tr>
-            <th class='col-sender'>المرسل/المودع</th> <th class='col-receiver'>المستلم</th>
+            <th class='col-sender'>المرسل/المودع</th> <th class='col-sphone'>رقم المرسل</th>
+            <th class='col-receiver'>المستلم</th> <th class='col-rphone'>رقم المستلم</th>
             <th class='col-type'>نوع العملية</th> <th class='col-transferno'>رقم الحوالة</th>
             <th class='col-amount'>المبلغ</th> <th class='col-foron'>له/عليه</th>
             <th class='col-date'>التاريخ</th> <th class='col-atm'>الصراف</th>
-            <th class='col-fees'>الرسوم</th> <th class='col-balance1'>رصيد قعيطي</th>
-            <th class='col-balance2'>رصيد قديم</th> <th class='col-balance3'>رصيد سعودي</th>
+            <th class='col-fees'>الرسوم</th> 
+            <th class='col-fromcur'>صرف من</th> <th class='col-price'>السعر</th>
+            <th class='col-tocur'>صرف إلى</th> <th class='col-transamount'>المبلغ المقابل</th>
+            <th class='col-balance1'>رصيد قعيطي</th> <th class='col-balance2'>رصيد قديم</th> <th class='col-balance3'>رصيد سعودي</th>
             <th class='col-note'>ملاحظة</th> <th class='col-status'>الحالة</th>
         </tr>
     </thead>
     <tbody>";
 
 while ($row = $transactions->fetch_assoc()) {
+    $from_cur = '';
+    if ($row['FROM_CURRENCY'] == 'new') $from_cur = 'قعيطي';
+    elseif ($row['FROM_CURRENCY'] == 'old') $from_cur = 'قديم';
+    elseif ($row['FROM_CURRENCY'] == 'sa') $from_cur = 'سعودي';
+    
+    $to_cur = '';
+    if ($row['TO_CURRENCY'] == 'new') $to_cur = 'قعيطي';
+    elseif ($row['TO_CURRENCY'] == 'old') $to_cur = 'قديم';
+    elseif ($row['TO_CURRENCY'] == 'sa') $to_cur = 'سعودي';
+
+    $price_display = floatval($row['PRICE']) != 0 ? floatval($row['PRICE']) : '';
+    $trans_amount = floatval($row['TRANSFERED_AMMOUNT']) != 0 ? number_format(floatval($row['TRANSFERED_AMMOUNT']), 2) : '';
+
     $html .= "<tr>";
     $html .= "<td>" . htmlspecialchars($row['SENDER_NAME']) . "</td>";
+    $html .= "<td>" . htmlspecialchars($row['SENDER_PHONE']) . "</td>";
     $html .= "<td>" . htmlspecialchars($row['RECEIVER_NAME']) . "</td>";
+    $html .= "<td>" . htmlspecialchars($row['RECEIVER_PHONE']) . "</td>";
     $html .= "<td>" . htmlspecialchars($row['TYPE']) . "</td>";
     $html .= "<td>" . htmlspecialchars($row['TRANSFER_NO']) . "</td>";
+    
     $amount_display = '';
     if ($row['CURRENCY'] == 'new') {
         $amount_display = number_format($row['AMMOUNT'], 2) . ' قعيطي';
     } elseif ($row['CURRENCY'] == 'old') {
         $amount_display = number_format($row['AMMOUNT'], 2) . ' قديم';
-    } else {
+    } elseif ($row['CURRENCY'] == 'sa') {
         $amount_display = number_format($row['AMMOUNT'], 2) . ' سعودي';
+    } else {
+        $amount_display = number_format($row['AMMOUNT'], 2);
     }
+    
     $html .= "<td>" . $amount_display . "</td>";
     $html .= "<td>" . htmlspecialchars($row['FOR_OR_ON']) . "</td>";
     $html .= "<td>" . htmlspecialchars(date("Y-m-d", strtotime($row['TRA_DATE']))) . "</td>";
     $html .= "<td>" . htmlspecialchars($row['ATM']) . "</td>";
     $html .= "<td>" . number_format($row['TRA_FEES'], 2) . "</td>";
+    
+    $html .= "<td>" . $from_cur . "</td>";
+    $html .= "<td>" . $price_display . "</td>";
+    $html .= "<td>" . $to_cur . "</td>";
+    $html .= "<td>" . $trans_amount . "</td>";
+    
     $html .= "<td>" . ($row['sum_ammount_new'] >= 0 ? number_format($row['sum_ammount_new'], 2) . ' لكم' : number_format(abs($row['sum_ammount_new']), 2) . ' عليكم') . "</td>";
     $html .= "<td>" . ($row['sum_ammount_old'] >= 0 ? number_format($row['sum_ammount_old'], 2) . ' لكم' : number_format(abs($row['sum_ammount_old']), 2) . ' عليكم') . "</td>";
     $html .= "<td>" . ($row['sum_ammount_sa'] >= 0 ? number_format($row['sum_ammount_sa'], 2) . ' لكم' : number_format(abs($row['sum_ammount_sa']), 2) . ' عليكم') . "</td>";
