@@ -109,8 +109,8 @@ async function openShareModal(traData) {
 عن طريق ${traData.ATM}
 المودع: ${traData.SENDER_NAME}`;
                 if (traData.SENDER_PHONE) textWithoutTotal += `\nرقم المودع: ${traData.SENDER_PHONE}`;
-                textWithoutTotal += `\nالمستلم: ${traData.RECEIVER_NAME}`;
-                if (traData.RECEIVER_PHONE) textWithoutTotal += `\nرقم المستلم: ${traData.RECEIVER_PHONE}`;
+                // textWithoutTotal += `\nالمستلم: ${traData.RECEIVER_NAME}`;
+                // if (traData.RECEIVER_PHONE) textWithoutTotal += `\nرقم المستلم: ${traData.RECEIVER_PHONE}`;
                 textWithoutTotal += `\nالمبلغ: ${ammount} ${currency}
 التاريخ: ${traData.TRA_DATE}
 رقم الإيداع : ${traData.TRANSFER_NO}`;

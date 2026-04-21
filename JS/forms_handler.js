@@ -61,7 +61,7 @@ function setupHawalaToggle(forOrOnId, senderRowId, receiverRowId, feesRowId) {
             senderRow.classList.remove('hidden');
             receiverRow.classList.add('hidden');
             feesRow.classList.add('hidden');
-            senderRow.querySelectorAll('input').forEach(inp => inp.required = false);
+            senderRow.querySelectorAll('input').forEach(inp => inp.required = true);
             receiverRow.querySelectorAll('input').forEach(inp => inp.required = false);
             feesRow.querySelectorAll('input').forEach(inp => inp.required = false);
         } else if (val === 'عليه') {
@@ -69,7 +69,7 @@ function setupHawalaToggle(forOrOnId, senderRowId, receiverRowId, feesRowId) {
             receiverRow.classList.remove('hidden');
             feesRow.classList.remove('hidden');
             senderRow.querySelectorAll('input').forEach(inp => inp.required = false);
-            receiverRow.querySelectorAll('input').forEach(inp => inp.required = false);
+            receiverRow.querySelectorAll('input').forEach(inp => inp.required = true);
             feesRow.querySelectorAll('input').forEach(inp => inp.required = true);
         }
     }
@@ -92,12 +92,13 @@ function setupDepositToggle(forOrOnId, senderRowId, receiverRowId) {
         if (val === 'له') {
             senderRow.classList.remove('hidden');
             receiverRow.classList.add('hidden');
-            senderRow.querySelectorAll('input').forEach(inp => inp.required = false);
+            senderRow.querySelectorAll('input').forEach(inp => inp.required = true);
             receiverRow.querySelectorAll('input').forEach(inp => inp.required = false);
         } else if (val === 'عليه') {
             senderRow.classList.add('hidden');
             receiverRow.classList.remove('hidden');
             senderRow.querySelectorAll('input').forEach(inp => inp.required = false);
+            receiverRow.querySelectorAll('input').forEach(inp => inp.required = true);
             // رقم المستلم مطلوب في حالة "عليه"
             const receiverPhone = receiverRow.querySelector('input[name*="receiver-phone"]');
             if (receiverPhone) receiverPhone.required = true;
